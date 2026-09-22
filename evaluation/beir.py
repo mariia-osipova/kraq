@@ -1,0 +1,156 @@
+from __future__ import annotations
+
+from functools import lru_cache
+from pathlib import Path
+import random
+from typing import Dict, Iterable, List
+
+from beir.retrieval.evaluation import EvaluateRetrieval  # type: ignore
+from tqdm import tqdm
+
+from ireranker.rankers.ranker import Ranker
+from ireranker.types import RankingDataset, RankingTask
+
+
+def _progress(iterable: Iterable, **kwargs) -> Iterable:
+    return tqdm(iterable, **kwargs)
+
+
+def dataset_to_beir_qrels(dataset: RankingDataset) -> Dict[str, Dict[str, int]]:
+    qrels: Dict[str, Dict[str, int]] = {}
+    for task in dataset.tasks:
+        rels: Dict[str, int] = {}
+        if task.y_true is None:
+            continue
+        for doc_id, rel in zip(task.candidate_ids, task.y_true):
+            if rel and rel > 0:
+                rels[doc_id] = int(rel)
+        if rels:
+            qrels[task.query_id] = rels
+    return qrels
+
+
+def ranker_results_to_beir(
+    ranker: Ranker, dataset: RankingDataset, rng: random.Random
+) -> Dict[str, Dict[str, float]]:
+    results: Dict[str, Dict[str, float]] = {}
+    tasks = dataset.tasks
+    dataset_name = Path(tasks[0].dataset_path).name if tasks and tasks[0].dataset_path else ""
+    bm25_runs = _load_bm25_run(dataset_name) if dataset_name else {}
+
+    ranker_label = getattr(ranker, "display_name", ranker.name)
+    iterator = _progress(
+        tasks,
+        total=len(tasks),
+        desc=f"Ranking ({ranker_label})",
+        leave=False,
+    )
+    for task in iterator:
+        shuffled_task = RankingTask(
+            query_id=task.query_id,
+            candidate_ids=list(task.candidate_ids),
+            y_true=list(task.y_true) if task.y_true is not None else None,
+            dataset_path=task.dataset_path,
+        )
+
+        shuffled_task.candidate_ids = _bm25_order_candidates(shuffled_task, bm25_runs)[:100]
+        # rng.shuffle(shuffled_task.candidate_ids)
+
+        indices = ranker.rank(shuffled_task)
+        n = len(indices)
+        res: Dict[str, float] = {}
+        for pos, idx in enumerate(indices):
+            doc_id = shuffled_task.candidate_ids[idx]
+            score = float(n - pos)
+            res[doc_id] = score
+        results[shuffled_task.query_id] = res
+    return results
+
+
+def evaluate_rankers_beir(
+    rankers: List[Ranker],
+    dataset: RankingDataset,
+    k_values: List[int],
+    *,
+    seed: int | None = None,
+) -> List[Dict[str, float | int | str]]:
+    """Evaluate rankers using BEIR metrics and return flattened rows for CSV.
+
+    Returns a list of rows with keys: ranker, k, NDCG, MAP, Recall, Precision, Comparisons,
+    Comparisons_per_task, CacheHits, NDCG_per_comp.
+    """
+    qrels = dataset_to_beir_qrels(dataset)
+    rows: List[Dict[str, float | int | str]] = []
+    task_count = len(dataset.tasks)
+    base_seed = seed if seed is not None else 0
+    iter_rankers = _progress(rankers, desc="Evaluating rankers", leave=True)
+    for r in iter_rankers:
+        r.set_seed(base_seed)
+        r.reset_comparisons()
+        ranker_name = getattr(r, "display_name", r.name)
+        oracle_label = getattr(r, "oracle_label", getattr(r.oracle, "name", None))
+        ranker_base = getattr(r, "name", ranker_name)
+        rng = random.Random(base_seed)
+        res = ranker_results_to_beir(r, dataset, rng)
+        ndcg, _map, recall, precision = EvaluateRetrieval.evaluate(qrels, res, k_values)
+        total_comparisons = int(r.comparisons)
+        total_cache_hits = int(getattr(r, "cache_hits", 0))
+        avg_comparisons = float(total_comparisons / task_count) if task_count else 0.0
+        for k in k_values:
+            ndcg_k = float(ndcg.get(f"NDCG@{k}", 0.0))
+            rows.append(
+                {
+                    "ranker": ranker_base,
+                    "oracle": oracle_label,
+                    "k": int(k),
+                    "NDCG": ndcg_k,
+                    "MAP": float(_map.get(f"MAP@{k}", 0.0)),
+                    "Recall": float(recall.get(f"Recall@{k}", 0.0)),
+                    "Precision": float(precision.get(f"P@{k}", 0.0)),
+                    "Comparisons": total_comparisons,
+                    "Comparisons_per_task": avg_comparisons,
+                    "CacheHits": total_cache_hits,
+                    "NDCG_per_comp": (
+                        float(ndcg_k / total_comparisons) if total_comparisons else 0.0
+                    ),
+                }
+            )
+    return rows
+
+
+# ======= BM25 HELPERS ========
+_BM25_RUN_DIR = Path(__file__).resolve().parents[2] / "data" / "external" / "beir" / "bm25-runs"
+
+
+@lru_cache(maxsize=8)
+def _load_bm25_run(dataset: str) -> Dict[str, List[str]]:
+    """Load a TREC BM25 run into {qid: [doc_ids...]}. Missing file -> empty dict."""
+    run_path = _BM25_RUN_DIR / f"run.beir.bm25-flat.{dataset}.txt"
+    runs: Dict[str, List[str]] = {}
+    if not run_path.exists():
+        return runs
+    with run_path.open("r", encoding="utf-8") as f:
+        for line in f:
+            parts = line.strip().split()
+            if len(parts) < 6:
+                continue
+            qid, _, doc_id, *_ = parts
+            runs.setdefault(qid, []).append(doc_id)
+    return runs
+
+
+def _bm25_order_candidates(task: RankingTask, bm25_runs: Dict[str, List[str]]) -> List[str]:
+    """Order candidate_ids by BM25 run; keep any missing candidates at the end."""
+    order = bm25_runs.get(task.query_id)
+    if not order:
+        return list(task.candidate_ids)
+    seen: set[str] = set()
+    ordered: List[str] = []
+    for doc_id in order:
+        if doc_id in task.candidate_ids and doc_id not in seen:
+            ordered.append(doc_id)
+            seen.add(doc_id)
+    for doc_id in task.candidate_ids:
+        if doc_id not in seen:
+            ordered.append(doc_id)
+    return ordered
