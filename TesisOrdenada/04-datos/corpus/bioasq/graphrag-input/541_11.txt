@@ -1,0 +1,3 @@
+Arrhythmia-associated cardiac Ca²(+) cycling proteins and gene mutations.
+
+Calcium is an important mediator in cardiac excitation and disorders in cardiac Ca(2+) homeostasis have great influence on the cardiac action potential. Therefore dysfunction in regulatory proteins that are involved in Ca(2+) handling can lead to the occurrence of severe arrhythmia. Although mutations in Ca(2+) regulating proteins are quite rare, they can offer general insights into arrhythmogenesis. Here, we briefly review some important aspects of arrhythmia-associated mutations in Ca(2+) regulating proteins with special emphasis to its associated pathophysiology.

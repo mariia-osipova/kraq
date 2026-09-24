@@ -1,0 +1,3 @@
+Direct and remote constriction of membrane necks.
+
+The physical properties of membrane necks are relevant in vesiculation, a process that plays an essential role in cellular physiology. Because the neck's radius is, in general, finite, membrane scission and the consequent pinching off of the vesicle can only occur if it is narrowed to permit the necessary membrane topological reformation. Here we examine, in a simple single phase lipid vesicle, how external forces can promote neck constriction not only by direct compression at the neck but also, counterintuitively, by dilation at remote locations. These results provide a new perspective on the role played by actin polymerization in the process of endocytosis.

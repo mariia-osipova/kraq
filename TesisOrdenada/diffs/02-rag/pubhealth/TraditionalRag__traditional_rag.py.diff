@@ -1,0 +1,31 @@
+--- /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/TraditionalRag/traditional_rag.py	2025-05-25 18:59:36.000000000 -0300
++++ /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_pubhealth_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_pubhealth_solver/TraditionalRag/traditional_rag.py	2025-05-03 15:10:16.000000000 -0300
+@@ -153,13 +153,16 @@
+         # Etapa 4: Generar respuesta con LLM
+         prompt_start_time = perf_counter()
+         
+-        prompt = f"""Below is an instruction that describes a task. Write a response for it and state
+- your explanation supporting your response.
++        prompt = f"""Given the following medical claim and evidence, determine whether it is true, false, or a mixture of both. Then, provide a brief explanation explaining your reasoning.
+  ### Evidence:
+  {context}
+- ### Instruction: 
++ ### Claim: 
+  {query}
+- ### Response:
++
++ Answer format:
++Label: <true/false/mixture>
++Explanation: <your explanation>
++
+ """
+         prompt_time = perf_counter() - prompt_start_time
+         
+@@ -173,6 +176,7 @@
+         response = await llm_client.chat.completions.create(
+             model=llm_model,
+             messages=[
++                {"role": "system", "content": "You are a helpful assistant."},
+                 {"role": "user", "content": prompt}
+             ],
+             temperature=0.0

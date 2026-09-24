@@ -1,0 +1,3 @@
+Stereoselective synthesis of MLN4924, an inhibitor of NEDD8-activating enzyme.
+
+MLN4924 (1), which is in clinical trials as an anticancer agent, was stereoselectively synthesized from d-ribose via a route involving stereoselective reduction, regioselective cleavage of an isopropylidene moiety, and selective displacement of a cyclic sulfate moiety as key steps.

@@ -1,0 +1,3 @@
+Cytosine methyltransferases as tumor markers.
+
+Changes in DNA methylation patterns is a prominent characteristic of human tumors. Tumor cells display reduced levels of genomic DNA methylation and site-specific CpG island hypermethylation. Methylation of CpG dinucleotides is catalyzed by the enzyme family of DNA methyltransferases (DNMTs). In this review, the role of DNA methylation and DNMTs as key determinants of carcinogenesis is further elucidated. The chromatin modifying proteins that are known to interact with DNMTs are also described. Finally, the role of DNMTs as potential therapeutic targets is addressed.

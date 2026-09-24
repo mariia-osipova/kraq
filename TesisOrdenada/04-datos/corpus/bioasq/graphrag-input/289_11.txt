@@ -1,0 +1,3 @@
+Identification of off-target cleavage sites of zinc finger nucleases and TAL effector nucleases using predictive models.
+
+Using engineered nucleases, such as Zinc Finger Nucleases (ZFNs) or Transcription Activator-Like Effector Nucleases (TALENs), to make targeted genomic modifications has become a common technique to create new model organisms and custom cell lines, and has shown great promise for disease treatment. However, these nucleases have the potential for off-target cleavage that could confound interpretation of experimental results and be detrimental for therapeutic use. Here, we describe a method to test for nuclease cleavage at potential off-target sites predicted by bioinformatics models.

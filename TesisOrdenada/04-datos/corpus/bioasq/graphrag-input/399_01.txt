@@ -1,0 +1,3 @@
+Prefractionation of cerebrospinal fluid to enhance glycoprotein concentration prior to structural determination with FT-ICR mass spectrometry.
+
+Glycoproteins in cerebrospinal fluid are found to be altered in Alzheimer patients compared to healthy control individuals. We have utilized micro-solution isoelectric focusing and affinity chromatography, prior to gel electrophoresis to enable site-specific structural determination of the N-linked glycans in apolipoprotein J with the use of FT-ICR MS. The albumin depletion method is the most suitable as prefractionation method of CSF prior to 2-DE for structural determination of glycoproteins in the study of neurodegenerative disorders.

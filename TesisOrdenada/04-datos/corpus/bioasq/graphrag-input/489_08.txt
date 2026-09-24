@@ -1,0 +1,3 @@
+Proteomic analysis of urinary exosomes in cardiovascular and associated kidney diseases by two-dimensional electrophoresis and LC-MS/MS.
+
+Urinary exosomes are membranous vesicles 40-100 nm in size containing proteins that are characteristic of every renal tubule epithelial cell type. In this chapter, we describe a methodology to isolate and analyze urinary exosomes proteome by 2-DE and LC-MS/MS, in the search for biomarkers of vascular and associated kidney diseases. We describe an isolation methodology by serial (ultra)centrifugation steps compatible with 2-DE and LC-MS/MS analysis. Exosome purity is confirmed by electron microscopy and Western blot.

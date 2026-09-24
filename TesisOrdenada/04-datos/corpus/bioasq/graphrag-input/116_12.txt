@@ -1,0 +1,3 @@
+Identification of a large rearrangement in CYLD as a cause of familial cylindromatosis.
+
+Pathogenic mutations in CYLD can be identified in patients affected with Brooke-Spiegler syndrome, (Familial) Cylindromatosis or multiple familial trichoepithelioma. To date, only technologies which are able to identify small point mutations in CYLD, such as sequence and WAVE analysis, were used. Here we describe the identification of a larger rearrangement identified by Quantitative PCR analysis of CYLD, indicating that a combination of these technologies is necessary when searching for pathogenic mutations in CYLD.

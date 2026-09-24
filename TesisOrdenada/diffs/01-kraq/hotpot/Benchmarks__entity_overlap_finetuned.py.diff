@@ -1,0 +1,98 @@
+--- /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Local_BioASQ_test1_NoPromptTuning/Local_BioASQ_test1_NoPromptTuning/src/Benchmarks/entity_overlap_finetuned.py	2025-05-16 17:38:01.000000000 -0300
++++ /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Local_hotpot_NoPromptTuning/Local_hotpot_NoPromptTuning/src/Benchmarks/entity_overlap_finetuned.py	2025-05-16 15:54:20.000000000 -0300
+@@ -34,18 +34,13 @@
+ 
+ Return **ONLY** valid JSON with this schema: {{ "entities": [string, …] }}  
+ Rules:
+-• Extract ALL important entities including:
+-  - People: individual names, groups of people, historical figures, etc.
+-  - Geographic Locations: countries, cities, mountains, rivers, regions, etc.
+-  - Events: historical events, dates, time periods, celebrations, etc.
+-  - Objects: physical objects, artifacts, structures, natural features, etc.
+-  - Organizations: companies, institutions, governments, teams, etc.
+-  - Concepts: key terms, technical concepts, subjects, processes, phenomena, etc.
+-• Include ALL important domain-specific terms mentioned in the question
+-• Preserve original spelling/capitalisation
+-• Capture noun phrases that represent distinct entities
+-• No extra text or explanations
+-• If nothing qualifies, return {{ "entities": [] }}
++• Include ONLY People, Geographic Locations, and Events.
++• People: individual names, groups of people, historical figures, etc.
++• Geographic Locations: countries, cities, mountains, rivers, regions, etc.
++• Events: historical events, dates, time periods, celebrations, etc.
++• Preserve original spelling/capitalisation.
++• No extra text or explanations.
++• If nothing qualifies, return {{ "entities": [] }}.
+ 
+ ### Few-shot
+ User: Question: "How tall is Mount Everest compared to Mount Kilimanjaro?"
+@@ -54,15 +49,14 @@
+ User: Question: "When did Christopher Columbus arrive in America?"
+ Assistant: {{ "entities": ["Christopher Columbus", "America"] }}
+ 
+-User: Question: "What are the components of a cell membrane?"
+-Assistant: {{ "entities": ["cell membrane", "components"] }}
++User: Question: "Who was the president during World War II?"
++Assistant: {{ "entities": ["World War II"] }}
+ 
+-User: Question: "How does photosynthesis work in plants?"
+-Assistant: {{ "entities": ["photosynthesis", "plants"] }}
++User: Question: "What happened during the Battle of Waterloo?"
++Assistant: {{ "entities": ["Battle of Waterloo"] }}
+ 
+-User: Question: "What was the impact of the Industrial Revolution on urban development?"
+-Assistant: {{ "entities": ["Industrial Revolution", "urban development", "impact"] }}
+-"""
++User: Question: "Where did Albert Einstein work in 1905?"
++Assistant: {{ "entities": ["Albert Einstein", "1905"] }}"""
+     
+     user_prompt = f"""User: Question: "{text}"
+ """
+@@ -163,18 +157,13 @@
+ 
+ Return **ONLY** valid JSON with this schema: {{ "entities": [string, …] }}  
+ Rules:
+-• Extract ALL important entities including:
+-  - People: individual names, groups of people, historical figures, etc.
+-  - Geographic Locations: countries, cities, mountains, rivers, regions, etc.
+-  - Events: historical events, dates, time periods, celebrations, etc.
+-  - Objects: physical objects, artifacts, structures, natural features, etc.
+-  - Organizations: companies, institutions, governments, teams, etc.
+-  - Concepts: key terms, technical concepts, subjects, processes, phenomena, etc.
+-• Include ALL important domain-specific terms mentioned in the question
+-• Preserve original spelling/capitalisation
+-• Capture noun phrases that represent distinct entities
+-• No extra text or explanations
+-• If nothing qualifies, return {{ "entities": [] }}
++• Include ONLY People, Geographic Locations, and Events.
++• People: individual names, groups of people, historical figures, etc.
++• Geographic Locations: countries, cities, mountains, rivers, regions, etc.
++• Events: historical events, dates, time periods, celebrations, etc.
++• Preserve original spelling/capitalisation.
++• No extra text or explanations.
++• If nothing qualifies, return {{ "entities": [] }}.
+ 
+ ### Few-shot
+ User: Question: "How tall is Mount Everest compared to Mount Kilimanjaro?"
+@@ -183,15 +172,14 @@
+ User: Question: "When did Christopher Columbus arrive in America?"
+ Assistant: {{ "entities": ["Christopher Columbus", "America"] }}
+ 
+-User: Question: "What are the components of a cell membrane?"
+-Assistant: {{ "entities": ["cell membrane", "components"] }}
++User: Question: "Who was the president during World War II?"
++Assistant: {{ "entities": ["World War II"] }}
+ 
+-User: Question: "How does photosynthesis work in plants?"
+-Assistant: {{ "entities": ["photosynthesis", "plants"] }}
++User: Question: "What happened during the Battle of Waterloo?"
++Assistant: {{ "entities": ["Battle of Waterloo"] }}
+ 
+-User: Question: "What was the impact of the Industrial Revolution on urban development?"
+-Assistant: {{ "entities": ["Industrial Revolution", "urban development", "impact"] }}
+-"""
++User: Question: "Where did Albert Einstein work in 1905?"
++Assistant: {{ "entities": ["Albert Einstein", "1905"] }}"""
+     
+     user_prompt = f"""User: Question: "{text}"
+ """

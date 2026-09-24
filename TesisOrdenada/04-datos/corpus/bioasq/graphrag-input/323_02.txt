@@ -1,0 +1,3 @@
+Cloning and sequencing of inulinase and β-fructofuranosidase genes of a deep-sea Microbulbifer species and properties of recombinant enzymes.
+
+An inulinase-producing Microbulbifer sp. strain, JAM-3301, was isolated from a deep-sea sediment. An inulin operon that contained three open reading frames was cloned and sequenced. Two of the three genes were expressed. One product was an endo-inulinase, and the other was a β-fructofuranosidase. Both enzymes worked together to effectively degrade inulin.

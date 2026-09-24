@@ -1,0 +1,3 @@
+Proteome profiling of the green sulfur bacterium Chlorobaculum tepidum by N-terminal proteomics.
+
+In this study, we performed the first large-scale identification of N-terminal peptides from the green sulfur bacterium Chlorobaculum tepidum. Combined fractional diagonal chromatography (COFRADIC) was used to isolate protein N-terminal peptides from three different proteome preparations, and following LC-MS/MS analysis, over 621 different proteins were identified by their N-terminal peptides. Our data constitute the largest data set currently available for protein N-termini of prokaryotic photosynthetic organisms.

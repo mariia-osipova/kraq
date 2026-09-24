@@ -1,0 +1,11 @@
+--- /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Local_BioASQ_test1_NoPromptTuning/Local_BioASQ_test1_NoPromptTuning/src/QuestionGeneration/generate_naive_questions.py	2025-04-22 14:05:40.000000000 -0300
++++ /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Local_Pubhealth_NoPromptTuning/Local_Pubhealth_NoPromptTuning/src/QuestionGeneration/generate_naive_questions.py	2025-05-02 20:00:58.000000000 -0300
+@@ -482,7 +482,7 @@
+         start_time = time.time()
+         # Utilizar None para generar todas las preguntas posibles
+         # Guardar checkpoint cada 20 lotes (100 preguntas si batch_size=5)
+-        questions = generate_naive_questions(19100, batch_size=5, checkpoint_interval=4)
++        questions = generate_naive_questions(10412, batch_size=5, checkpoint_interval=4)
+         total_time = time.time() - start_time
+         print(f"\nGeneradas {len(questions)} preguntas naive exitosamente")
+         print(f"Tiempo total del proceso completo: {total_time:.2f} segundos")

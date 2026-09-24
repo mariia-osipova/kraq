@@ -1,0 +1,3 @@
+Control of RNA processing by a large non-coding RNA over-expressed in carcinomas.
+
+RNA processing is vital for the high fidelity and diversity of eukaryotic transcriptomes and the encoded proteomes. However, control of RNA processing is not fully established. Σ RNA is a class of conserved large non-coding RNAs (murine Hepcarcin; human MALAT-1) up-regulated in carcinomas. Using antisense technology, we identified that RNA post-transcriptional modification is the most significant global function of Σ RNA. Specifically, processing of the pre-mRNAs of genes including Tissue Factor and Endoglin was altered by hydrolysis of Σ RNA/MALAT-1. These results support the hypothesis that Σ RNA/MALAT-1 is a regulatory molecule exerting roles in RNA post-transcriptional modification.

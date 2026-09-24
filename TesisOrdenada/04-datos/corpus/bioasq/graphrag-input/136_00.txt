@@ -1,0 +1,3 @@
+Teaching neuroimages: hypomyelinating leukodystrophy with hypodontia due to POLR3B: look into a leukodystrophy's mouth.
+
+An 18-year-old German woman presented with progressive cerebellar ataxia since early childhood, delayed cognitive development, and hypogonadotropic hypogonadism. MRI demonstrated diffuse cerebral hypomyelination, cerebellar atrophy, and thin corpus callosum; X-ray revealed persistent milk teeth and hypoplastic crowns and roots (figure), indicative of 4H syndrome (hypomyelination, hypodontia, hypogonadotropic hypogonadism). POLR3B sequencing(1) revealed 2 compound heterozygous mutations (C527R [C.1579T>C] and the common ancestral V523E [C.1568T>A](2)).

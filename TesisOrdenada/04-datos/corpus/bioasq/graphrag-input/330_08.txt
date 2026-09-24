@@ -1,0 +1,3 @@
+[Antileukemic drug--a selective inhibitor of BCR-ABL tyrosine kynase, imatinib(STI571)].
+
+Chronic myeloid leukemia (CML) is a clonal hematopoietic stem cell disorder characterized by Philadelphia chromosome and resultant production of the constitutively activated BCR-ABL tyrosine kinase. Imatinib (STI571), selective inhibitor of the ABL-tyrosine kinase, inhibits the activity of BCR-ABL tyrosine kinase. A phase I and II study of STI571 showed remarkable cytogenetic effect in patients with interferon-refractory CML, offering new hope for therapy for CML. It will, however, require long-term follow-up data from phase II and III clinical studies to validate the effect of STI571 on survival. As therapy for CML improves, monitoring minimal residual disease will be important.

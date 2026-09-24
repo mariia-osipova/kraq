@@ -1,0 +1,3 @@
+Assay and properties of the mitochondrial dynamin related protein Opa1.
+
+Opa1, also known as Mgm1 in yeast, is a mitochondrial member of the dynamin family. Unlike other dynamin family members, Opa1 has an N-terminal mitochondrial targeting sequence, suggesting that this protein is imported into mitochondria. Here, we describe biochemical techniques, such as mitochondrial isolation, digitonin extraction, a protease protection assay, and carbonate extraction, that were used to determine that mammalian Opa1 resides in the intermembrane space where it is tightly bound to the inner membrane. In addition, we describe bacterial expression of the Opa1 GTPase domain, methods for purification, and an in vitro assay for GTP hydrolysis.

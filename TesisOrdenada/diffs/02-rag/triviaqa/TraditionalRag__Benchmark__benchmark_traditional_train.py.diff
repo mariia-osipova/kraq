@@ -1,0 +1,183 @@
+--- /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/TraditionalRag/Benchmark/benchmark_traditional_train.py	2025-05-19 12:05:28.000000000 -0300
++++ /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_triviaQA_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_triviaQA_solver/TraditionalRag/Benchmark/benchmark_traditional_train.py	2025-05-09 23:31:31.000000000 -0300
+@@ -12,7 +12,7 @@
+ from sentence_transformers import SentenceTransformer, util
+ from bert_score import score
+ from tqdm import tqdm
+-from typing import List, Dict, Any, Tuple, Optional
++from typing import List, Dict, Any, Tuple
+ from qdrant_client import AsyncQdrantClient
+ import torch
+ 
+@@ -36,37 +36,22 @@
+ EMBEDDING_MODEL = "nomic-embed-text"
+ LLM_MODEL = "hugging-quants/Meta-Llama-3.1-8B-Instruct-AWQ-INT4"
+ # Modelo para el cálculo de similitud coseno
+-sentence_model = SentenceTransformer('all-MiniLM-L6-v2', device="cuda:1")
++sentence_model = SentenceTransformer('all-MiniLM-L6-v2', device='cuda:1')
+ 
+ 
+-def calculate_cosine_similarity(text1: str, text2: Any) -> float:
++def calculate_cosine_similarity(text1: str, text2: str) -> float:
+     """
+     Calcula la similitud coseno entre dos textos
+     """
+-    # Convertir a string si es una lista
+-    if isinstance(text1, list):
+-        text1 = str(text1)
+-    if isinstance(text2, list):
+-        text2 = str(text2)
+-    
++    # Verificar que los textos no sean None o vacíos
+     if not text1 or not text2:
+         logger.warning("Uno de los textos está vacío o es None. Retornando similitud 0.0")
+         return 0.0
+-    
+-    try:
+-        # Especificar el dispositivo CUDA:1
+-        device = torch.device("cuda:1")
+-        
+-        # Asegurarnos de que el modelo esté en CUDA:1
+-        if not hasattr(calculate_cosine_similarity, 'sentence_model'):
+-            calculate_cosine_similarity.sentence_model = SentenceTransformer('all-MiniLM-L6-v2', device="cuda:1")
+-        
+-        # Generar embeddings y moverlos a CUDA:1
+-        embedding1 = calculate_cosine_similarity.sentence_model.encode(text1, convert_to_tensor=True)
+-        embedding2 = calculate_cosine_similarity.sentence_model.encode(text2, convert_to_tensor=True)
+         
+-        embedding1 = embedding1.to(device)
+-        embedding2 = embedding2.to(device)
++    try:
++        # Generar embeddings
++        embedding1 = sentence_model.encode(text1, convert_to_tensor=True)
++        embedding2 = sentence_model.encode(text2, convert_to_tensor=True)
+         
+         # Asegúrate de que los tensores sean unidimensionales (vectores)
+         if len(embedding1.shape) > 1 and embedding1.shape[0] > 1:
+@@ -80,8 +65,7 @@
+         if isinstance(similarity, torch.Tensor) and similarity.numel() > 1:
+             similarity = similarity.mean()
+             
+-        # Mover el resultado a CPU antes de convertirlo a Python
+-        return similarity.cpu().item()
++        return similarity.item()
+     except Exception as e:
+         logger.error(f"Error calculando similitud coseno: {e}")
+         return 0.0
+@@ -144,7 +128,8 @@
+ async def generate_traditional_rag_response(
+     question: str,
+     llm_client: AsyncOpenAI,
+-    embeddings_client: AsyncOpenAI
++    embeddings_client: AsyncOpenAI,
++    top_k: int
+ ) -> Tuple[str, float, float]:
+     """
+     Genera una respuesta con Traditional RAG y captura los tiempos
+@@ -153,6 +138,7 @@
+         question: La pregunta a responder
+         llm_client: Cliente para el LLM
+         embeddings_client: Cliente para los embeddings
++        top_k: Número de documentos a recuperar
+         
+     Returns:
+         Tuple con (respuesta, tiempo_total, tiempo_recuperacion)
+@@ -184,7 +170,7 @@
+             "llm_client": llm_client,                # Cliente vLLM para LLM
+             "embedding_model": EMBEDDING_MODEL,      # nomic-embed-text (Ollama)
+             "llm_model": LLM_MODEL,                  # Llama 3.1 Instruct (vLLM)
+-            "top_k": 20,
++            "top_k": top_k,
+             "debug_prints": False,
+             "verbose_timing": False
+         }
+@@ -266,20 +252,15 @@
+         logger.error(f"Error obteniendo preguntas de Qdrant: {e}")
+         return []
+ 
+-async def run_benchmark(
+-    limit: int = 300,
+-    questions: Optional[List[Dict[str, Any]]] = None,
+-    results_dir: Optional[Path] = None,
+-    top_k: int = 20
+-) -> None:
++async def run_benchmark(questions=None, results_dir=None, top_k=20, n_questions=None):
+     """
+     Ejecuta el benchmark completo
+     
+     Args:
+-        limit: Número máximo de preguntas a evaluar
+         questions: Lista opcional de preguntas predefinidas
+-        results_dir: Directorio opcional para resultados
++        results_dir: Directorio opcional para guardar resultados
+         top_k: Número de documentos a recuperar
++        n_questions: Número específico de preguntas a procesar
+     """
+     # Configurar clientes de API
+     llm_client = AsyncOpenAI(
+@@ -292,32 +273,18 @@
+         api_key="ollama"
+     )
+     
+-    # Usar directorio de resultados personalizado si se proporciona
++    # Usar el directorio de resultados proporcionado o el predeterminado
+     if results_dir is None:
+         results_dir = Path(__file__).parent / "results"
++    else:
++        results_dir = Path(results_dir)
++    
+     results_dir.mkdir(exist_ok=True)
+     
+     # Crear directorio para respuestas
+     answer_dir = results_dir / "answers"
+     answer_dir.mkdir(exist_ok=True)
+     
+-    # Usar preguntas proporcionadas o obtenerlas de Qdrant
+-    if questions is not None:
+-        all_questions = questions[:limit]
+-    else:
+-        all_questions = await get_questions_from_qdrant(limit=limit)
+-    
+-    # Modificar parámetros para Traditional RAG
+-    params = {
+-        "embeddings_client": embeddings_client,
+-        "llm_client": llm_client,
+-        "embedding_model": EMBEDDING_MODEL,
+-        "llm_model": LLM_MODEL,
+-        "top_k": top_k,
+-        "debug_prints": False,
+-        "verbose_timing": False
+-    }
+-    
+     # Verificar si existe checkpoint previo
+     answer_checkpoint = answer_dir / "partial_results.json"
+     
+@@ -335,7 +302,18 @@
+             logger.error(f"Error cargando checkpoint: {e}")
+             answer_results = []
+     
+-    total_questions = len(all_questions)
++    # Si se proporcionaron preguntas y n_questions, usar solo las primeras n_questions
++    if questions and n_questions:
++        questions = questions[:n_questions]
++    elif questions:
++        n_questions = len(questions)
++    else:
++        # Si no se proporcionaron preguntas, obtener n_questions de Qdrant
++        questions = await get_questions_from_qdrant(limit=n_questions if n_questions else 400)
++        if n_questions:
++            questions = questions[:n_questions]
++    
++    total_questions = len(questions)
+     remaining_questions = len(questions)
+     
+     logger.info(f"Total de preguntas: {total_questions}")
+@@ -373,7 +351,7 @@
+             try:
+                 # Generar respuesta
+                 response, total_time, retrieval_time = await generate_traditional_rag_response(
+-                    question, llm_client, embeddings_client
++                    question, llm_client, embeddings_client, top_k
+                 )
+                 has_response = True
+                 

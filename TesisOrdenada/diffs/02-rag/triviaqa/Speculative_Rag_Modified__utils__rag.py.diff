@@ -1,0 +1,9 @@
+--- /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/Speculative_Rag_Modified/utils/rag.py	2025-04-29 17:41:59.000000000 -0300
++++ /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_triviaQA_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_triviaQA_solver/Speculative_Rag_Modified/utils/rag.py	2025-05-08 18:22:32.000000000 -0300
+@@ -503,4 +503,4 @@
+         "verify_parallel_estimate": verify_response.get("parallel_estimate", 0),
+         "draft_individual_times": draft_times,
+         "verify_individual_times": verify_response.get("individual_times", [])
+-    } 
+\ No hay ningún carácter de nueva línea al final del archivo
++    } 

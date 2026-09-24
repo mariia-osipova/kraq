@@ -1,0 +1,105 @@
+--- /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/TraditionalRag_CombinedRetrieve/Benchmark/exact_match.py	2025-05-21 19:54:31.000000000 -0300
++++ /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_triviaQA_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_triviaQA_solver/TraditionalRag_CombinedRetrieve/Benchmark/exact_match.py	2025-05-21 20:26:25.000000000 -0300
+@@ -5,42 +5,49 @@
+ import re
+ from datetime import datetime
+ 
+-def extract_label(text: str) -> str:
++def extract_label(text: Union[str, dict]) -> str:
+     """
+     Extrae la respuesta principal del texto generado.
+-    Para HotPot, la respuesta suele estar en el primer párrafo o ser la primera afirmación.
++    Maneja tanto textos en formato string como respuestas en formato diccionario.
+     
+     Args:
+-        text (str): El texto completo de la respuesta
++        text (Union[str, dict]): El texto o diccionario con la respuesta generada
+         
+     Returns:
+         str: La respuesta extraída
+     """
++    # Si el texto es un diccionario
++    if isinstance(text, dict):
++        # Intentar extraer la primera respuesta del diccionario
++        if text:
++            # Tomar el primer valor que no sea "no information found"
++            for key, value in text.items():
++                if value and value != "no information found":
++                    return value.lower().strip()
++            # Si no hay valores válidos, tomar el primer valor
++            return next(iter(text.values())).lower().strip()
++        return ""
++    
++    # Si es string, procesar normalmente
++    if not isinstance(text, str):
++        return ""
++        
+     # Dividir por párrafos
+     paragraphs = text.split('\n')
+     
+     # Tomar el primer párrafo no vacío
+     for paragraph in paragraphs:
+         if paragraph.strip():
+-            # Limpiar la respuesta de cualquier texto explicativo
+-            # Buscar patrones comunes en respuestas de HotPot
+-            cleaned = paragraph.strip()
+-            # Si contiene "Based on", tomar solo la parte después
+-            if "Based on" in cleaned:
+-                parts = cleaned.split(",", 1)
+-                if len(parts) > 1:
+-                    cleaned = parts[1].strip()
+-            
+-            return cleaned.lower()
++            return paragraph.strip().lower()
++    
+     return ""
+ 
+-def calculate_exact_match(generated_answer: str, reference_answer: Union[str, List[str]]) -> float:
++def calculate_exact_match(generated_answer: Union[str, dict], reference_answer: Union[str, List[str]]) -> float:
+     """
+     Calcula la métrica Exact Match entre la respuesta generada y la referencia.
+-    Para HotPot, compara si la respuesta de referencia está contenida en la respuesta generada.
+     
+     Args:
+-        generated_answer (str): La respuesta generada por el modelo
++        generated_answer (Union[str, dict]): La respuesta generada por el modelo
+         reference_answer (Union[str, List[str]]): La respuesta de referencia
+         
+     Returns:
+@@ -56,12 +63,15 @@
+     if isinstance(reference_answer, list):
+         reference_texts = [ref.lower().strip() for ref in reference_answer if isinstance(ref, str)]
+         # Verificar si alguna de las referencias está contenida en la respuesta generada
+-        return float(any(ref in generated_text for ref in reference_texts))
++        for ref in reference_texts:
++            if ref in generated_text or generated_text in ref:
++                return 1.0
++        return 0.0
+     
+     # Si la referencia es un string
+     reference_text = reference_answer.lower().strip()
+-    # Verificar si la referencia está contenida en la respuesta generada
+-    return float(reference_text in generated_text)
++    # Verificar si la referencia está contenida en la respuesta generada o viceversa
++    return float(reference_text in generated_text or generated_text in reference_text)
+ 
+ def evaluate_exact_match_from_results(results_file: Union[str, Path]) -> Dict[str, float]:
+     """
+@@ -92,7 +102,7 @@
+             generated_answer = result.get('generated_answer', '')
+             reference_answer = result.get('reference_answer', '')
+             
+-            if not generated_answer or not reference_answer:
++            if generated_answer is None or reference_answer is None:
+                 logger.warning(f"Respuesta faltante para pregunta {question_id}")
+                 continue
+             
+@@ -156,7 +166,7 @@
+     Función principal para ejecutar la evaluación de Exact Match sobre los resultados.
+     """
+     # Definir la ruta al archivo de resultados
+-    results_dir = Path(__file__).parent.parent / "Benchmark" / "results_bien" / "combined"
++    results_dir = Path(__file__).parent.parent / "Benchmark" / "results"
+     
+     # Evaluar tanto resultados completos como parciales
+     result_files = [

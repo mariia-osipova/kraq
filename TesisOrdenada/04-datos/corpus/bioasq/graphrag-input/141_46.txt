@@ -1,0 +1,3 @@
+Chromodomains read the arginine code of post-translational targeting.
+
+Chromodomains typically recruit protein complexes to chromatin and read the epigenetic histone code by recognizing lysine methylation in histone tails. We report the crystal structure of the chloroplast signal recognition particle (cpSRP) core from Arabidopsis thaliana, with the cpSRP54 tail comprising an arginine-rich motif bound to the second chromodomain of cpSRP43. A twinned aromatic cage reads out two neighboring nonmethylated arginines and adapts chromodomains to a non-nuclear function in post-translational targeting.

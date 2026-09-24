@@ -1,0 +1,3 @@
+Prokaryotic genetic code.
+
+The prokaryotic genetic code has been influenced by directional mutation pressure (GC/AT pressure) that has been exerted on the entire genome. This pressure affects the synonymous codon choice, the amino acid composition of proteins and tRNA anticodons. Unassigned codons would have been produced in bacteria with extremely high GC or AT genomes by deleting certain codons and the corresponding tRNAs. A high AT pressure together with genomic economization led to a change in assignment of the UGA codon, from stop to tryptophan, in Mycoplasma.

@@ -1,0 +1,3 @@
+New and established tyrosine kinase inhibitors for chronic myeloid leukemia.
+
+Chronic myeloid leukemia (CML) is an uncommon malignancy, the treatment and prognosis of which have dramatically shifted over the last decade. Characterized by a translocation between chromosomes 9 and 22, known as the Philadelphia chromosome, small-molecule tyrosine kinase inhibitors (TKIs) targeted against the oncogenic BCR-ABL fusion protein have changed this once fatal disease into the model of targeted therapy. This article will review the pharmacological and clinical data supporting the use of imatinib and the second-generation TKIs dasatinib and nilotinib, and the novel TKIs bosutinib and ponatinib.

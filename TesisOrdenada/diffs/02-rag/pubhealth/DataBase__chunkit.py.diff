@@ -1,0 +1,14 @@
+--- /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/DataBase/chunkit.py	2025-04-28 23:30:13.000000000 -0300
++++ /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_pubhealth_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_pubhealth_solver/DataBase/chunkit.py	2025-05-03 14:58:54.000000000 -0300
+@@ -42,8 +42,8 @@
+             print(f"Error procesando {filename}: {str(e)}")
+ 
+ # Directorios de entrada y salida
+-input_directory = '/home/luciano/Documents/Teo Gutter/Tesis/Speculative_Rag/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_triviaQA/DataBase/input'
+-output_directory = '/home/luciano/Documents/Teo Gutter/Tesis/Speculative_Rag/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_triviaQA/DataBase/chunks'
++input_directory = '/home/luciano/Documents/Teo Gutter/Tesis/Speculative_Rag/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_pubhealth/DataBase/input'
++output_directory = '/home/luciano/Documents/Teo Gutter/Tesis/Speculative_Rag/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_pubhealth/DataBase/chunks'
+ 
+ # Ejecutar la función para crear los chunks
+ create_chunks(input_directory, output_directory)
+\ No hay ningún carácter de nueva línea al final del archivo

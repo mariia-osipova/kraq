@@ -1,0 +1,10 @@
+--- /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/TraditionalRag/traditional_rag.py	2025-05-25 18:59:36.000000000 -0300
++++ /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_vsequential_BioASQ_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_vsequential_BioASQ_solver/TraditionalRag/traditional_rag.py	2025-04-26 17:52:55.000000000 -0300
+@@ -173,6 +173,7 @@
+         response = await llm_client.chat.completions.create(
+             model=llm_model,
+             messages=[
++                {"role": "system", "content": "You are a helpful assistant."},
+                 {"role": "user", "content": prompt}
+             ],
+             temperature=0.0

@@ -1,0 +1,3 @@
+Matrix metalloproteinase-9 polymorphism 1562 C > T (rs3918242) associated with protection against placental malaria.
+
+Phagocytosis of malaria pigment (hemozoin) induces increased activity of matrix metalloproteinase (MMP)-9, an endopeptidase involved in cytokine regulation. In this study, we examined whether a common functional MMP-9 promoter polymorphism (rs3918242) affects Plasmodium falciparum infection in pregnancy. Eighteen percent of Ghanaian primiparae carried the minor T allele. It was associated with reduced odds of placental hemozoin and of placental as well as peripheral blood parasitemia. The results indicate that a common MMP-9 polymorphism protects against placental malaria indicating that this endopeptidase is involved in susceptibility to P. falciparum.

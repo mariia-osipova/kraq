@@ -1,0 +1,3 @@
+[Successful use of vemurafenib in a patient with resistant hairy cell leukemia].
+
+The paper describes a case of a patient with refractory hairy cell leukemia. In spite of the absence of CD25 expression, the disease was classified as a classical form according to the WHO classification (2008), as also confirmed by the detection of BRAFV600E mutation. The disease was characterized by resistance to all lines of therapy (interferon-a, splenectomy, cladribin). Clinical and hematological remission was achieved within 2 months of administration of the BRAF kinase inhibitor vemurafenib.

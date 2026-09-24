@@ -1,0 +1,3 @@
+Programmed death 1 pathway inhibition in metastatic renal cell cancer and prostate cancer.
+
+Programmed death 1 (PD-1) is a T cell co-inhibitory receptor with two ligands, PD-L1 and PD-L2. In cancer, this pathway plays a major role in immune resistance in the tumor environment. Blockade of this pathway can enhance antitumor immune responses. This review discusses the preclinical rationale for PD-1 pathway inhibition in advanced renal cell carcinoma and prostate cancer, in addition to the clinical activity and toxicity of the anti-PD-L1 antibody BMS-936559, as well as anti-PD-1 antibodies MK-3475 and BMS-936558.

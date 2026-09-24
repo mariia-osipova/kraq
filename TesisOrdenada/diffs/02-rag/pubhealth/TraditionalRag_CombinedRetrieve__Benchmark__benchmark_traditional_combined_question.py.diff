@@ -1,0 +1,167 @@
+--- /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/TraditionalRag_CombinedRetrieve/Benchmark/benchmark_traditional_combined_question.py	2025-05-19 12:05:00.000000000 -0300
++++ /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_pubhealth_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_pubhealth_solver/TraditionalRag_CombinedRetrieve/Benchmark/benchmark_traditional_combined_question.py	2025-05-20 00:03:03.000000000 -0300
+@@ -13,7 +13,7 @@
+ from sentence_transformers import SentenceTransformer, util
+ from bert_score import score
+ from tqdm import tqdm
+-from typing import List, Dict, Any, Tuple, Optional
++from typing import List, Dict, Any, Tuple
+ from qdrant_client import AsyncQdrantClient
+ import torch
+ 
+@@ -37,7 +37,7 @@
+ EMBEDDING_MODEL = "nomic-embed-text"
+ LLM_MODEL = "hugging-quants/Meta-Llama-3.1-8B-Instruct-AWQ-INT4"
+ # Modelo para el cálculo de similitud coseno
+-sentence_model = SentenceTransformer('all-MiniLM-L6-v2', device="cuda:1")
++sentence_model = SentenceTransformer('all-MiniLM-L6-v2', device='cuda:1')
+ 
+ 
+ 
+@@ -45,7 +45,7 @@
+     """
+     Calcula la similitud coseno entre dos textos
+     """
+-    # Convertir a string si es una lista
++    # Convertir a string si es una lista (respuestas exactas pueden ser listas)
+     if isinstance(text1, list):
+         text1 = str(text1)
+     if isinstance(text2, list):
+@@ -56,19 +56,8 @@
+         return 0.0
+     
+     try:
+-        # Especificar el dispositivo CUDA:1
+-        device = torch.device("cuda:1")
+-        
+-        # Asegurarnos de que el modelo esté en CUDA:1
+-        if not hasattr(calculate_cosine_similarity, 'sentence_model'):
+-            calculate_cosine_similarity.sentence_model = SentenceTransformer('all-MiniLM-L6-v2', device="cuda:1")
+-        
+-        # Generar embeddings y moverlos a CUDA:1
+-        embedding1 = calculate_cosine_similarity.sentence_model.encode(text1, convert_to_tensor=True)
+-        embedding2 = calculate_cosine_similarity.sentence_model.encode(text2, convert_to_tensor=True)
+-        
+-        embedding1 = embedding1.to(device)
+-        embedding2 = embedding2.to(device)
++        embedding1 = sentence_model.encode(text1, convert_to_tensor=True)
++        embedding2 = sentence_model.encode(text2, convert_to_tensor=True)
+         
+         # Asegúrate de que los tensores sean unidimensionales (vectores)
+         if len(embedding1.shape) > 1 and embedding1.shape[0] > 1:
+@@ -82,8 +71,7 @@
+         if isinstance(similarity, torch.Tensor) and similarity.numel() > 1:
+             similarity = similarity.mean()
+             
+-        # Mover el resultado a CPU antes de convertirlo a Python
+-        return similarity.cpu().item()
++        return similarity.item()
+     except Exception as e:
+         logger.error(f"Error calculando similitud coseno: {e}")
+         return 0.0
+@@ -114,6 +102,7 @@
+     question: str,
+     generated_answer: str,
+     reference_answer: str,
++    answer_type: str = "answer",
+     client: AsyncOpenAI = None
+ ) -> int:
+     """
+@@ -121,14 +110,16 @@
+     usando exclusivamente el LLM para el juicio
+     """
+     try:
+-        # Prompt para evaluación
++        # Preparar el prompt según el tipo de respuesta de referencia
++        
++            # Para respuesta única
+         prompt = f"""You are an expert evaluator for question answering systems. Your task is to determine if the generated answer correctly responds to the question according to the reference answer.
+ 
+ Question: {question}
+ Generated Answer: {generated_answer}
+ Reference Answer: {reference_answer}
+ 
+-The reference answer represents the truth. The generated answer must match the meaning of the reference answer to be considered correct. If the generated answer is more specific but the core meaning is the same, it is also considered correct.
++The reference answer represents the truth. The label of the generated answer must match the reference answer to be considered correct.
+ 
+ Respond with ONLY a single digit:
+ 1 - CORRECT: 
+@@ -195,7 +186,7 @@
+             "llm_client": llm_client,                # Cliente vLLM para LLM
+             "embedding_model": EMBEDDING_MODEL,      # nomic-embed-text (Ollama)
+             "llm_model": LLM_MODEL,                  # Llama 3.1 Instruct (vLLM)
+-            "top_k": 20,
++            "top_k": 10,
+             "debug_prints": False,
+             "verbose_timing": False,
+             "question_collection": "questions-index-finetuned"
+@@ -269,6 +260,7 @@
+         question=question,
+         generated_answer=response,
+         reference_answer=reference_answer,
++        answer_type=answer_type,
+         client=llm_client
+     )
+     
+@@ -290,20 +282,9 @@
+     
+     return result
+ 
+-async def run_benchmark(
+-    limit: int = 300,
+-    questions: Optional[List[Dict[str, Any]]] = None,
+-    results_dir: Optional[Path] = None,
+-    top_k: int = 20
+-) -> None:
++async def run_benchmark():
+     """
+     Ejecuta el benchmark completo
+-    
+-    Args:
+-        limit: Número máximo de preguntas a evaluar
+-        questions: Lista opcional de preguntas predefinidas
+-        results_dir: Directorio opcional para resultados
+-        top_k: Número de documentos a recuperar
+     """
+     # Configurar clientes de API
+     llm_client = AsyncOpenAI(
+@@ -316,22 +297,21 @@
+         api_key="ollama"
+     )
+     
+-    # Usar directorio de resultados personalizado si se proporciona
+-    if results_dir is None:
+-        results_dir = Path(__file__).parent / "results"
++    # Crear directorios para resultados
++    results_dir = Path(__file__).parent / "results_random"
+     results_dir.mkdir(exist_ok=True)
+     
+-    # Crear directorios para resultados
+     ideal_dir = results_dir / "ideal_answers"
+     exact_dir = results_dir / "exact_answers"
+     ideal_dir.mkdir(exist_ok=True)
+     exact_dir.mkdir(exist_ok=True)
+     
+-    # Usar preguntas proporcionadas o obtenerlas de Qdrant
+-    if questions is not None:
+-        all_questions = questions[:limit]
+-    else:
+-        all_questions = await get_questions_from_qdrant(limit=limit)
++    # Obtener preguntas de Qdrant
++    all_questions = await get_questions_from_qdrant(limit=1000)
++    
++    if not all_questions:
++        logger.error("No se pudieron obtener preguntas de Qdrant")
++        return
+     
+     # Verificar checkpoints existentes
+     ideal_results = []
+@@ -480,7 +460,7 @@
+                 if isinstance(answer, list):
+                     question_data["exact_answer"] = answer
+                 else:
+-                    question_data["exact_answer"] = answer
++                    question_data["exact_answer"] = [answer]
+                 
+                 question_data["ideal_answer"] = answer if isinstance(answer, str) else str(answer)
+                 

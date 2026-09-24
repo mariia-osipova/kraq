@@ -1,0 +1,3 @@
+α-Synuclein: the long distance runner.
+
+Parkinson's disease is characterized by α-synuclein pathology in the form of Lewy bodies and Lewy neurites. Braak et al described the spatial and temporal spread of α-synuclein pathology in Parkinson's disease. Recent experimental studies have demonstrated that α-synuclein can transfer from cell to cell. In this review, we highlight the involvement of α-synuclein in Parkinson's disease and in Braak's staging of Parkinson's disease pathology. We discuss whether a prion-like mechanism of α-synuclein spread might contribute to Parkinson's disease pathology. We describe recent studies investigating cell-to-cell transfer of α-synuclein and focus our review on the long-distance axonal transport of α-synuclein along neurons.

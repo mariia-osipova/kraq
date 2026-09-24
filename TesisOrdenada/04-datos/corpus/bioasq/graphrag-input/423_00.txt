@@ -1,0 +1,3 @@
+[Dendritic cells: orchestration of the immune response].
+
+Dendritic cells are critical initiators of immune responses. They not only activate pathogen-specific T and B lymphocytes, they also stimulate cells of the innate immune system. Furthermore, dentritic cells are involved in immunological tolerance induction through the elimination of autoreactive T lymphocytes. Over the last ten years, understanding of the development, biology and physiopathology of dentritic cells has progressed considerably which has lead to the use of dentritic cells in immunotherapy protocols to treat tumors, infections and auto-immune diseases.

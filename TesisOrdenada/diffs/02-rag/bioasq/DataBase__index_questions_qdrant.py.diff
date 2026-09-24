@@ -1,0 +1,28 @@
+--- /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/DataBase/index_questions_qdrant.py	2025-04-28 23:31:20.000000000 -0300
++++ /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_vsequential_BioASQ_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_vsequential_BioASQ_solver/DataBase/index_questions_qdrant.py	2025-04-23 14:28:16.000000000 -0300
+@@ -90,15 +90,22 @@
+         for question_entry in questions_data:
+             question_id = question_entry["id"]
+             question_text = question_entry["question"]
+-            answer = question_entry["answer"]
+             
+-            # Crear payload simplificado solo con id, pregunta y respuesta
++            # Crear payload con toda la información relevante
+             payload = {
+                 "question_id": question_id,
+                 "question": question_text,
+-                "answer": answer
++                "source_file": os.path.basename(file_path)
+             }
+             
++            # Agregar respuesta ideal si existe
++            if "ideal_answer" in question_entry and question_entry["ideal_answer"]:
++                payload["ideal_answer"] = question_entry["ideal_answer"]
++            
++            # Agregar respuesta exacta si existe
++            if "exact_answer" in question_entry and question_entry["exact_answer"]:
++                payload["exact_answer"] = question_entry["exact_answer"]
++            
+             processed_questions.append({
+                 "text": question_text,
+                 "payload": payload

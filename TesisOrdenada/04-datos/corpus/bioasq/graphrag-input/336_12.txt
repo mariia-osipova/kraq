@@ -1,0 +1,3 @@
+FAK and Nanog cross talk with p53 in cancer stem cells.
+
+This review is focused on the role of Focal Adhesion Kinase (FAK) signaling in cancer stem cells. The recent data demonstrate the important role of FAK in cancer stem cell proliferation, differentiation, motility, and invasion. We showed recently that the transcription factor Nanog binds the FAK promoter and up-regulates FAK expression, and that FAK binds Nanog and phosphorylates it. This review discusses the interaction of FAK, Nanog, Oct-3/4, and Sox-2 signaling pathways that are critical for the regulation of cancer stem cells. The cross-linked signaling of FAK with p53 and Nanog signaling in cancer stem cell and function and targeted therapeutics approaches are discussed.

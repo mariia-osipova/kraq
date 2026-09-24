@@ -1,0 +1,3 @@
+How do RNA sequence, DNA sequence, and chromatin properties regulate splicing?
+
+Recent genome-wide studies have revealed a remarkable correspondence between nucleosome positions and exon-intron boundaries, and several studies have implicated specific histone modifications in regulating alternative splicing. In addition, recent progress in cracking the 'splicing code' shows that sequence motifs carried on the nascent RNA molecule itself are sufficient to accurately predict tissue-specific alternative splicing patterns. Together, these studies shed light on the complex interplay between RNA sequence, DNA sequence, and chromatin properties in regulating splicing.

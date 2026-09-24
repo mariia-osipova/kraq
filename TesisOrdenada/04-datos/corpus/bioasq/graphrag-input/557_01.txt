@@ -1,0 +1,3 @@
+In vitro transcription of viroid RNA into full-length copies by RNA-dependent RNA polymerase from healthy tomato leaf tissue.
+
+RNA-dependent RNA polymerase from healthy tomato plant tissue accepts potato spindle tuber viroid (PSTV) RNA as a template for the in vitro synthesis of full-length RNA copies of the PSTV genome. Viroid transcription requires the presence of Mn2+ and /or Mg2+ ions and is not inhibited by concentrations of 10(-5) M alpha-amanitin. This is the first report of a well-defined product synthesized in vitro by an RNA-dependent RNA polymerase from healthy plants.

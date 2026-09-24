@@ -1,0 +1,3 @@
+Mepolizumab in eosinophilic disorders.
+
+Mepolizumab (Bosatria(®), GlaxoSmithKline) is a biologic agent developed to treat asthma. It represents a humanized monoclonal antibody of IgG1 κ type, which targets human IL-5 and thus prevents its interaction with the α-chain of the IL-5 receptor. To date, it has not been approved for use in any eosinophil-related disorder; however, several studies have suggested some therapeutic benefit across a spectrum of eosinophil-related disorders. This article evaluates the currently available preclinical and clinical studies, and the impact of mepolizumab against a variety of eosinophilic disorders.

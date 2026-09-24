@@ -1,0 +1,3 @@
+Cilia and cilia-associated proteins in cancer.
+
+The primary cilium is a well-established target in the pathogenesis of numerous developmental and chronic disorders, and more recently is attracting interest as a structure relevant to cancer. Here we discuss mechanisms by which changes in cilia can contribute to the formation and growth of tumors. We emphasize the cancer-relevance of cilia-dependent signaling pathways and proteins including mTOR, VHL, TSC, WNT, Aurora-A, NEDD9, and Hedgehog, and highlight the emerging role of ciliary dysfunction in renal cell carcinoma, medulloblastoma, and breast cancer.

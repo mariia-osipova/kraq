@@ -1,0 +1,3 @@
+The secreted proteome profile of developing Dictyostelium discoideum cells.
+
+Dictyostelium discoideum is a unicellular eukaryote that, when starved, aggregates to form multicellular structures. In this report, we identified the proteins secreted by developing Dictyostelium cells using MS-based proteomics. A total of 349 different secreted proteins were identified, indicating that at least 2.6% of the 13 600 predicted proteins in the Dictyostelium genome are secreted. Gene ontology analysis suggests that many of the secreted proteins are involved in protein and carbohydrate metabolism, and proteolysis.

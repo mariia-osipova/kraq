@@ -1,0 +1,3 @@
+In macropore tryptic digestion at acidic pH and its implication for proteomics.
+
+Gan et al. (Proteomics 2013, 13, 3117-3123) described a new "macropore" protocol for effective protein digestion by trypsin suitable for a wide range of pH including acidic pH. It was effective not only in experiments with solutions of a model protein (myoglobin), but also with a subfraction of rat liver cytosol. This significantly simplifies and accelerates protein digestion procedures for subsequent MS. However, further studies are needed to find limits of experimental applicability of the described protocol in proteomics.

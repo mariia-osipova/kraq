@@ -1,0 +1,3 @@
+Electrospray ionization tandem mass spectrometry (ESI-MS/MS)-based shotgun lipidomics.
+
+In the past decade, many new strategies for mass spectrometry (MS)-based analyses of lipids have been developed. Lipidomics is one of the most promising research fields to emerge as a result of these advances in MS. Currently, mass spectrometric analysis of lipids involves two complementary approaches: direct infusion (shotgun lipidomics) and liquid chromatography coupled to MS. In this chapter, I will demonstrate the approach of shotgun lipidomics using electrospray ionization tandem MS for the analysis of lipid molecular species directly from crude biological extracts of tissue or fluids.

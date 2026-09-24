@@ -1,0 +1,1502 @@
+[
+  {
+    "id": "jp_3138",
+    "question": "What does a seismologist study?",
+    "answer": "Earthquakes"
+  },
+  {
+    "id": "jp_3139",
+    "question": "What element comes between Uranium and Plutonium in the periodic table?",
+    "answer": "Neptunium"
+  },
+  {
+    "id": "jp_3140",
+    "question": "A gaggle is a group of what animal?",
+    "answer": "Geese"
+  },
+  {
+    "id": "jp_3141",
+    "question": "What food made Popeye strong?",
+    "answer": "Spinach"
+  },
+  {
+    "id": "jp_3145",
+    "question": "What was the pen name of Samuel Langhorne Clemens?",
+    "answer": "Mark Twain"
+  },
+  {
+    "id": "jp_3146",
+    "question": "What salt sea borders Jordan and is 433 meters below sea level?",
+    "answer": "Dead Sea"
+  },
+  {
+    "id": "jp_3153",
+    "question": "Under what plant is it customary to kiss during the Christmas season?",
+    "answer": "Mistletoe"
+  },
+  {
+    "id": "jp_3154",
+    "question": "What country did the band ABBA hail from?",
+    "answer": "Sweden"
+  },
+  {
+    "id": "jp_3157",
+    "question": "On what TV show would you see a van called the Mystery Machine?",
+    "answer": "Scooby Doo"
+  },
+  {
+    "id": "jp_3158",
+    "question": "What type of animal does mohair come from?",
+    "answer": "Angora Goat"
+  },
+  {
+    "id": "jp_3160",
+    "question": "What 1978 horror film introduced Jamie Lee Curtis to the big screen?",
+    "answer": "Halloween"
+  },
+  {
+    "id": "jp_3162",
+    "question": "Aves is the taxonomical class of what type of animals?",
+    "answer": "Birds"
+  },
+  {
+    "id": "jp_3163",
+    "question": "What fictional character visited Lilliput and Brobdingnag?",
+    "answer": "Lemuel Gulliver"
+  },
+  {
+    "id": "jp_3164",
+    "question": "\"In what country did the movie \"\"The Last King of Scotland\"\" take place?\"",
+    "answer": "Uganda"
+  },
+  {
+    "id": "jp_3167",
+    "question": "\"Whose motto is \"\"Semper Fidelis\"\"?\"",
+    "answer": "US Marine Corps"
+  },
+  {
+    "id": "jp_3169",
+    "question": "Who is Posh Spice's husband?",
+    "answer": "David Beckham"
+  },
+  {
+    "id": "jp_3170",
+    "question": "What river flows through Paris?",
+    "answer": "The Seine"
+  },
+  {
+    "id": "jp_3172",
+    "question": "What is Superman's achilles heel?",
+    "answer": "Kryptonite"
+  },
+  {
+    "id": "jp_3173",
+    "question": "When Jack fell down and broke his crown, who came tumbling after?",
+    "answer": "Jill"
+  },
+  {
+    "id": "jp_3174",
+    "question": "Hatters were often “mad” because of exposure to what chemical element?",
+    "answer": "Mercury"
+  },
+  {
+    "id": "jp_3175",
+    "question": "Before the Euro, what was the name of Italy's currency?",
+    "answer": "The Lira"
+  },
+  {
+    "id": "jp_3176",
+    "question": "In what year did the California gold rush start?",
+    "answer": "1848"
+  },
+  {
+    "id": "jp_3179",
+    "question": "Besides Mexico and Canada, what country is geographically closest to the United States?",
+    "answer": "Russia"
+  },
+  {
+    "id": "jp_3181",
+    "question": "In the US, the title esquire is used to describe a person who practices what profession?",
+    "answer": "Law"
+  },
+  {
+    "id": "jp_3182",
+    "question": "What hurricane devastated south Florida in 1992?",
+    "answer": "Andrew"
+  },
+  {
+    "id": "jp_3183",
+    "question": "The star Betelgeuse is pronounced like what two English words?",
+    "answer": "Beetle Juice"
+  },
+  {
+    "id": "jp_3185",
+    "question": "What is the English translation of the Latin word “Rex”?",
+    "answer": "King"
+  },
+  {
+    "id": "jp_3188",
+    "question": "What is the word for a group of fish?",
+    "answer": "School"
+  },
+  {
+    "id": "jp_3189",
+    "question": "What river flows through Budapest and Vienna?",
+    "answer": "Danube"
+  },
+  {
+    "id": "jp_3191",
+    "question": "Where are the pearly gates said to be?",
+    "answer": "Heaven"
+  },
+  {
+    "id": "jp_3192",
+    "question": "Ethanol and isopropyl are types of what?",
+    "answer": "Alcohol"
+  },
+  {
+    "id": "jp_3193",
+    "question": "What mythical animal is a rabbit with antlers?",
+    "answer": "Jackalope"
+  },
+  {
+    "id": "jp_3196",
+    "question": "What country is home to 9 of the 10 most venomous types of snakes?",
+    "answer": "Australia"
+  },
+  {
+    "id": "jp_3198",
+    "question": "\"In the term \"\"Valley Girl\"\", what valley is being referred to?\"",
+    "answer": "San Fernando"
+  },
+  {
+    "id": "jp_3199",
+    "question": "What team has defeated the Washington Generals thousands of times?",
+    "answer": "Harlem Globetrotters"
+  },
+  {
+    "id": "jp_3202",
+    "question": "What Jewish mystical teachings are followed by Madonna?",
+    "answer": "Kabbalah"
+  },
+  {
+    "id": "jp_3203",
+    "question": "What is the best-selling Dutch beer?",
+    "answer": "Heineken"
+  },
+  {
+    "id": "jp_3204",
+    "question": "In Genesis, what type of animal returns to Noah's Ark carrying an olive leaf?",
+    "answer": "Dove"
+  },
+  {
+    "id": "jp_3205",
+    "question": "What is the term for an economic downturn that is more severe than a recession?",
+    "answer": "Depression"
+  },
+  {
+    "id": "jp_3206",
+    "question": "\"Who painted \"\"Guernica\"\" and \"\"The Old Guitarist\"\"?\"",
+    "answer": "Pablo Picasso"
+  },
+  {
+    "id": "jp_3207",
+    "question": "What Canadian province is west of Alberta?",
+    "answer": "British Columbia"
+  },
+  {
+    "id": "jp_3208",
+    "question": "What is the word for a baby goat?",
+    "answer": "Kid"
+  },
+  {
+    "id": "jp_3210",
+    "question": "What city is connected to its northern neighbors by the Golden Gate Bridge?",
+    "answer": "San Francisco"
+  },
+  {
+    "id": "jp_3211",
+    "question": "If someone is in the Land of Nod, what are they doing?",
+    "answer": "Sleeping"
+  },
+  {
+    "id": "jp_3212",
+    "question": "Who was the lead singer of Queen?",
+    "answer": "Freddie Mercury"
+  },
+  {
+    "id": "jp_3213",
+    "question": "According to legend, what Lady rode naked through Coventry to protest high taxes?",
+    "answer": "Lady Godiva"
+  },
+  {
+    "id": "jp_3217",
+    "question": "What is Indiana Jones's real first name?",
+    "answer": "Henry"
+  },
+  {
+    "id": "jp_3222",
+    "question": "The Dardanelles separate two parts of what country?",
+    "answer": "Turkey"
+  },
+  {
+    "id": "jp_3223",
+    "question": "Who were the workers at Willy Wonka's chocolate factory?",
+    "answer": "Oompa-Loompas"
+  },
+  {
+    "id": "jp_3225",
+    "question": "What unit is used to measure the purity of gold?",
+    "answer": "Carat"
+  },
+  {
+    "id": "jp_3227",
+    "question": "\"What cult leader was inspired by the Beatles' song \"\"Helter Skelter\"\"?\"",
+    "answer": "Charles Manson"
+  },
+  {
+    "id": "jp_3230",
+    "question": "What force keeps the moon in orbit around Earth?",
+    "answer": "Gravity"
+  },
+  {
+    "id": "jp_3231",
+    "question": "Capellini, Tagliatelle and Ditalini are types of what?",
+    "answer": "Pasta"
+  },
+  {
+    "id": "jp_3238",
+    "question": "Where do basketball's Globetrotters supposedly hail from?",
+    "answer": "Harlem"
+  },
+  {
+    "id": "jp_3240",
+    "question": "What is the most famous trophy in the sport of yacht racing?",
+    "answer": "America's Cup"
+  },
+  {
+    "id": "jp_3242",
+    "question": "Who is the Duke of York?",
+    "answer": "Prince Andrew"
+  },
+  {
+    "id": "jp_3246",
+    "question": "What is the only ancient wonder of the world that still exists?",
+    "answer": "The Great Pyramid of Giza"
+  },
+  {
+    "id": "jp_3247",
+    "question": "What animal is the offspring of a male donkey and female horse?",
+    "answer": "Mule"
+  },
+  {
+    "id": "jp_3249",
+    "question": "What country is divided between Greek and Turkish factions?",
+    "answer": "Cyprus"
+  },
+  {
+    "id": "jp_3250",
+    "question": "What type of animal is Punxsutawney Phil?",
+    "answer": "Groundhog"
+  },
+  {
+    "id": "jp_3252",
+    "question": "What is Gordon Matthew Thomas Sumner's stage name?",
+    "answer": "Sting"
+  },
+  {
+    "id": "jp_3254",
+    "question": "What childhood disease is a softening of bones due to malnutrition?",
+    "answer": "Rickets"
+  },
+  {
+    "id": "jp_3255",
+    "question": "Kate Hudson is the daughter of what famous actress?",
+    "answer": "Goldie Hawn"
+  },
+  {
+    "id": "jp_3257",
+    "question": "What word describes an organism with an absence of pigment in the skin?",
+    "answer": "Albino"
+  },
+  {
+    "id": "jp_3258",
+    "question": "What is Decompression Sickness commonly called?",
+    "answer": "The Bends"
+  },
+  {
+    "id": "jp_3259",
+    "question": "In addition to sapphire, what gemstone is a variety of the mineral corundum?",
+    "answer": "Ruby"
+  },
+  {
+    "id": "jp_3261",
+    "question": "In ancient Greece, what would you find at Delphi?",
+    "answer": "The Oracle"
+  },
+  {
+    "id": "jp_3263",
+    "question": "In what modern-day country was Christopher Columbus born?",
+    "answer": "Italy"
+  },
+  {
+    "id": "jp_3264",
+    "question": "What 2013 Pixar movie is a prequel to Monsters Inc.?",
+    "answer": "Monsters University"
+  },
+  {
+    "id": "jp_3265",
+    "question": "What sea borders Turkey to the north?",
+    "answer": "Black Sea"
+  },
+  {
+    "id": "jp_3266",
+    "question": "What does a mnemonic device help you do?",
+    "answer": "Remember"
+  },
+  {
+    "id": "jp_3269",
+    "question": "In what city would you find the world's largest indoor ski slope?",
+    "answer": "Dubai"
+  },
+  {
+    "id": "jp_3273",
+    "question": "What is the common term for Myocardial Infarction?",
+    "answer": "Heart Attack"
+  },
+  {
+    "id": "jp_3275",
+    "question": "If someone commits matricide, who did they kill?",
+    "answer": "Their Mother"
+  },
+  {
+    "id": "jp_3279",
+    "question": "What does the Jewish holiday Rosh Hashanah celebrate?",
+    "answer": "New Year"
+  },
+  {
+    "id": "jp_3280",
+    "question": "What TV series was created by Gene Roddenberry?",
+    "answer": "Star Trek"
+  },
+  {
+    "id": "jp_3281",
+    "question": "What is the name of the Princess Bride?",
+    "answer": "Buttercup"
+  },
+  {
+    "id": "jp_3283",
+    "question": "What South American city has the best-known Carnival celebration?",
+    "answer": "Rio de Janeiro"
+  },
+  {
+    "id": "jp_3288",
+    "question": "What comic strip features characters named Jughead and Veronica?",
+    "answer": "Archie"
+  },
+  {
+    "id": "jp_3289",
+    "question": "What river is dammed by the Hoover Dam?",
+    "answer": "Colorado River"
+  },
+  {
+    "id": "jp_3294",
+    "question": "\"What TV chef co-authored \"\"Mastering the Art of French Cooking\"\"?\"",
+    "answer": "Julia Child"
+  },
+  {
+    "id": "jp_3297",
+    "question": "What brass instrument uses a slide instead of valves?",
+    "answer": "Trombone"
+  },
+  {
+    "id": "jp_3298",
+    "question": "\"What \"\"Wizard of Oz\"\" character wants a brain?\"",
+    "answer": "Scarecrow"
+  },
+  {
+    "id": "jp_3300",
+    "question": "In what country did papyrus originate?",
+    "answer": "Egypt"
+  },
+  {
+    "id": "jp_3305",
+    "question": "What exam must be passed to practice law in the U.S.?",
+    "answer": "Bar Exam"
+  },
+  {
+    "id": "jp_3309",
+    "question": "What country inspired Starbucks - but has no Starbucks in it?",
+    "answer": "Italy"
+  },
+  {
+    "id": "jp_3313",
+    "question": "\"What word is repeated before \"\"toil and trouble\"\" in \"\"Macbeth\"\"?\"",
+    "answer": "Double"
+  },
+  {
+    "id": "jp_3314",
+    "question": "What could Jack Sprat's wife not eat?",
+    "answer": "Lean"
+  },
+  {
+    "id": "jp_3318",
+    "question": "In addition to sine and cosine, what is the third main function of trigonometry?",
+    "answer": "Tangent"
+  },
+  {
+    "id": "jp_3319",
+    "question": "Traditionally, when a man bows a woman will do what?",
+    "answer": "Curtsey"
+  },
+  {
+    "id": "jp_3320",
+    "question": "What is the word for a Jewish candelabra?",
+    "answer": "Menorah"
+  },
+  {
+    "id": "jp_3322",
+    "question": "What is the last U.S. state, alphabetically?",
+    "answer": "Wyoming"
+  },
+  {
+    "id": "jp_3323",
+    "question": "\"What country's unofficial national anthem is \"\"Waltzing Matilda\"\"?\"",
+    "answer": "Australia"
+  },
+  {
+    "id": "jp_3325",
+    "question": "What is Gaius Octavius better known as?",
+    "answer": "Augustus"
+  },
+  {
+    "id": "jp_3326",
+    "question": "\"What rock band released the albums \"\"Sticky Fingers\"\" and \"\"Beggar's Banquet\"\"?\"",
+    "answer": "The Rolling Stones"
+  },
+  {
+    "id": "jp_3328",
+    "question": "At what venue do the Rockettes perform?",
+    "answer": "Radio City Music Hall"
+  },
+  {
+    "id": "jp_3331",
+    "question": "What was the name of the Nazi secret police?",
+    "answer": "Gestapo"
+  },
+  {
+    "id": "jp_3332",
+    "question": "\"What does the Latin term \"\"Annus Horribilis\"\" means in English?\"",
+    "answer": "Horrible Year"
+  },
+  {
+    "id": "jp_3333",
+    "question": "What river does the Hoover Dam dam?",
+    "answer": "Colorado River"
+  },
+  {
+    "id": "jp_3334",
+    "question": "What river is spanned by the Tower Bridge?",
+    "answer": "Thames"
+  },
+  {
+    "id": "jp_3335",
+    "question": "What religious movement started in Jamaica in the 1930's?",
+    "answer": "Rastafari"
+  },
+  {
+    "id": "jp_3337",
+    "question": "\"What part of speech are the words, \"\"and\"\", \"\"or\"\", and \"\"but\"\"?\"",
+    "answer": "Conjunction"
+  },
+  {
+    "id": "jp_3338",
+    "question": "What type of animal is a water moccasin?",
+    "answer": "Snake"
+  },
+  {
+    "id": "jp_3339",
+    "question": "What Germanic language was once the most commonly-spoken language among European Jews?",
+    "answer": "Yiddish"
+  },
+  {
+    "id": "jp_3340",
+    "question": "What is the capital of Bavaria?",
+    "answer": "Munich"
+  },
+  {
+    "id": "jp_3342",
+    "question": "\"What Norse god is known as a \"\"trickster god\"\"?\"",
+    "answer": "Loki"
+  },
+  {
+    "id": "jp_3343",
+    "question": "\"On what type of building would you be most likely to find a \"\"flying buttress\"\"?\"",
+    "answer": "Church"
+  },
+  {
+    "id": "jp_3345",
+    "question": "What is the only Great Lake that doesn't border Canada?",
+    "answer": "Lake Michigan"
+  },
+  {
+    "id": "jp_3346",
+    "question": "What is either a popular sport or a type of insect?",
+    "answer": "Cricket"
+  },
+  {
+    "id": "jp_3347",
+    "question": "What type of collectible, featuring Honus Wagner, was sold for $2.8 million in 2007?",
+    "answer": "Baseball Card"
+  },
+  {
+    "id": "jp_3351",
+    "question": "What organ is foie gras made from?",
+    "answer": "Liver"
+  },
+  {
+    "id": "jp_3352",
+    "question": "What is Judi Dench's title in the British honours system?",
+    "answer": "Dame"
+  },
+  {
+    "id": "jp_3353",
+    "question": "What landlocked African country is also a men's name in the English language?",
+    "answer": "Chad"
+  },
+  {
+    "id": "jp_3358",
+    "question": "What U.S. state is closest to London, geographically?",
+    "answer": "Maine"
+  },
+  {
+    "id": "jp_3359",
+    "question": "What city was captured at the end of the First Crusade in 1099?",
+    "answer": "Jerusalem"
+  },
+  {
+    "id": "jp_3360",
+    "question": "What island do lemurs come from?",
+    "answer": "Madagascar"
+  },
+  {
+    "id": "jp_3363",
+    "question": "It takes a village to what?",
+    "answer": "Raise a Child"
+  },
+  {
+    "id": "jp_3369",
+    "question": "What is the 2nd book of Bible?",
+    "answer": "Exodus"
+  },
+  {
+    "id": "jp_3370",
+    "question": "In what country would you be most likely to find a polder?",
+    "answer": "Netherlands"
+  },
+  {
+    "id": "jp_3372",
+    "question": "What is the largest Caribbean Island?",
+    "answer": "Cuba"
+  },
+  {
+    "id": "jp_3373",
+    "question": "What horse won the 1973 Triple Crown?",
+    "answer": "Secretariat"
+  },
+  {
+    "id": "jp_3375",
+    "question": "What instrument did Ravi Shankar play?",
+    "answer": "Sitar"
+  },
+  {
+    "id": "jp_3377",
+    "question": "What was the Soviet version of the CIA?",
+    "answer": "KGB"
+  },
+  {
+    "id": "jp_3378",
+    "question": "What is the Japanese word for freshwater eel?",
+    "answer": "Unagi"
+  },
+  {
+    "id": "jp_3379",
+    "question": "What city-state did Hannibal fight for?",
+    "answer": "Carthage"
+  },
+  {
+    "id": "jp_3380",
+    "question": "What are french fries called in France?",
+    "answer": "Frites"
+  },
+  {
+    "id": "jp_3381",
+    "question": "Besides tennis, what sport can be played at Wimbledon's All England Club?",
+    "answer": "Croquet"
+  },
+  {
+    "id": "jp_3383",
+    "question": "What does a smoke jumper fight?",
+    "answer": "Wildfires"
+  },
+  {
+    "id": "jp_3386",
+    "question": "\"What type of doors did the DeLorean in \"\"Back to the Future\"\" have?\"",
+    "answer": "Gull-wing"
+  },
+  {
+    "id": "jp_3391",
+    "question": "Who was the first head of the Church of England?",
+    "answer": "Henry VIII"
+  },
+  {
+    "id": "jp_3392",
+    "question": "Who have fought from the halls of Montezuma to the shores of Tripoli?",
+    "answer": "U.S. Marines"
+  },
+  {
+    "id": "jp_3395",
+    "question": "In golf, what is one stroke better than a birdie?",
+    "answer": "Eagle"
+  },
+  {
+    "id": "jp_3396",
+    "question": "What was stolen from the Louvre in 1911?",
+    "answer": "The Mona Lisa"
+  },
+  {
+    "id": "jp_3397",
+    "question": "What ancient people had priests known as druids?",
+    "answer": "Celts"
+  },
+  {
+    "id": "jp_3400",
+    "question": "What is the name of the pirate flag?",
+    "answer": "Jolly Roger"
+  },
+  {
+    "id": "jp_3404",
+    "question": "What city hosted the 2010 Winter Olympics?",
+    "answer": "Vancouver"
+  },
+  {
+    "id": "jp_3406",
+    "question": "\"What \"\"wonder drug\"\" was discovered by Alexander Fleming?\"",
+    "answer": "Penicillin"
+  },
+  {
+    "id": "jp_3407",
+    "question": "If you cross the river Styx, where are you?",
+    "answer": "Hades"
+  },
+  {
+    "id": "jp_3408",
+    "question": "What is Japan's national sport?",
+    "answer": "Sumo Wrestling"
+  },
+  {
+    "id": "jp_3409",
+    "question": "\"Who painted \"\"The Old Guitarist\"\" during his blue period?\"",
+    "answer": "Pablo Picasso"
+  },
+  {
+    "id": "jp_3410",
+    "question": "Who lived by the sea in a land called Honah Lee?",
+    "answer": "Puff the Magic Dragon"
+  },
+  {
+    "id": "jp_3412",
+    "question": "\"Who directed \"\"The Nightmare Before Christmas\"\" and \"\"Edward Scissorhands\"\"?\"",
+    "answer": "Tim Burton"
+  },
+  {
+    "id": "jp_3415",
+    "question": "What country heats most of its buildings with geothermal energy?",
+    "answer": "Iceland"
+  },
+  {
+    "id": "jp_3416",
+    "question": "What Frankish king was crowned emperor on Christmas day in 800 A.D.?",
+    "answer": "Charlemagne"
+  },
+  {
+    "id": "jp_3417",
+    "question": "What actress was on the cover of the first issue of Playboy?",
+    "answer": "Marilyn Monroe"
+  },
+  {
+    "id": "jp_3418",
+    "question": "In musical terms, what is the opposite of forte?",
+    "answer": "Piano"
+  },
+  {
+    "id": "jp_3419",
+    "question": "What is the most popular breed of dog in the United States?",
+    "answer": "Labrador Retriever"
+  },
+  {
+    "id": "jp_3420",
+    "question": "What is the name of the Japanese art of growing miniature trees?",
+    "answer": "Bonsai"
+  },
+  {
+    "id": "jp_3422",
+    "question": "Who has a brother named Mycroft?",
+    "answer": "Sherlock Holmes"
+  },
+  {
+    "id": "jp_3424",
+    "question": "What major Asian inland sea has almost entirely dried up?",
+    "answer": "Aral Sea"
+  },
+  {
+    "id": "jp_3425",
+    "question": "What Teamsters union leader mysteriously disappeared in 1975?",
+    "answer": "Jimmy Hoffa"
+  },
+  {
+    "id": "jp_3427",
+    "question": "What species interbred with humans in Europe and Asia before going extinct around 30,000 B.C.?",
+    "answer": "Neanderthal"
+  },
+  {
+    "id": "jp_3428",
+    "question": "In what country would you have found Robben Island prison?",
+    "answer": "South Africa"
+  },
+  {
+    "id": "jp_3430",
+    "question": "What type of person is a southpaw?",
+    "answer": "Left-Handed"
+  },
+  {
+    "id": "jp_3432",
+    "question": "What language does the word algebra come from?",
+    "answer": "Arabic"
+  },
+  {
+    "id": "jp_3433",
+    "question": "What U.S. state has the highest average elevation at 6,800 feet?",
+    "answer": "Colorado"
+  },
+  {
+    "id": "jp_3434",
+    "question": "\"In what sport might you experience a \"\"sticky wicket\"\" or a \"\"wicked googly\"\"?\"",
+    "answer": "Cricket"
+  },
+  {
+    "id": "jp_3435",
+    "question": "What city is Monte Carlo a part of?",
+    "answer": "Monaco"
+  },
+  {
+    "id": "jp_3436",
+    "question": "\"Who said \"\"I'm strong to the finish, 'cause I eats me Spinach\"\"?\"",
+    "answer": "Popeye"
+  },
+  {
+    "id": "jp_3438",
+    "question": "Pont Neuf is the oldest bridge in Paris. What does its name mean?",
+    "answer": "New Bridge"
+  },
+  {
+    "id": "jp_3439",
+    "question": "What animal does Angora wool come from?",
+    "answer": "Angora Rabbit"
+  },
+  {
+    "id": "jp_3440",
+    "question": "What country's flag featured a hammer and a sickle?",
+    "answer": "The Soviet Union"
+  },
+  {
+    "id": "jp_3442",
+    "question": "Which English King fought in the Third Crusade?",
+    "answer": "Richard I"
+  },
+  {
+    "id": "jp_3443",
+    "question": "What type of animal makes royal jelly?",
+    "answer": "Bees"
+  },
+  {
+    "id": "jp_3444",
+    "question": "What element are computer chips typically made from?",
+    "answer": "Silicon"
+  },
+  {
+    "id": "jp_3445",
+    "question": "In 2012, Felix Baumgartner became the first person to break the sound barrier doing what?",
+    "answer": "Skydiving"
+  },
+  {
+    "id": "jp_3447",
+    "question": "What U.S. Army rank is one higher than Captain?",
+    "answer": "Major"
+  },
+  {
+    "id": "jp_3448",
+    "question": "What country banned the sale of chewing gum in 2004?",
+    "answer": "Singapore"
+  },
+  {
+    "id": "jp_3450",
+    "question": "What is the largest ethnic group in Germany (besides Germans)?",
+    "answer": "Turks"
+  },
+  {
+    "id": "jp_3451",
+    "question": "What country's most common family name is Nguyen?",
+    "answer": "Vietnam"
+  },
+  {
+    "id": "jp_3452",
+    "question": "What Greek titan was chained to a rock as punishment for giving fire to mankind?",
+    "answer": "Prometheus"
+  },
+  {
+    "id": "jp_3454",
+    "question": "Where would you find Capitoline and Palatine hills?",
+    "answer": "Rome"
+  },
+  {
+    "id": "jp_3456",
+    "question": "What is the only Grand Slam tennis tournament to be played on clay courts?",
+    "answer": "French Open"
+  },
+  {
+    "id": "jp_3460",
+    "question": "What geologic period came after the Triassic?",
+    "answer": "Jurassic"
+  },
+  {
+    "id": "jp_3461",
+    "question": "If you have insomnia, what can't you do?",
+    "answer": "Sleep"
+  },
+  {
+    "id": "jp_3462",
+    "question": "If you land at John Lennon airport, what city are you in?",
+    "answer": "Liverpool"
+  },
+  {
+    "id": "jp_3464",
+    "question": "What industry's four capitals are New York, London, Paris and Milan?",
+    "answer": "Fashion"
+  },
+  {
+    "id": "jp_3467",
+    "question": "What food is made with lady fingers, coffee, mascarpone, and cocoa (among other ingredients)?",
+    "answer": "Tiramisu"
+  },
+  {
+    "id": "jp_3468",
+    "question": "What giant beast was kidnapped from Skull Island?",
+    "answer": "King Kong"
+  },
+  {
+    "id": "jp_3471",
+    "question": "\"What musical artist was known as \"\"The Purple One\"\"?\"",
+    "answer": "Prince"
+  },
+  {
+    "id": "jp_3472",
+    "question": "Among the countries in Asia, which one has the most Christians?",
+    "answer": "Philippines"
+  },
+  {
+    "id": "jp_3473",
+    "question": "What breed of dog is Scooby-Doo?",
+    "answer": "Great Dane"
+  },
+  {
+    "id": "jp_3475",
+    "question": "What chemical, often added to tap water, greatly reduces the rate of tooth decay?",
+    "answer": "Fluoride"
+  },
+  {
+    "id": "jp_3478",
+    "question": "\"What product once featured a much-loathed \"\"assistant\"\" named Clippy?\"",
+    "answer": "Microsoft Office"
+  },
+  {
+    "id": "jp_3481",
+    "question": "In 2014, a Boeing 777 mysteriously disappeared over the Indian Ocean. What country did it take off from?",
+    "answer": "Malaysia"
+  },
+  {
+    "id": "jp_3482",
+    "question": "\"What U.S. grocery chain has been humorously referred to as \"\"Whole Paycheck\"\"?\"",
+    "answer": "Whole Foods"
+  },
+  {
+    "id": "jp_3484",
+    "question": "What's the most popular sport in India?",
+    "answer": "Cricket"
+  },
+  {
+    "id": "jp_3485",
+    "question": "What does a kleptomaniac have a compulsion to do?",
+    "answer": "Steal"
+  },
+  {
+    "id": "jp_3486",
+    "question": "In what movie did Meryl Streep play a character inspired by Vogue editor Anna Wintour?",
+    "answer": "The Devil Wears Prada"
+  },
+  {
+    "id": "jp_3487",
+    "question": "In what country were the Smurfs invented?",
+    "answer": "Belgium"
+  },
+  {
+    "id": "jp_3488",
+    "question": "What term refers to dipping food into a communal pot of melted cheese?",
+    "answer": "Fondue"
+  },
+  {
+    "id": "jp_3489",
+    "question": "What type of alien is the Doctor from Doctor Who?",
+    "answer": "Time Lord"
+  },
+  {
+    "id": "jp_3492",
+    "question": "Who is (usually) pursued by Blinky, Inky, Pinky and Clyde?",
+    "answer": "Pac-Man"
+  },
+  {
+    "id": "jp_3493",
+    "question": "Who famously wore a pink Chanel suit and a pillbox hat?",
+    "answer": "Jacqueline Kennedy"
+  },
+  {
+    "id": "jp_3496",
+    "question": "Who was Bonnie Parker's partner in crime?",
+    "answer": "Clyde Barrow"
+  },
+  {
+    "id": "jp_3499",
+    "question": "What country built a 1,000 mile fence to prevent the spread of rabbits? (it didn't work)",
+    "answer": "Australia"
+  },
+  {
+    "id": "jp_3500",
+    "question": "After corn, what is the most-planted crop in the United States?",
+    "answer": "Soybeans"
+  },
+  {
+    "id": "jp_3502",
+    "question": "What type of meat is used to make wiener schnitzel?",
+    "answer": "Veal"
+  },
+  {
+    "id": "jp_3504",
+    "question": "\"What city's film industry is called \"\"Bollywood\"\"?\"",
+    "answer": "Mumbai"
+  },
+  {
+    "id": "jp_3507",
+    "question": "\"What phase of the moon comes after \"\"waning crescent\"\"?\"",
+    "answer": "New Moon"
+  },
+  {
+    "id": "jp_3508",
+    "question": "What type of plant is molasses usually made from?",
+    "answer": "Sugarcane"
+  },
+  {
+    "id": "jp_3511",
+    "question": "\"Who wrote \"\"Around the World in Eighty Days\"\" and \"\"Twenty Thousand Leagues Under the Sea\"\"?\"",
+    "answer": "Jules Verne"
+  },
+  {
+    "id": "jp_3513",
+    "question": "What Pacific island was visited by the HMS Bounty and Paul Gauguin?",
+    "answer": "Tahiti"
+  },
+  {
+    "id": "jp_3515",
+    "question": "What disease is characterized by the body's inability to produce or respond to insulin?",
+    "answer": "Diabetes"
+  },
+  {
+    "id": "jp_3516",
+    "question": "What great island sank into the Atlantic Ocean, according to Plato?",
+    "answer": "Atlantis"
+  },
+  {
+    "id": "jp_3517",
+    "question": "What is the only U.S. state whose name starts with the letter F?",
+    "answer": "Florida"
+  },
+  {
+    "id": "jp_3518",
+    "question": "What holiday comes the day after Halloween?",
+    "answer": "All Saints' Day"
+  },
+  {
+    "id": "jp_3519",
+    "question": "Which British overseas territory borders Spain?",
+    "answer": "Gibraltar"
+  },
+  {
+    "id": "jp_3520",
+    "question": "\"In what country do people say \"\"Kanpai\"\" when making a toast?\"",
+    "answer": "Japan"
+  },
+  {
+    "id": "jp_3521",
+    "question": "Who has appeared on the cover of Sports Illustrated a record 50 times?",
+    "answer": "Michael Jordan"
+  },
+  {
+    "id": "jp_3522",
+    "question": "What is a percolator used to make?",
+    "answer": "Coffee"
+  },
+  {
+    "id": "jp_3523",
+    "question": "What potent greenhouse gas is produced by the digestive systems of cattle?",
+    "answer": "Methane"
+  },
+  {
+    "id": "jp_3524",
+    "question": "Who does a regicide kill?",
+    "answer": "a King"
+  },
+  {
+    "id": "jp_3525",
+    "question": "What is the main ingredient in miso?",
+    "answer": "Soybeans"
+  },
+  {
+    "id": "jp_3526",
+    "question": "\"Who narrated \"\"March of the Penguins\"\" and \"\"The Shawshank Redemption\"\"?\"",
+    "answer": "Morgan Freeman"
+  },
+  {
+    "id": "jp_3528",
+    "question": "What day comes after Maundy Thursday?",
+    "answer": "Good Friday"
+  },
+  {
+    "id": "jp_3529",
+    "question": "What is the fruit of the ficus tree?",
+    "answer": "Figs"
+  },
+  {
+    "id": "jp_3530",
+    "question": "Besides Spanish, what language is commonly spoken in Barcelona?",
+    "answer": "Catalan"
+  },
+  {
+    "id": "jp_3534",
+    "question": "\"If someone is eating \"\"longpig\"\" what type of flesh are they eating?\"",
+    "answer": "Human"
+  },
+  {
+    "id": "jp_3535",
+    "question": "\"What band recorded the song \"\"Where the Streets Have No Name\"\"?\"",
+    "answer": "U2"
+  },
+  {
+    "id": "jp_3536",
+    "question": "What internal organ produces insulin?",
+    "answer": "Pancreas"
+  },
+  {
+    "id": "jp_3538",
+    "question": "What country grows the most coffee beans?",
+    "answer": "Brazil"
+  },
+  {
+    "id": "jp_3539",
+    "question": "\"What \"\"magic words\"\" did Ali Baba use to enter the den of the forty thieves?\"",
+    "answer": "Open Sesame"
+  },
+  {
+    "id": "jp_3540",
+    "question": "What instant messaging service did Facebook purchase for $19 billion in 2014?",
+    "answer": "WhatsApp"
+  },
+  {
+    "id": "jp_3541",
+    "question": "What organization was led by Boutros Boutros-Ghali and Kofi Annan?",
+    "answer": "United Nations"
+  },
+  {
+    "id": "jp_3542",
+    "question": "What island did Captain Cook discover, before being killed by the people who already lived there?",
+    "answer": "Hawaii"
+  },
+  {
+    "id": "jp_3543",
+    "question": "What was famously built in 1961 and demolished in 1989?",
+    "answer": "The Berlin Wall"
+  },
+  {
+    "id": "jp_3546",
+    "question": "What company purchased the rights to the Star Wars franchise in 2012?",
+    "answer": "Disney"
+  },
+  {
+    "id": "jp_3547",
+    "question": "\"What is another name for Rome's \"\"Flavian Amphitheatre\"\"?\"",
+    "answer": "Colosseum"
+  },
+  {
+    "id": "jp_3548",
+    "question": "What Australian soap opera has aired for since 1985 and once starred Kylie Minogue?",
+    "answer": "Neighbours"
+  },
+  {
+    "id": "jp_3549",
+    "question": "What aquatic animal can live to be 100 years old in the wild, but usually dies before age 30 in captivity?",
+    "answer": "Orca"
+  },
+  {
+    "id": "jp_3552",
+    "question": "If something is simian, what type of animal does it resemble?",
+    "answer": "Ape"
+  },
+  {
+    "id": "jp_3553",
+    "question": "What U.S. state is most strongly associated with Bourbon whiskey?",
+    "answer": "Kentucky"
+  },
+  {
+    "id": "jp_3554",
+    "question": "What insecticide caused a major reduction in bald eagle populations until 1972?",
+    "answer": "DDT"
+  },
+  {
+    "id": "jp_3555",
+    "question": "Who commanded the Millennium Falcon?",
+    "answer": "Han Solo"
+  },
+  {
+    "id": "jp_3559",
+    "question": "What creature lived at the center of the labyrinth?",
+    "answer": "Minotaur"
+  },
+  {
+    "id": "jp_3561",
+    "question": "What is the plural of court-martial?",
+    "answer": "Courts-martial"
+  },
+  {
+    "id": "jp_3562",
+    "question": "\"What model/rapper had a #1 hit in 2014 with her song \"\"Fancy\"\"?\"",
+    "answer": "Iggy Azalea"
+  },
+  {
+    "id": "jp_3563",
+    "question": "What kooky movie character, portrayed by Johnny Depp, was skilled at topiary?",
+    "answer": "Edward Scissorhands"
+  },
+  {
+    "id": "jp_3565",
+    "question": "\"What does the Indian word \"\"raja\"\" mean in English?\"",
+    "answer": "King"
+  },
+  {
+    "id": "jp_3567",
+    "question": "\"What \"\"be\"\" word refers to men's clothing that is custom-made by a tailor?\"",
+    "answer": "Bespoke"
+  },
+  {
+    "id": "jp_3568",
+    "question": "On what would you find a field, motto, crest, and escutcheon?",
+    "answer": "Coat of Arms"
+  },
+  {
+    "id": "jp_3571",
+    "question": "What is the opposite of leeward?",
+    "answer": "Windward"
+  },
+  {
+    "id": "jp_3573",
+    "question": "What is the name for a clay monster of Jewish folklore?",
+    "answer": "Golem"
+  },
+  {
+    "id": "jp_3574",
+    "question": "What color, starting with M, is also referred to as fuchsia?",
+    "answer": "Magenta"
+  },
+  {
+    "id": "jp_3575",
+    "question": "What is T.E. Lawrence better known as?",
+    "answer": "Lawrence of Arabia"
+  },
+  {
+    "id": "jp_3576",
+    "question": "\"What has been given the nickname \"\"La Ville-Lumière\"\"?\"",
+    "answer": "Paris"
+  },
+  {
+    "id": "jp_3577",
+    "question": "What is the last name of Donatella, Gianni, and Allegra ?",
+    "answer": "Versace"
+  },
+  {
+    "id": "jp_3578",
+    "question": "What is the highest mountain in Japan?",
+    "answer": "Mount Fuji"
+  },
+  {
+    "id": "jp_3579",
+    "question": "What well-known dance form originated in Argentina and Uruguay?",
+    "answer": "Tango"
+  },
+  {
+    "id": "jp_3582",
+    "question": "What is the tallest waterfall in the world?",
+    "answer": "Angel Falls"
+  },
+  {
+    "id": "jp_3583",
+    "question": "After which goddess is the the capital of Greece named?",
+    "answer": "Athena"
+  },
+  {
+    "id": "jp_3584",
+    "question": "On what island could dodo birds once be found?",
+    "answer": "Mauritius"
+  },
+  {
+    "id": "jp_3586",
+    "question": "What is the largest desert in Africa?",
+    "answer": "Sahara"
+  },
+  {
+    "id": "jp_3588",
+    "question": "What is the biggest island in the Caribbean?",
+    "answer": "Cuba"
+  },
+  {
+    "id": "jp_3589",
+    "question": "On what sea is the Russian city of Sochi located?",
+    "answer": "Black Sea"
+  },
+  {
+    "id": "jp_3592",
+    "question": "What is the name of the Dutch-speaking region of Belgium?",
+    "answer": "Flanders"
+  },
+  {
+    "id": "jp_3593",
+    "question": "By volume of water, what is the largest lake in Scotland?",
+    "answer": "Loch Ness"
+  },
+  {
+    "id": "jp_3595",
+    "question": "What Italian region has its capital in Florence?",
+    "answer": "Tuscany"
+  },
+  {
+    "id": "jp_3596",
+    "question": "What country is often described as being shaped like a boot?",
+    "answer": "Italy"
+  },
+  {
+    "id": "jp_3599",
+    "question": "What canal connects the Red and Mediterranean Seas?",
+    "answer": "Suez Canal"
+  },
+  {
+    "id": "jp_3600",
+    "question": "What was the name of the highest caste in Indian society?",
+    "answer": "Brahmin"
+  },
+  {
+    "id": "jp_3601",
+    "question": "What country is a group of islands in the Persian Gulf?",
+    "answer": "Bahrain"
+  },
+  {
+    "id": "jp_3602",
+    "question": "Aotearoa is an alternative name for what country?",
+    "answer": "New Zealand"
+  },
+  {
+    "id": "jp_3603",
+    "question": "What musical instrument is considered to be a symbol of Ireland?",
+    "answer": "Harp"
+  },
+  {
+    "id": "jp_3604",
+    "question": "What is the world's biggest freshwater lake by volume?",
+    "answer": "Lake Baikal"
+  },
+  {
+    "id": "jp_3606",
+    "question": "What city was capital of Russia until 1918?",
+    "answer": "St. Petersburg"
+  },
+  {
+    "id": "jp_3608",
+    "question": "Montreal is located on an island in what river?",
+    "answer": "Saint Lawrence"
+  },
+  {
+    "id": "jp_3610",
+    "question": "What's the world's second-tallest mountain?",
+    "answer": "K2"
+  },
+  {
+    "id": "jp_3612",
+    "question": "Tsar and Kaiser were derivatives of what Roman title?",
+    "answer": "Caesar"
+  },
+  {
+    "id": "jp_3614",
+    "question": "Munich is located in what German state?",
+    "answer": "Bavaria"
+  },
+  {
+    "id": "jp_3615",
+    "question": "Besides the Caucasus, what mountain range forms the border of Europe and Asia?",
+    "answer": "Ural Mountains"
+  },
+  {
+    "id": "jp_3616",
+    "question": "What country is also known as Persia?",
+    "answer": "Iran"
+  },
+  {
+    "id": "jp_3618",
+    "question": "What is the biggest city on the island of Java?",
+    "answer": "Jakarta"
+  },
+  {
+    "id": "jp_3619",
+    "question": "What U.S. state has the smallest land area?",
+    "answer": "Rhode Island"
+  },
+  {
+    "id": "jp_3621",
+    "question": "What island in the Caribbean is divided between France and the Netherlands?",
+    "answer": "St. Martin"
+  },
+  {
+    "id": "jp_3622",
+    "question": "What city was famously built on Palatine, Capitoline, and five other hills?",
+    "answer": "Rome"
+  },
+  {
+    "id": "jp_3623",
+    "question": "What country was once known as East Pakistan?",
+    "answer": "Bangladesh"
+  },
+  {
+    "id": "jp_3625",
+    "question": "What English spa town was known to the Romans as Aquae Sulis?",
+    "answer": "Bath"
+  },
+  {
+    "id": "jp_3626",
+    "question": "What U.S. military base is located on the island of Cuba?",
+    "answer": "Guantánamo Bay"
+  },
+  {
+    "id": "jp_3627",
+    "question": "What was the city of Kolkata formerly called?",
+    "answer": "Calcutta"
+  },
+  {
+    "id": "jp_3628",
+    "question": "What is the largest landlocked country in Africa?",
+    "answer": "Chad"
+  },
+  {
+    "id": "jp_3629",
+    "question": "What is the capital of Bosnia and Herzegovina?",
+    "answer": "Sarajevo"
+  },
+  {
+    "id": "jp_3630",
+    "question": "What country is bordered by Panama and Nicaragua?",
+    "answer": "Costa Rica"
+  },
+  {
+    "id": "jp_3634",
+    "question": "Besides Cape Town and Bloemfontein, what city is a capital of South Africa?",
+    "answer": "Pretoria"
+  },
+  {
+    "id": "jp_3640",
+    "question": "What group of Caribbean islands includes St. Croix, St. Thomas, and Tortola?",
+    "answer": "Virgin Islands"
+  },
+  {
+    "id": "jp_3641",
+    "question": "In what city would you find the district of Pudong, home to the world's second tallest building?",
+    "answer": "Shanghai"
+  },
+  {
+    "id": "jp_3642",
+    "question": "What part of France is located on the continent of South America?",
+    "answer": "French Guiana"
+  },
+  {
+    "id": "jp_3643",
+    "question": "What river forms part of the border between France and Germany?",
+    "answer": "Rhine"
+  },
+  {
+    "id": "jp_3644",
+    "question": "What is Canada's largest, newest, and least populated territory?",
+    "answer": "Nunavut"
+  },
+  {
+    "id": "jp_3646",
+    "question": "What is the second largest urban area in Japan?",
+    "answer": "Osaka"
+  },
+  {
+    "id": "jp_3647",
+    "question": "In the Gulf War, what gulf is being referred to?",
+    "answer": "Persian Gulf"
+  },
+  {
+    "id": "jp_3648",
+    "question": "What group of islands are controlled by the United Kingdom, but claimed by Argentina?",
+    "answer": "Falkland Islands"
+  },
+  {
+    "id": "jp_3649",
+    "question": "\"What peninsula is split in half by a \"\"demilitarized zone\"\"?\"",
+    "answer": "Korea"
+  },
+  {
+    "id": "jp_3650",
+    "question": "\"The island of Majorca has a name that means \"\"larger island\"\". Which island is the \"\"smaller island\"\"?\"",
+    "answer": "Minorca"
+  },
+  {
+    "id": "jp_3655",
+    "question": "In what city would you find a gondola?",
+    "answer": "Venice"
+  },
+  {
+    "id": "jp_3656",
+    "question": "What is the tallest mountain in the United States?",
+    "answer": "Mount McKinley"
+  },
+  {
+    "id": "jp_3658",
+    "question": "What is the world's biggest river, by volume of water discharged?",
+    "answer": "Amazon"
+  },
+  {
+    "id": "jp_3661",
+    "question": "What country is nearest to the French territory of St. Pierre and Miquelon?",
+    "answer": "Canada"
+  },
+  {
+    "id": "jp_3662",
+    "question": "By land area, what is the largest country in Africa?",
+    "answer": "Algeria"
+  }
+]

@@ -1,0 +1,3 @@
+Aptamers as potential nucleic acid pharmaceuticals.
+
+In vitro selection is a technique for the isolation of nucleic acid ligands that can bind to proteins with high affinity and specificity, and has potential applications in the development of new pharmaceuticals. This review summarizes the protein targets that have successfully elicited nucleic acid binding species (also known as "aptamers") and explores examples of how they might be developed for clinical use. In particular, the use of aptamers for the alleviation of blood clotting and the treatment of AIDS are considered.

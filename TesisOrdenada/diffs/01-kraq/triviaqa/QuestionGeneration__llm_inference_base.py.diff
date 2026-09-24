@@ -1,0 +1,11 @@
+--- /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Local_BioASQ_test1_NoPromptTuning/Local_BioASQ_test1_NoPromptTuning/src/QuestionGeneration/llm_inference_base.py	2025-04-22 13:57:35.000000000 -0300
++++ /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Local_TriviaQA_Mistral7Bv0.1_300/Local_TriviaQA_Mistral7Bv0.1_300/src/QuestionGeneration/llm_inference_base.py	2025-04-29 01:48:05.000000000 -0300
+@@ -14,7 +14,7 @@
+ GENERATION_BATCH_SIZE = int(os.getenv("GENERATION_BATCH_SIZE", 2))
+ 
+ # Configuración específica de GPU y cuantización
+-CUDA_DEVICE = "cuda:1"  # Forzar uso de GPU1
++CUDA_DEVICE = "cuda:0"  # Forzar uso de GPU1
+ COMPUTE_DTYPE = torch.float16
+ device = torch.device(CUDA_DEVICE if torch.cuda.is_available() else "cpu")
+ print(f"Usando dispositivo: {device}")

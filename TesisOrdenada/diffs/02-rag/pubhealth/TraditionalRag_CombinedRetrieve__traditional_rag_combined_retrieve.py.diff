@@ -1,0 +1,23 @@
+--- /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/TraditionalRag_CombinedRetrieve/traditional_rag_combined_retrieve.py	2025-05-25 18:59:26.000000000 -0300
++++ /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_pubhealth_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_pubhealth_solver/TraditionalRag_CombinedRetrieve/traditional_rag_combined_retrieve.py	2025-05-20 00:02:33.000000000 -0300
+@@ -375,13 +375,16 @@
+         # Etapa 5: Generar respuesta con LLM
+         prompt_start_time = perf_counter()
+         
+-        prompt = f"""Below is an instruction that describes a task. Write a response for it and state
+- your explanation supporting your response.
++        prompt = f"""Given the following medical claim and evidence, determine whether it is true, false, or a mixture of both. Then, provide a brief explanation explaining your reasoning.
+  ### Evidence:
+  {context}
+- ### Instruction: 
++ ### Claim: 
+  {query}
+- ### Response:
++
++ Answer format:
++Label: <true/false/mixture>
++Explanation: <your explanation>
++
+ """
+         prompt_time = perf_counter() - prompt_start_time
+         

@@ -1,0 +1,3 @@
+The homozygous KCNQ1 gene mutation associated with recessive Romano-Ward syndrome.
+
+In a 7-year-old boy with normal hearing suffering from repeated syncope an extremely prolonged QTc interval (up to 700 ms) was found. The mother was completely asymptomatic and the father had an intermittently borderline QTc interval (maximum 470 ms) but no symptoms. In the proband a mutation analysis of KCNQ1 gene revealed a homozygous 1893insC mutation. The parents were heterozygous for this mutation. There was no consanguineous marriage in the family. The clinical relevance of these findings is that apparently normal individuals may have a latent reduction of repolarizing currents, a "reduced repolarization reserve," because they are carriers of latent ion channel genes mutations.

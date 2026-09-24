@@ -1,0 +1,3 @@
+Expression of three glutamate transporter subtype mRNAs in human brain regions and peripheral tissues.
+
+We compared the expression of mRNAs for three human glutamate transporter subtypes in human central nervous system (CNS) and other organs by Northern blot analysis. hGLT-1 and hGLuT-1 mRNAs were most abundantly expressed in the brain, while hEAAC1 mRNA expression (3.8 kb and 2,4 kb) was strongest in peripheral organs. All subtype mRNAs were expressed throughout the CNS with hGLT-1 predominant in frontal lobe, striatum and limbic areas, and hGluT-1 predominant in cerebellum.

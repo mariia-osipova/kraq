@@ -1,0 +1,601 @@
+--- /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/SpeculativeRag/Benchmark/benchmark_speculative.py	2025-05-10 01:35:17.000000000 -0300
++++ /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_vsequential_BioASQ_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_vsequential_BioASQ_solver/SpeculativeRag/Benchmark/benchmark_speculative.py	2025-05-20 13:10:24.000000000 -0300
+@@ -37,7 +37,6 @@
+ EMBEDDING_MODEL = "nomic-embed-text"  # Usando nomic-embed-text de Ollama
+ DRAFTER_MODEL = "hugging-quants/Meta-Llama-3.1-8B-Instruct-AWQ-INT4"  # Modelo cuantizado
+ VERIFIER_MODEL = "hugging-quants/Meta-Llama-3.1-8B-Instruct-AWQ-INT4"  # Mismo modelo para verificación
+-
+ LLM_MODEL = VERIFIER_MODEL # Modelo para evaluación
+ 
+ # Configuración de Qdrant
+@@ -45,7 +44,7 @@
+ RETRIEVAL_COLLECTION = "chunks"               # Colección para la recuperación de documentos
+ 
+ # Modelo para el cálculo de similitud coseno
+-sentence_model = SentenceTransformer('all-MiniLM-L6-v2')
++sentence_model = SentenceTransformer('all-MiniLM-L6-v2', device="cuda:1")
+ 
+ def calculate_cosine_similarity(text1: str, text2: Any) -> float:
+     """
+@@ -120,50 +119,112 @@
+     question: str,
+     generated_answer: str,
+     reference_answer: str,
+-    answer_type: str = "answer",
++    answer_type: str = "ideal_answer",
+     client: AsyncOpenAI = None
+ ) -> int:
+     """
+-    Evalúa si la respuesta generada es correcta para preguntas de tipo trivia simple
+-    usando exclusivamente el LLM para el juicio
++    Evalúa si la respuesta generada es correcta según criterios más estrictos
+     """
+     try:
+-        # Preparar el prompt según el tipo de respuesta de referencia
+-        
+-            # Para respuesta única
+-        prompt = f"""You are an expert evaluator for question answering systems. Your task is to determine if the generated answer correctly responds to the question according to the reference answer.
++        # Diferentes prompts según el tipo de respuesta
++        if answer_type == "exact_answer":
++            # Para respuestas exactas (con lista de verdades)
++            if isinstance(reference_answer, list) and len(reference_answer) > 0:
++                # Convertir cada elemento a string y unirlos
++                reference_str = ", ".join([str(ans) for ans in reference_answer])
++                prompt = f"""
++You are an expert evaluator of question answering systems with a focus on factual accuracy. Assess if the generated answer correctly addresses the question based on the reference answers.
++
++Question: {question}
++Generated Answer: {generated_answer}
++Reference Answers: {reference_str}
++
++The reference answers are provided as a list of true answers to the question.
++
++The generated answer should cover most items in the reference answers
++
++Contradicting ANY of the reference answers is a critical error
++Including incorrect information invalidates the answer
++
++Is the generated answer correct?
++Answer with a single digit:
++1 - Yes, the generated answer meets the criteria for correctness
++0 - No, the generated answer fails to meet one or more key criteria
++
++Your response (just the digit 1 or 0):
++"""
++            else:
++                # Una sola respuesta exacta
++                prompt = f"""
++You are an expert evaluator of question answering systems with a focus on factual accuracy. Assess if the generated answer correctly addresses the question based on the reference answer.
+ 
+ Question: {question}
+ Generated Answer: {generated_answer}
+ Reference Answer: {reference_answer}
+ 
+-The reference answer represents the truth. The generated answer must match the meaning of the reference answer to be considered correct or if its a factoid answer it must be the same as the reference answer. If the generated answer is more specific but the core meaning is the same, it is also considered correct.
++The reference answer represents the ground truth to the question.
+ 
+-Respond with ONLY a single digit:
+-1 - CORRECT: 
+-0 - INCORRECT: 
++The generated answer MUST contain the essential information from the reference answer
++
++It must not contain any statements that contradict the reference answer
++
++While the wording may differ, the core facts and meaning must be preserved. Partial answers that miss key points should be considered incorrect.
++
++Is the generated answer correct?
++Answer with a single digit:
++1 - Yes, the generated answer meets the criteria for correctness
++0 - No, the generated answer fails to meet one or more key criteria
++
++Your response (just the digit 1 or 0):
++"""
++        else:
++            # Para respuestas ideales (considerando referencia como verdad)
++            prompt = f"""
++You are an expert evaluator of question answering systems with a focus on completeness and accuracy. Assess if the generated answer correctly addresses the question based on the reference answer.
++
++Question: {question}
++Generated Answer: {generated_answer}
++Reference Answer: {reference_answer}
++
++Question: {question}
++Generated Answer: {generated_answer}
++Reference Answer: {reference_answer}
++
++The reference answer represents the ground truth to the question.
++
++The generated answer MUST contain the essential information from the reference answer
++
++It must not contain any statements that contradict the reference answer
++
++While the wording may differ, the core facts and meaning must be preserved. Partial answers that miss key points should be considered incorrect.
++
++Is the generated answer correct?
++Answer with a single digit:
++1 - Yes, the generated answer meets the criteria for correctness
++0 - No, the generated answer fails to meet one or more key criteria
++
++Your response (just the digit 1 or 0):
++"""
+ 
+-Your verdict (just the digit 1 or 0):"""
+-        
+         # Usar el modelo para la evaluación
+         response = await client.chat.completions.create(
+             model=LLM_MODEL,
+             messages=[{"role": "user", "content": prompt}],
+             temperature=0.0,
+-            max_tokens=5
++            max_tokens=10
+         )
+         
+         answer_text = response.choices[0].message.content.strip()
+         return 1 if answer_text.startswith("1") else 0
+             
+     except Exception as e:
+-        logger.error(f"Error evaluando corrección: {e}")
++        logger.error(f"Error evaluando corrección con modelo local: {e}")
+         return 0  # Por defecto, si hay error, consideramos la respuesta incorrecta
+ 
+ 
+ async def get_questions_from_qdrant(limit: int = 1000) -> List[Dict[str, Any]]:
+     """
+-    Obtiene preguntas directamente desde la colección de Qdrant (formato actualizado)
++    Obtiene preguntas directamente desde la colección de Qdrant
+     
+     Args:
+         limit: Número máximo de preguntas a recuperar
+@@ -192,46 +253,34 @@
+         else:
+             points = scroll_result.points
+         
+-        # Procesar las preguntas en el nuevo formato (solo con campo answer)
++        # Filtrar a solo las preguntas que tienen respuestas ideales y/o exactas
+         questions = []
+-        skipped = 0
+-        
+         for point in points:
+             question_data = {
+                 "question_id": point.payload.get("question_id", ""),
+                 "question": point.payload.get("question", "")
+             }
+             
+-            # Verificar si tiene el campo answer y añadirlo como respuesta exacta
+-            if "answer" in point.payload and point.payload["answer"]:
+-                answer = point.payload["answer"]
+-                # Conservar el campo original para compatibilidad
+-                question_data["answer"] = answer
+-                
+-                # También almacenar como exact_answer para compatibilidad con el código existente
+-                if isinstance(answer, list):
+-                    question_data["exact_answer"] = answer
+-                else:
+-                    question_data["exact_answer"] = [answer]
+-                
+-                # Añadir como ideal_answer también
+-                question_data["ideal_answer"] = answer if isinstance(answer, str) else str(answer)
+-                
++            # Agregar respuesta ideal si existe y es un string
++            if "ideal_answer" in point.payload and isinstance(point.payload["ideal_answer"], str):
++                question_data["ideal_answer"] = point.payload["ideal_answer"]
++            
++            # Agregar respuesta exacta si existe
++            if "exact_answer" in point.payload and point.payload["exact_answer"]:
++                # Mantener la estructura de lista original si es una lista
++                if isinstance(point.payload["exact_answer"], list):
++                    question_data["exact_answer"] = point.payload["exact_answer"]
++                # Si es una cadena, crear una lista
++                elif isinstance(point.payload["exact_answer"], str):
++                    question_data["exact_answer"] = [point.payload["exact_answer"]]
++            
++            # Solo agregamos preguntas que tengan al menos un tipo de respuesta
++            if "ideal_answer" in question_data or "exact_answer" in question_data:
+                 questions.append(question_data)
+-            else:
+-                skipped += 1
+         
+         await qdrant_client.close()
+         
+         logger.info(f"Se obtuvieron {len(questions)} preguntas válidas de Qdrant")
+-        if skipped > 0:
+-            logger.info(f"Se saltaron {skipped} preguntas sin respuesta válida")
+-        
+-        # Si tenemos más preguntas que el límite, recortamos
+-        if len(questions) > limit:
+-            logger.info(f"Limitando resultado a {limit} preguntas")
+-            questions = questions[:limit]
+-            
+         return questions
+         
+     except Exception as e:
+@@ -292,30 +341,35 @@
+         return
+ 
+ async def run_benchmark_with_qdrant(
+-    limit: int = 300,
+-    questions: Optional[List[Dict[str, Any]]] = None,
+-    results_dir: Optional[Path] = None,
+-    k: int = 5,
+-    m: int = 10,
+-    top_k: int = 20
+-) -> None:
++    limit: int = 1000,
++    questions: List[Dict[str, Any]] = None,
++    results_dir: Path = None,
++    **params
++):
+     """
+-    Ejecuta el benchmark usando las preguntas almacenadas en Qdrant
++    Ejecuta el benchmark usando preguntas proporcionadas o de Qdrant
+     
+     Args:
+         limit: Número máximo de preguntas a evaluar
+-        questions: Lista opcional de preguntas predefinidas
++        questions: Lista opcional de preguntas pre-seleccionadas
+         results_dir: Directorio opcional para resultados
+-        k: Número de clusters
+-        m: Número de subsets de documentos
+-        top_k: Número de documentos a recuperar
++        **params: Parámetros adicionales para Speculative RAG
+     """
+-    logger.info(f"Iniciando benchmark de Speculative RAG con {limit} preguntas")
++    # Usar directorio de resultados personalizado si se proporciona
++    if results_dir is None:
++        results_dir = Path(__file__).parent / "benchmark_results_speculative_qdrant"
++    results_dir.mkdir(exist_ok=True, parents=True)
++    
++    # Resto del código existente, pero usando 'questions' si se proporciona
++    if questions is None:
++        questions = await get_questions_from_qdrant(limit=limit)
++    
++    logger.info(f"Iniciando benchmark de Speculative RAG con {limit} preguntas de Qdrant")
+     
+     # Inicializar clientes
+     vllm_client = AsyncOpenAI(
+         base_url=VLLM_BASE_URL,
+-        api_key="not-needed"
++        api_key="not-needed"  # vLLM no requiere API key
+     )
+     
+     ollama_client = AsyncOpenAI(
+@@ -323,21 +377,19 @@
+         api_key="ollama"
+     )
+     
++    # Clientes separados para drafter y verifier (por ahora iguales, pero podrían ser diferentes)
+     drafter_client = vllm_client
+     verifier_client = vllm_client
+     
+-    # Usar directorio de resultados personalizado si se proporciona
+-    if results_dir is None:
+-        results_dir = Path(__file__).parent / "benchmark_results_speculative_qdrant"
+-    results_dir.mkdir(exist_ok=True)
+-    
+-    # Crear directorios para respuestas
+-    answer_dir = results_dir / "answers"
+-    answer_dir.mkdir(exist_ok=True)
++    # Crear subdirectorios para cada tipo de respuesta
++    ideal_dir = results_dir / "ideal_answers"
++    exact_dir = results_dir / "exact_answers"
++    ideal_dir.mkdir(exist_ok=True)
++    exact_dir.mkdir(exist_ok=True)
+     
+     # Verificar si existen checkpoints previos
+-    ideal_checkpoint = results_dir / "ideal_answers" / "partial_results.json"
+-    exact_checkpoint = results_dir / "exact_answers" / "partial_results.json"
++    ideal_checkpoint = ideal_dir / "partial_results.json"
++    exact_checkpoint = exact_dir / "partial_results.json"
+     
+     # Cargar resultados previos si existen
+     ideal_results = []
+@@ -364,11 +416,8 @@
+             logger.error(f"Error cargando checkpoint de respuestas exactas: {e}")
+             exact_results = []
+     
+-    # Usar preguntas proporcionadas o obtenerlas de Qdrant
+-    if questions is not None:
+-        all_questions = questions[:limit]  # Respetar el límite
+-    else:
+-        all_questions = await get_questions_from_qdrant(limit=limit)
++    # Obtener preguntas de Qdrant
++    all_questions = await get_questions_from_qdrant(limit=limit)
+     
+     if not all_questions:
+         logger.error("No se pudieron obtener preguntas de Qdrant. Abortando benchmark.")
+@@ -388,13 +437,13 @@
+     if remaining_questions == 0:
+         logger.info("Todas las preguntas ya fueron procesadas. Generando informes finales.")
+         # Guardar todos los resultados (por si acaso no se guardaron al final)
+-        with open(results_dir / "ideal_answers" / "full_results.json", "w", encoding="utf-8") as f:
++        with open(ideal_dir / "full_results.json", "w", encoding="utf-8") as f:
+             json.dump(ideal_results, f, indent=2, ensure_ascii=False)
+-        with open(results_dir / "exact_answers" / "full_results.json", "w", encoding="utf-8") as f:
++        with open(exact_dir / "full_results.json", "w", encoding="utf-8") as f:
+             json.dump(exact_results, f, indent=2, ensure_ascii=False)
+         # Generar estadísticas
+-        await generate_stats_report(ideal_results, results_dir / "ideal_answers", "Ideal Answers")
+-        await generate_stats_report(exact_results, results_dir / "exact_answers", "Exact Answers")
++        await generate_stats_report(ideal_results, ideal_dir, "Ideal Answers")
++        await generate_stats_report(exact_results, exact_dir, "Exact Answers")
+         logger.info(f"Benchmark completado. Resultados guardados en {results_dir}")
+         return
+     
+@@ -412,16 +461,21 @@
+         total_time = 0
+         
+         # Solo ejecutar si hay respuestas de referencia
+-        if "answer" in question_data or "ideal_answer" in question_data or "exact_answer" in question_data:
++        if "ideal_answer" in question_data or "exact_answer" in question_data:
+             try:
+                 # Capturar la salida para extraer los tiempos
+                 time_logger = TimeCaptureLogger()
+                 
+-                # Configurar parámetros para Speculative RAG
+-                params = {
++                # Usar los parámetros recibidos o valores predeterminados si no se proporcionan
++                k = params.get('k', 4)
++                m = params.get('m', 8)
++                top_k = params.get('top_k', 15)
++                seed = params.get('seed', 23)
++                
++                run_params = {
+                     "embedding_model": EMBEDDING_MODEL,
+                     "k": k,
+-                    "seed": 23,
++                    "seed": seed,
+                     "client": ollama_client,
+                     "drafter_model": DRAFTER_MODEL,
+                     "verifier_model": VERIFIER_MODEL,
+@@ -441,7 +495,7 @@
+                 sys.stdout = time_logger
+                 
+                 # Ejecutar Speculative RAG
+-                response, total_time = await speculative_rag(query=question, **params)
++                response, total_time = await speculative_rag(query=question, **run_params)
+                 has_response = True
+                 
+                 # Restaurar sys.stdout a su valor original
+@@ -468,59 +522,107 @@
+             logger.warning(f"No se generó respuesta para la pregunta ID: {question_id}")
+             continue
+ 
+-        # Preferir usar el campo answer cuando está disponible
+-        if "answer" in question_data:
+-            # Código para evaluar con el campo answer
+-            reference_answer = question_data["answer"]
+-            
+-            # Evaluar usando la métrica correcta
+-            correctness = await evaluate_correctness(
++        # Evaluar contra respuesta ideal si existe
++        if "ideal_answer" in question_data:
++            eval_start_time = time.time()
++            ideal_reference = question_data["ideal_answer"]
++            
++            cosine_sim = calculate_cosine_similarity(response, ideal_reference)
++            precision, recall, f1 = calculate_bert_score(response, ideal_reference)
++            is_correct = await evaluate_correctness(
+                 question=question,
+                 generated_answer=response,
+-                reference_answer=reference_answer,
+-                answer_type="answer",
+-                client=verifier_client
++                reference_answer=ideal_reference,
++                answer_type="ideal_answer",
++                client=vllm_client # Usar el mismo cliente para evaluación
+             )
++            eval_time = time.time() - eval_start_time
++            logger.debug(f"Tiempo de evaluación ideal: {eval_time:.2f}s")
+             
+-            # Calcular otras métricas si es necesario
+-            cosine_sim = calculate_cosine_similarity(response, reference_answer)
+-            precision, recall, f1 = calculate_bert_score(response, reference_answer)
+-            
+-            # Guardar resultados
+-            result = {
++            ideal_result = {
+                 "question_id": question_id,
+                 "question": question,
+-                "reference_answer": reference_answer,
++                "reference_answer": ideal_reference,
++                "answer_type": "ideal_answer",
+                 "generated_answer": response,
+-                "correctness": correctness,
+                 "cosine_similarity": cosine_sim,
+-                "bert_precision": precision,
+-                "bert_recall": recall,
+-                "bert_f1": f1,
++                "bert_score_precision": precision,
++                "bert_score_recall": recall,
++                "bert_score_f1": f1,
++                "is_correct": is_correct,
+                 "total_time": total_time,
+-                "execution_times": execution_times
++                **execution_times # Añadir todos los tiempos capturados
+             }
++            ideal_results.append(ideal_result)
+             
+-            # Añadir a resultados
+-            exact_results.append(result)
++            # Guardar checkpoint
++            if len(ideal_results) % 5 == 0:
++                with open(ideal_checkpoint, "w", encoding="utf-8") as f:
++                    json.dump(ideal_results, f, indent=2, ensure_ascii=False)
++        
++        # Evaluar contra respuesta exacta si existe
++        if "exact_answer" in question_data:
++            eval_start_time = time.time()
++            exact_references = question_data["exact_answer"]
++            
++            if isinstance(exact_references, list) and len(exact_references) > 0:
++                best_cosine_sim = max([calculate_cosine_similarity(response, str(ref)) for ref in exact_references])
++                representative_ref = str(max(exact_references, key=lambda x: len(str(x))))
++                precision, recall, f1 = calculate_bert_score(response, representative_ref)
++                exact_is_correct = await evaluate_correctness(
++                    question=question,
++                    generated_answer=response,
++                    reference_answer=exact_references,
++                    answer_type="exact_answer",
++                    client=vllm_client
++                )
++            else:
++                single_ref_str = str(exact_references) # Si no es lista, convertir a string
++                best_cosine_sim = calculate_cosine_similarity(response, single_ref_str)
++                precision, recall, f1 = calculate_bert_score(response, single_ref_str)
++                exact_is_correct = await evaluate_correctness(
++                    question=question,
++                    generated_answer=response,
++                    reference_answer=single_ref_str,
++                    answer_type="exact_answer",
++                    client=vllm_client
++                )
+             
+-            # Guardar resultados parciales
+-            with open(exact_checkpoint, "w", encoding="utf-8") as f:
+-                json.dump(exact_results, f, indent=2, ensure_ascii=False)
+-        
++            eval_time = time.time() - eval_start_time
++            logger.debug(f"Tiempo de evaluación exacta: {eval_time:.2f}s")
++            
++            exact_result = {
++                "question_id": question_id,
++                "question": question,
++                "reference_answer": exact_references,
++                "answer_type": "exact_answer",
++                "generated_answer": response,
++                "cosine_similarity": best_cosine_sim,
++                "bert_score_precision": precision,
++                "bert_score_recall": recall,
++                "bert_score_f1": f1,
++                "is_correct": exact_is_correct,
++                "total_time": total_time,
++                 **execution_times # Añadir todos los tiempos capturados
++            }
++            exact_results.append(exact_result)
++            
++            # Guardar checkpoint
++            if len(exact_results) % 5 == 0:
++                with open(exact_checkpoint, "w", encoding="utf-8") as f:
++                    json.dump(exact_results, f, indent=2, ensure_ascii=False)
+         
+-
+         await asyncio.sleep(1) # Pausa
+     
+     # Guardar resultados finales
+-    with open(results_dir / "ideal_answers" / "full_results.json", "w", encoding="utf-8") as f:
++    with open(ideal_dir / "full_results.json", "w", encoding="utf-8") as f:
+         json.dump(ideal_results, f, indent=2, ensure_ascii=False)
+-    with open(results_dir / "exact_answers" / "full_results.json", "w", encoding="utf-8") as f:
++    with open(exact_dir / "full_results.json", "w", encoding="utf-8") as f:
+         json.dump(exact_results, f, indent=2, ensure_ascii=False)
+     
+     # Generar estadísticas finales
+-    await generate_stats_report(ideal_results, results_dir / "ideal_answers", "Speculative RAG - Ideal Answers")
+-    await generate_stats_report(exact_results, results_dir / "exact_answers", "Speculative RAG - Exact Answers")
++    await generate_stats_report(ideal_results, ideal_dir, "Speculative RAG - Ideal Answers")
++    await generate_stats_report(exact_results, exact_dir, "Speculative RAG - Exact Answers")
+     
+     logger.info(f"Benchmark completado. Resultados guardados en {results_dir}")
+ 
+@@ -535,13 +637,7 @@
+     # Extraer todas las métricas y tiempos disponibles
+     metrics = {key: [r.get(key, 0) for r in results] for key in results[0].keys() if isinstance(results[0].get(key), (int, float))}
+     
+-    # Extraer también los tiempos de ejecución desde execution_times
+-    execution_time_metrics = {}
+-    for time_key in ["draft_sequential_time", "draft_parallel_estimate", "verify_sequential_time", "verify_parallel_estimate"]:
+-        execution_time_metrics[time_key] = [r.get("execution_times", {}).get(time_key, 0) for r in results]
+-    
+     stats = {}
+-    # Procesar métricas principales
+     for metric_name, values in metrics.items():
+         values = np.array(values)
+         # Filtrar valores no finitos o nan si es necesario
+@@ -559,26 +655,9 @@
+             "q75": float(np.percentile(values, 75))
+         }
+     
+-    # Procesar tiempos de ejecución
+-    for metric_name, values in execution_time_metrics.items():
+-        values = np.array(values)
+-        values = values[np.isfinite(values)]
+-        if len(values) == 0: continue
+-
+-        stats[metric_name] = {
+-            "mean": float(np.mean(values)),
+-            "median": float(np.median(values)),
+-            "min": float(np.min(values)),
+-            "max": float(np.max(values)),
+-            "std": float(np.std(values)),
+-            "q25": float(np.percentile(values, 25)),
+-            "q40": float(np.percentile(values, 40)),
+-            "q75": float(np.percentile(values, 75))
+-        }
+-    
+     # Calcular accuracy
+-    if "correctness" in stats:
+-        stats["accuracy"] = {"value": stats["correctness"]["mean"]}
++    if "is_correct" in stats:
++        stats["accuracy"] = {"value": stats["is_correct"]["mean"]}
+     
+     # Guardar estadísticas como JSON
+     with open(output_dir / "stats.json", "w", encoding="utf-8") as f:
+@@ -593,7 +672,7 @@
+         report += f"- Accuracy: {stats['accuracy']['value']:.4f}\n\n"
+     
+     report += "## Estadísticas de Métricas de Calidad\n\n"
+-    quality_metrics = ["cosine_similarity", "bert_precision"]
++    quality_metrics = ["cosine_similarity", "bert_score_precision", "bert_score_recall", "bert_score_f1"]
+     for metric in quality_metrics:
+         if metric in stats:
+             report += f"### {metric}\n"
+@@ -602,9 +681,7 @@
+             report += "\n"
+             
+     report += "## Estadísticas de Tiempos de Ejecución (segundos)\n\n"
+-    time_metrics = [key for key in stats if "time" in key and key != "draft_sequential_time" and 
+-                   key != "draft_parallel_estimate" and key != "verify_sequential_time" and 
+-                   key != "verify_parallel_estimate"]
++    time_metrics = [key for key in stats if "time" in key or "parallel" in key]
+     for metric in time_metrics:
+         report += f"### {metric}\n"
+         for key, value in stats[metric].items():
+@@ -618,34 +695,13 @@
+     avg_verify_seq = stats.get("verify_sequential_time", {}).get("mean", 0)
+     avg_verify_par = stats.get("verify_parallel_estimate", {}).get("mean", 0)
+     
+-    # Añadir estos tiempos al informe
+-    report += f"### Tiempo de Drafting\n"
+-    report += f"- Secuencial (promedio): {avg_draft_seq:.4f}s\n"
+-    report += f"- Paralelo estimado (promedio): {avg_draft_par:.4f}s\n"
+-    if avg_draft_par > 0:
+-        report += f"- Speedup: {avg_draft_seq/avg_draft_par:.2f}x\n\n"
+-    else:
+-        report += f"- Speedup: N/A\n\n"
+-        
+-    report += f"### Tiempo de Verificación\n"
+-    report += f"- Secuencial (promedio): {avg_verify_seq:.4f}s\n"
+-    report += f"- Paralelo estimado (promedio): {avg_verify_par:.4f}s\n"
+-    if avg_verify_par > 0:
+-        report += f"- Speedup: {avg_verify_seq/avg_verify_par:.2f}x\n\n"
+-    else:
+-        report += f"- Speedup: N/A\n\n"
+-    
+-    # Tiempo total de LLM y speedup
+     seq_llm_time = avg_draft_seq + avg_verify_seq
+     par_llm_time = avg_draft_par + avg_verify_par
++    speedup = seq_llm_time / par_llm_time if par_llm_time > 0 else 0
+     
+-    report += f"### Tiempo Total LLM\n"
+-    report += f"- Secuencial (Drafting + Verificación): {seq_llm_time:.4f}s\n"
+-    report += f"- Paralelo Estimado (Drafting + Verificación): {par_llm_time:.4f}s\n"
+-    if par_llm_time > 0:
+-        report += f"- Speedup Total Estimado: {seq_llm_time/par_llm_time:.2f}x\n\n"
+-    else:
+-        report += f"- Speedup Total Estimado: N/A\n\n"
++    report += f"- Tiempo LLM Secuencial (Drafting + Verificación): {seq_llm_time:.4f}s\n"
++    report += f"- Tiempo LLM Paralelo Estimado (Drafting + Verificación): {par_llm_time:.4f}s\n"
++    report += f"- Speedup Estimado: {speedup:.2f}x\n\n"
+ 
+     # Guardar informe markdown
+     with open(output_dir / "report.md", "w", encoding="utf-8") as f:

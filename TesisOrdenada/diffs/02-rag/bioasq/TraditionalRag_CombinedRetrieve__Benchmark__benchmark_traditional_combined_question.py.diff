@@ -1,0 +1,604 @@
+--- /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/TraditionalRag_CombinedRetrieve/Benchmark/benchmark_traditional_combined_question.py	2025-05-19 12:05:00.000000000 -0300
++++ /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_vsequential_BioASQ_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_vsequential_BioASQ_solver/TraditionalRag_CombinedRetrieve/Benchmark/benchmark_traditional_combined_question.py	2025-05-02 00:26:27.000000000 -0300
+@@ -13,9 +13,10 @@
+ from sentence_transformers import SentenceTransformer, util
+ from bert_score import score
+ from tqdm import tqdm
+-from typing import List, Dict, Any, Tuple, Optional
++from typing import List, Dict, Any, Tuple
+ from qdrant_client import AsyncQdrantClient
+ import torch
++import re
+ 
+ # Añadir el directorio raíz del proyecto a sys.path
+ project_root = Path(__file__).parent.parent.parent
+@@ -36,8 +37,9 @@
+ VLLM_BASE_URL = "http://localhost:8000/v1"
+ EMBEDDING_MODEL = "nomic-embed-text"
+ LLM_MODEL = "hugging-quants/Meta-Llama-3.1-8B-Instruct-AWQ-INT4"
++
+ # Modelo para el cálculo de similitud coseno
+-sentence_model = SentenceTransformer('all-MiniLM-L6-v2', device="cuda:1")
++sentence_model = SentenceTransformer('all-MiniLM-L6-v2')
+ 
+ 
+ 
+@@ -45,7 +47,7 @@
+     """
+     Calcula la similitud coseno entre dos textos
+     """
+-    # Convertir a string si es una lista
++    # Convertir a string si es una lista (respuestas exactas pueden ser listas)
+     if isinstance(text1, list):
+         text1 = str(text1)
+     if isinstance(text2, list):
+@@ -56,19 +58,8 @@
+         return 0.0
+     
+     try:
+-        # Especificar el dispositivo CUDA:1
+-        device = torch.device("cuda:1")
+-        
+-        # Asegurarnos de que el modelo esté en CUDA:1
+-        if not hasattr(calculate_cosine_similarity, 'sentence_model'):
+-            calculate_cosine_similarity.sentence_model = SentenceTransformer('all-MiniLM-L6-v2', device="cuda:1")
+-        
+-        # Generar embeddings y moverlos a CUDA:1
+-        embedding1 = calculate_cosine_similarity.sentence_model.encode(text1, convert_to_tensor=True)
+-        embedding2 = calculate_cosine_similarity.sentence_model.encode(text2, convert_to_tensor=True)
+-        
+-        embedding1 = embedding1.to(device)
+-        embedding2 = embedding2.to(device)
++        embedding1 = sentence_model.encode(text1, convert_to_tensor=True)
++        embedding2 = sentence_model.encode(text2, convert_to_tensor=True)
+         
+         # Asegúrate de que los tensores sean unidimensionales (vectores)
+         if len(embedding1.shape) > 1 and embedding1.shape[0] > 1:
+@@ -82,8 +73,7 @@
+         if isinstance(similarity, torch.Tensor) and similarity.numel() > 1:
+             similarity = similarity.mean()
+             
+-        # Mover el resultado a CPU antes de convertirlo a Python
+-        return similarity.cpu().item()
++        return similarity.item()
+     except Exception as e:
+         logger.error(f"Error calculando similitud coseno: {e}")
+         return 0.0
+@@ -114,43 +104,109 @@
+     question: str,
+     generated_answer: str,
+     reference_answer: str,
++    answer_type: str = "ideal_answer",
+     client: AsyncOpenAI = None
+ ) -> int:
+     """
+-    Evalúa si la respuesta generada es correcta para preguntas de tipo trivia simple
+-    usando exclusivamente el LLM para el juicio
++    Evalúa si la respuesta generada es correcta según criterios más estrictos
+     """
+     try:
+-        # Prompt para evaluación
+-        prompt = f"""You are an expert evaluator for question answering systems. Your task is to determine if the generated answer correctly responds to the question according to the reference answer.
++        # Diferentes prompts según el tipo de respuesta
++        if answer_type == "exact_answer":
++            # Para respuestas exactas (con lista de verdades)
++            if isinstance(reference_answer, list) and len(reference_answer) > 0:
++                # Convertir cada elemento a string y unirlos
++                reference_str = ", ".join([str(ans) for ans in reference_answer])
++                prompt = f"""
++You are an expert evaluator of question answering systems with a focus on factual accuracy. Assess if the generated answer correctly addresses the question based on the reference answers.
++
++Question: {question}
++Generated Answer: {generated_answer}
++Reference Answers: {reference_str}
++
++The reference answers are provided as a list of true answers to the question.
++
++The generated answer should cover most items in the reference answers
++
++Contradicting ANY of the reference answers is a critical error
++Including incorrect information invalidates the answer
++
++Is the generated answer correct?
++Answer with a single digit:
++1 - Yes, the generated answer meets the criteria for correctness
++0 - No, the generated answer fails to meet one or more key criteria
++
++Your response (just the digit 1 or 0):
++"""
++            else:
++                # Una sola respuesta exacta
++                prompt = f"""
++You are an expert evaluator of question answering systems with a focus on factual accuracy. Assess if the generated answer correctly addresses the question based on the reference answer.
+ 
+ Question: {question}
+ Generated Answer: {generated_answer}
+ Reference Answer: {reference_answer}
+ 
+-The reference answer represents the truth. The generated answer must match the meaning of the reference answer to be considered correct. If the generated answer is more specific but the core meaning is the same, it is also considered correct.
++The reference answer represents the ground truth to the question.
+ 
+-Respond with ONLY a single digit:
+-1 - CORRECT: 
+-0 - INCORRECT: 
++The generated answer MUST contain the essential information from the reference answer
++
++It must not contain any statements that contradict the reference answer
++
++While the wording may differ, the core facts and meaning must be preserved. Partial answers that miss key points should be considered incorrect.
++
++Is the generated answer correct?
++Answer with a single digit:
++1 - Yes, the generated answer meets the criteria for correctness
++0 - No, the generated answer fails to meet one or more key criteria
++
++Your response (just the digit 1 or 0):
++"""
++        else:
++            # Para respuestas ideales (considerando referencia como verdad)
++            prompt = f"""
++You are an expert evaluator of question answering systems with a focus on completeness and accuracy. Assess if the generated answer correctly addresses the question based on the reference answer.
++
++Question: {question}
++Generated Answer: {generated_answer}
++Reference Answer: {reference_answer}
++
++Question: {question}
++Generated Answer: {generated_answer}
++Reference Answer: {reference_answer}
++
++The reference answer represents the ground truth to the question.
++
++The generated answer MUST contain the essential information from the reference answer
++
++It must not contain any statements that contradict the reference answer
++
++While the wording may differ, the core facts and meaning must be preserved. Partial answers that miss key points should be considered incorrect.
++
++Is the generated answer correct?
++Answer with a single digit:
++1 - Yes, the generated answer meets the criteria for correctness
++0 - No, the generated answer fails to meet one or more key criteria
++
++Your response (just the digit 1 or 0):
++"""
+ 
+-Your verdict (just the digit 1 or 0):"""
+-        
+         # Usar el modelo para la evaluación
+         response = await client.chat.completions.create(
+             model=LLM_MODEL,
+             messages=[{"role": "user", "content": prompt}],
+             temperature=0.0,
+-            max_tokens=5
++            max_tokens=10
+         )
+         
+         answer_text = response.choices[0].message.content.strip()
+         return 1 if answer_text.startswith("1") else 0
+             
+     except Exception as e:
+-        logger.error(f"Error evaluando corrección: {e}")
++        logger.error(f"Error evaluando corrección con modelo local: {e}")
+         return 0  # Por defecto, si hay error, consideramos la respuesta incorrecta
+ 
++
+ # Vamos a crear una nueva función para generar la respuesta una sola vez
+ async def generate_traditional_rag_response(
+     question: str,
+@@ -171,19 +227,29 @@
+     # Inicializar variables
+     start_time = time.time()
+     retrieval_time = 0
++    original_stdout = sys.stdout
+     
+     try:
+         # Clase personalizada para capturar los tiempos de ejecución
+         class TimeCaptureLogger:
+             def __init__(self):
+                 self.times = {}
++                self.buffer = ""
+             
+             def write(self, text):
++                self.buffer += text
+                 if "retrieval_time:" in text:
+-                    self.times["retrieval_time"] = float(text.split(":")[1].strip())
+-                elif "⏱️ Document retrieval time:" in text:
+-                    self.times["retrieval_time"] = float(text.split(":")[1].strip().split()[0])
++                    try:
++                        # Buscar el patrón "retrieval_time:X.XXXX"
++                        match = re.search(r"retrieval_time:(\d+\.\d+)", text)
++                        if match:
++                            self.times["retrieval_time"] = float(match.group(1))
++                    except Exception as e:
++                        logger.error(f"Error al extraer retrieval_time: {e}")
+                 return
++            
++            def flush(self):
++                pass
+         
+         # Capturar la salida para extraer los tiempos
+         time_logger = TimeCaptureLogger()
+@@ -191,22 +257,28 @@
+         # Configurar parámetros para Traditional RAG
+         params = {
+             "query": question,
+-            "embeddings_client": embeddings_client,  # Cliente Ollama para embeddings
+-            "llm_client": llm_client,                # Cliente vLLM para LLM
+-            "embedding_model": EMBEDDING_MODEL,      # nomic-embed-text (Ollama)
+-            "llm_model": LLM_MODEL,                  # Llama 3.1 Instruct (vLLM)
+-            "top_k": 20,
++            "embeddings_client": embeddings_client,
++            "llm_client": llm_client,
++            "embedding_model": EMBEDDING_MODEL,
++            "llm_model": LLM_MODEL,
++            "top_k": 15,
+             "debug_prints": False,
+             "verbose_timing": False,
+             "question_collection": "questions-index-finetuned"
+         }
+         
+         # Reemplazar temporalmente sys.stdout para capturar los tiempos
+-        original_stdout = sys.stdout
+         sys.stdout = time_logger
+         
+         # Ejecutar Traditional RAG y obtener respuesta y tiempo total
+-        response, total_time = await traditional_rag_combined_retrieve(**params)
++        try:
++            response, total_time = await traditional_rag_combined_retrieve(**params)
++        except Exception as e:
++            # Restaurar sys.stdout antes de loggear el error
++            sys.stdout = original_stdout
++            logger.error(f"Error ejecutando Traditional RAG: {e}")
++            # Si hay un error crítico durante la ejecución, devolver valores predeterminados
++            return "Error generando respuesta", time.time() - start_time, 0
+         
+         # Restaurar sys.stdout
+         sys.stdout = original_stdout
+@@ -214,17 +286,19 @@
+         # Obtener los tiempos capturados
+         retrieval_time = time_logger.times.get("retrieval_time", 0)
+         
++        # Añadir una guarda por si el retrieval_time no es un número válido
++        if not isinstance(retrieval_time, (int, float)):
++            logger.warning(f"retrieval_time no es un número válido: {retrieval_time}")
++            retrieval_time = 0
++            
++        return response, total_time, retrieval_time
++        
+     except Exception as e:
++        # Asegurar que sys.stdout se restaura incluso en caso de error
++        if sys.stdout is not original_stdout:
++            sys.stdout = original_stdout
+         logger.error(f"Error ejecutando Traditional RAG: {e}")
+-        response = "Error generando respuesta"
+-        total_time = 0
+-        sys.stdout = original_stdout
+-    
+-    # Si total_time es 0, algo salió mal, usar el tiempo desde el inicio
+-    if total_time == 0:
+-        total_time = time.time() - start_time
+-        
+-    return response, total_time, retrieval_time
++        return "Error generando respuesta", time.time() - start_time, 0
+ 
+ # Ahora modifiquemos la función evaluate_question para que acepte la respuesta ya generada
+ async def evaluate_question(
+@@ -269,6 +343,7 @@
+         question=question,
+         generated_answer=response,
+         reference_answer=reference_answer,
++        answer_type=answer_type,
+         client=llm_client
+     )
+     
+@@ -290,132 +365,160 @@
+     
+     return result
+ 
+-async def run_benchmark(
+-    limit: int = 300,
+-    questions: Optional[List[Dict[str, Any]]] = None,
+-    results_dir: Optional[Path] = None,
+-    top_k: int = 20
+-) -> None:
++async def run_benchmark():
+     """
+-    Ejecuta el benchmark completo
+-    
+-    Args:
+-        limit: Número máximo de preguntas a evaluar
+-        questions: Lista opcional de preguntas predefinidas
+-        results_dir: Directorio opcional para resultados
+-        top_k: Número de documentos a recuperar
++    Ejecuta el benchmark con soporte para respuestas ideales y exactas
+     """
+-    # Configurar clientes de API
+-    llm_client = AsyncOpenAI(
+-        base_url=VLLM_BASE_URL,
+-        api_key="not-needed"
+-    )
+-
+-    embeddings_client = AsyncOpenAI(
+-        base_url=OLLAMA_BASE_URL,
+-        api_key="ollama"
+-    )
++    logger.info("Iniciando benchmark de Traditional RAG con datos de questions-benchmark")
++    
++    # Crear directorio para resultados dentro de la carpeta Benchmark
++    # Obtener la ruta absoluta del archivo actual (benchmark_traditional_train.py)
++    current_file_path = Path(__file__).resolve()
++    
++    # El directorio padre del archivo es la carpeta Benchmark
++    benchmark_dir = current_file_path.parent
+     
+-    # Usar directorio de resultados personalizado si se proporciona
+-    if results_dir is None:
+-        results_dir = Path(__file__).parent / "results"
++    # Crear la carpeta de resultados dentro de la carpeta Benchmark
++    results_dir = benchmark_dir / "benchmark_results_traditional_qdrant"
+     results_dir.mkdir(exist_ok=True)
+     
+-    # Crear directorios para resultados
++    # Crear subdirectorios para cada tipo de respuesta
+     ideal_dir = results_dir / "ideal_answers"
+     exact_dir = results_dir / "exact_answers"
+     ideal_dir.mkdir(exist_ok=True)
+     exact_dir.mkdir(exist_ok=True)
+     
+-    # Usar preguntas proporcionadas o obtenerlas de Qdrant
+-    if questions is not None:
+-        all_questions = questions[:limit]
+-    else:
+-        all_questions = await get_questions_from_qdrant(limit=limit)
++    # Verificar si existen checkpoints previos
++    ideal_checkpoint = ideal_dir / "partial_results.json"
++    exact_checkpoint = exact_dir / "partial_results.json"
+     
+-    # Verificar checkpoints existentes
++    # Cargar resultados previos si existen
+     ideal_results = []
+     exact_results = []
+-    processed_questions = set()
++    processed_question_ids = set()
+     
+-    if (ideal_dir / "partial_results.json").exists():
++    if ideal_checkpoint.exists():
+         try:
+-            with open(ideal_dir / "partial_results.json", "r", encoding="utf-8") as f:
++            with open(ideal_checkpoint, "r", encoding="utf-8") as f:
+                 ideal_results = json.load(f)
+-                processed_questions.update([r["question_id"] for r in ideal_results])
+-                logger.info(f"Cargados {len(ideal_results)} resultados previos para respuestas ideales")
++            logger.info(f"Cargados {len(ideal_results)} resultados previos de respuestas ideales")
++            # Añadir IDs de preguntas ya procesadas
++            processed_question_ids.update([r["question_id"] for r in ideal_results])
+         except Exception as e:
+-            logger.error(f"Error cargando resultados previos para respuestas ideales: {e}")
++            logger.error(f"Error cargando checkpoint de respuestas ideales: {e}")
++            ideal_results = []
+     
+-    if (exact_dir / "partial_results.json").exists():
++    if exact_checkpoint.exists():
+         try:
+-            with open(exact_dir / "partial_results.json", "r", encoding="utf-8") as f:
++            with open(exact_checkpoint, "r", encoding="utf-8") as f:
+                 exact_results = json.load(f)
+-                processed_questions.update([r["question_id"] for r in exact_results])
+-                logger.info(f"Cargados {len(exact_results)} resultados previos para respuestas exactas")
++            logger.info(f"Cargados {len(exact_results)} resultados previos de respuestas exactas")
++            # Añadir IDs de preguntas ya procesadas
++            processed_question_ids.update([r["question_id"] for r in exact_results])
+         except Exception as e:
+-            logger.error(f"Error cargando resultados previos para respuestas exactas: {e}")
++            logger.error(f"Error cargando checkpoint de respuestas exactas: {e}")
++            exact_results = []
+     
+-    # Filtrar preguntas ya procesadas
+-    questions_to_process = [q for q in all_questions if q["question_id"] not in processed_questions]
++    # Obtener preguntas de Qdrant usando función similar a SpeculativeRag
++    all_questions = await get_questions_from_qdrant(limit=1000)
+     
+-    total_questions = len(all_questions)
+-    remaining_questions = len(questions_to_process)
++    if not all_questions:
++        logger.error("No se pudieron obtener preguntas de Qdrant. Abortando benchmark.")
++        return
+     
+-    # Analizar distribución de tipos de preguntas
+-    question_types = {}
++    # Filtrar preguntas que ya se procesaron
++    questions = []
+     for q in all_questions:
+-        q_type = "unknown"
+-        if "question_id" in q:
+-            # Convert question_id to string before checking
+-            question_id_str = str(q["question_id"])
+-            if "_" in question_id_str:
+-                # Intentar inferir tipo a partir del ID si está disponible (e.g., "list_123")
+-                id_parts = question_id_str.split("_")
+-                if len(id_parts) > 1:
+-                    q_type = id_parts[0]
+-        question_types[q_type] = question_types.get(q_type, 0) + 1
++        if q["question_id"] not in processed_question_ids:
++            questions.append(q)
++    
++    total_questions = len(all_questions)
++    remaining_questions = len(questions)
+     
+     logger.info(f"Total de preguntas: {total_questions}")
+-    logger.info(f"Distribución de tipos (inferidos del ID): {question_types}")
+     logger.info(f"Preguntas ya procesadas: {total_questions - remaining_questions}")
+-    logger.info(f"Preguntas por procesar: {remaining_questions}")
++    logger.info(f"Preguntas restantes por procesar: {remaining_questions}")
++    
++    # Si ya se procesaron todas las preguntas, mostrar mensaje y salir
++    if remaining_questions == 0:
++        logger.info("Todas las preguntas ya fueron procesadas. Generando informes finales.")
++        
++        # Guardar todos los resultados
++        with open(ideal_dir / "full_results.json", "w", encoding="utf-8") as f:
++            json.dump(ideal_results, f, indent=2, ensure_ascii=False)
++        
++        with open(exact_dir / "full_results.json", "w", encoding="utf-8") as f:
++            json.dump(exact_results, f, indent=2, ensure_ascii=False)
++        
++        # Calcular estadísticas para cada tipo de respuesta
++        await generate_stats_report(ideal_results, ideal_dir, "Ideal Answers")
++        await generate_stats_report(exact_results, exact_dir, "Exact Answers")
++        
++        logger.info(f"Benchmark completado. Resultados guardados en {results_dir}")
++        return
++    
++    # Inicializar clientes para LLM (vLLM) y embeddings (Ollama)
++    vllm_client = AsyncOpenAI(
++        base_url=VLLM_BASE_URL,
++        api_key="not-needed"  # vLLM no requiere API key
++    )
+     
+-    # Procesar cada pregunta
+-    for i, question_data in enumerate(tqdm(questions_to_process, desc="Procesando preguntas")):
++    ollama_client = AsyncOpenAI(
++        base_url=OLLAMA_BASE_URL,
++        api_key="ollama"
++    )
++    
++    # Procesar cada pregunta restante
++    for i, question_data in enumerate(tqdm(questions, desc="Evaluando preguntas")):
+         question = question_data["question"]
+-        question_id = question_data.get("question_id", f"unknown_{i}")
++        question_id = question_data.get("question_id", "unknown")
+         
+-        logger.info(f"Procesando pregunta {i+1}/{len(questions_to_process)}: {question}")
++        logger.info(f"Procesando pregunta {i+1}/{len(questions)} (ID: {question_id}): {question[:50]}...")
+         
+-        # Generar respuesta con RAG tradicional
++        # Generar la respuesta una sola vez con Traditional RAG
+         response, total_time, retrieval_time = await generate_traditional_rag_response(
+-            question, llm_client, embeddings_client
++            question=question,
++            llm_client=vllm_client,
++            embeddings_client=ollama_client
+         )
+         
+-        # Evaluar respuesta con respuesta ideal
++        # Evaluar contra la respuesta ideal si está disponible
+         if "ideal_answer" in question_data:
+             ideal_result = await evaluate_question(
+-                question_data, llm_client, response, total_time, retrieval_time, "ideal_answer"
++                question_data=question_data,
++                llm_client=vllm_client,
++                response=response,
++                total_time=total_time,
++                retrieval_time=retrieval_time,
++                answer_type="ideal_answer"
+             )
+-            ideal_results.append(ideal_result)
+             
+-            # Guardar resultados parciales después de cada 5 preguntas
+-            if len(ideal_results) % 5 == 0:
+-                with open(ideal_dir / "partial_results.json", "w", encoding="utf-8") as f:
+-                    json.dump(ideal_results, f, indent=2, ensure_ascii=False)
++            if ideal_result:
++                ideal_results.append(ideal_result)
++                
++                # Guardar resultados parciales después de cada 5 preguntas
++                if len(ideal_results) % 5 == 0:
++                    with open(ideal_dir / "partial_results.json", "w", encoding="utf-8") as f:
++                        json.dump(ideal_results, f, indent=2, ensure_ascii=False)
+         
+-        # Evaluar respuesta con respuesta exacta
++        # Evaluar contra las respuestas exactas si están disponibles (usando la misma respuesta generada)
+         if "exact_answer" in question_data:
+             exact_result = await evaluate_question(
+-                question_data, llm_client, response, total_time, retrieval_time, "exact_answer"
++                question_data=question_data,
++                llm_client=vllm_client,
++                response=response,
++                total_time=total_time,
++                retrieval_time=retrieval_time,
++                answer_type="exact_answer"
+             )
+-            exact_results.append(exact_result)
+             
+-            # Guardar resultados parciales después de cada 5 preguntas
+-            if len(exact_results) % 5 == 0:
+-                with open(exact_dir / "partial_results.json", "w", encoding="utf-8") as f:
+-                    json.dump(exact_results, f, indent=2, ensure_ascii=False)
++            if exact_result:
++                exact_results.append(exact_result)
++                
++                # Guardar resultados parciales después de cada 5 preguntas
++                if len(exact_results) % 5 == 0:
++                    with open(exact_dir / "partial_results.json", "w", encoding="utf-8") as f:
++                        json.dump(exact_results, f, indent=2, ensure_ascii=False)
+         
+         # Pequeña pausa para evitar sobrecarga
+         await asyncio.sleep(1)
+@@ -453,52 +556,36 @@
+         # Recuperar puntos de la colección de preguntas
+         scroll_response = await qdrant_client.scroll(
+             collection_name="questions-benchmark",
+-            limit=limit * 2,  # Recuperamos más para compensar las que filtraremos
++            limit=limit,
+             with_payload=True,
+             with_vectors=False
+         )
+         
+         points = scroll_response[0] if isinstance(scroll_response, tuple) else scroll_response.points
+         
+-        # Filtrar a solo las preguntas que tienen campo "answer"
++        # Filtrar a solo las preguntas que tienen respuestas ideales y/o exactas
+         questions = []
+-        skipped_questions = 0
+-        
+         for point in points:
+             question_data = {
+-                "question_id": str(point.payload.get("question_id", "")),
++                "question_id": point.payload.get("question_id", ""),
+                 "question": point.payload.get("question", "")
+             }
+             
+-            # Solo procesar preguntas con campo "answer"
+-            if "answer" in point.payload and point.payload["answer"]:
+-                answer = point.payload["answer"]
+-                # Mantener el campo original
+-                question_data["answer"] = answer
+-                
+-                # Añadir como exact_answer e ideal_answer para mantener compatibilidad
+-                if isinstance(answer, list):
+-                    question_data["exact_answer"] = answer
+-                else:
+-                    question_data["exact_answer"] = answer
+-                
+-                question_data["ideal_answer"] = answer if isinstance(answer, str) else str(answer)
+-                
++            # Agregar respuesta ideal si existe
++            if "ideal_answer" in point.payload and point.payload["ideal_answer"]:
++                question_data["ideal_answer"] = point.payload["ideal_answer"]
++            
++            # Agregar respuesta exacta si existe
++            if "exact_answer" in point.payload and point.payload["exact_answer"]:
++                question_data["exact_answer"] = point.payload["exact_answer"]
++            
++            # Solo agregamos preguntas que tengan al menos un tipo de respuesta
++            if "ideal_answer" in question_data or "exact_answer" in question_data:
+                 questions.append(question_data)
+-            else:
+-                skipped_questions += 1
+         
+         await qdrant_client.close()
+         
+-        logger.info(f"Se obtuvieron {len(questions)} preguntas válidas de tipo 'answer' de Qdrant")
+-        if skipped_questions > 0:
+-            logger.info(f"Se saltaron {skipped_questions} preguntas sin campo 'answer'")
+-        
+-        # Si tenemos más preguntas que el límite, recortamos
+-        if len(questions) > limit:
+-            logger.info(f"Limitando resultado a {limit} preguntas")
+-            questions = questions[:limit]
+-            
++        logger.info(f"Se obtuvieron {len(questions)} preguntas válidas de Qdrant")
+         return questions
+         
+     except Exception as e:

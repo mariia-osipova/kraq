@@ -1,0 +1,3 @@
+Sex chromatin staining in amnion cells.
+
+INTRODUCTIONThe procedure described here provides a quick and reliable method for determining the sex of mouse embryos that are <12.5 days post-coitum (dpc). Cells from amniotic membranes are stained with toluidine blue. The presence of a heavily stained condensed chromatin body (i.e., a Barr body) indicates the XX samples. With experience, we find a >95% concordance with genotyping data based on PCR for Y-chromosome sequences in extracted tail DNA. This protocol has the advantage of speed and efficiency: When assembling cultures with live tissue, samples can be sexed in 30 min.

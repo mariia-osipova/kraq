@@ -1,0 +1,3 @@
+Transcriptional enhancers can act in trans.
+
+Enhancers have been defined operationally as cis-regulatory sequences that can stimulate transcription of RNA polymerase-II-transcribed genes over large distances and even when located downstream of the gene. Recently, it has become evident that enhancers can also stimulate transcription in trans if they are brought into close proximity to the promoter/gene. These reports provide clues to the mechanism of remote enhancer action. In addition, the findings, together with genetic studies in Drosophila, strongly suggest that enhancer action in trans could underlie phenomena such as 'transvection', where one chromosome affects gene expression in the paired homolog.

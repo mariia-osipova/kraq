@@ -1,0 +1,3 @@
+Proteomic identification of a PSF/p54nrb heterodimer as RNF43 oncoprotein-interacting proteins.
+
+RNF43 is an oncogenic RING finger protein overexpressed in colorectal cancer. To dissect its biological functions, we explored RNF43-interacting proteins by pull-down assay and MS. We identified a heterodimer, p54nrb and PSF, as RNF43's binding partners and confirmed their physical interaction in vivo by the co-immunoprecipitation experiment. Immunofluorescence analysis revealed that co-expression of PSF relocates RNF43 from the nuclear periphery to the nucleoplasm. Thus, proteomic identification of RNF43-associated proteins sheds light on its dynamic interaction network in nuclear events.

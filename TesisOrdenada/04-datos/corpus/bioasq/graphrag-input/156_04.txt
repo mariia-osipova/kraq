@@ -1,0 +1,3 @@
+The end is not the end: remnants of tRNA precursors live on to sponge up small regulatory RNAs.
+
+Natural RNA sponges sequestering cellular noncoding RNA molecules have been found in diverse organisms. In this issue, Lalaouna et al. (2015) report another type of RNA sponge, showing that stable intermediates of bacterial tRNA processing control endogenous small RNAs.

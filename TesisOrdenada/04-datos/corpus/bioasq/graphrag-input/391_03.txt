@@ -1,0 +1,3 @@
+The genomic landscapes of inflammation.
+
+Inflammation involves the activation of a highly coordinated gene expression program that is specific for the initial stimulus and occurs in a different manner in bystander parenchymal cells and professional immune system cells recruited to the inflamed site. Recent data demonstrate that developmental transcription factors like the macrophage fate-determining Pu.1 set the stage for the activity of ubiquitous transcription factors activated by inflammatory stimuli, like NF-kB, AP-1, and interferon regulatory factors (IRFs). The intersection of lineage-determining and stimulus-activated transcription factors at enhancers explains cell type specificity in inflammatory responses.

@@ -1,0 +1,3 @@
+Recent advances in the study of candidate genes for adolescent idiopathic scoliosis.
+
+We used a microarray approach to evaluate gene expression profiles in human AIS osteoblasts, and to identify genes that are differentially expressed following estrogen exposure in non-AIS and AIS human osteoblasts. We found that more than one gene is likely responsible for AIS. Furthermore, some of these genes are estrogen-regulated, suggesting a possible role of estrogens in the etiology of scoliosis.

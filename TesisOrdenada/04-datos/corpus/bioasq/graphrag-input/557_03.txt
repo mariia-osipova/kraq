@@ -1,0 +1,3 @@
+Citrus exocortis viroid RNA is associated with the largest subunit of RNA polymerase II in tomato in vivo.
+
+An active replication complex of citrus exocortis viroid (CEV) was isolated as a chromatin-enriched fraction of infected tomato leaf with CEV RNA synthesis activity. This activity was solubilised from the chromatin with ammonium sulphate, but not with sarkosyl. Nucleoprotein complexes in the soluble fraction which bound to a monoclonal antibody to the carboxy terminal domain of the largest subunit of RNA polymerase II (8WG16) were affinity purified and contained plus- and minus-sense CEV RNA. The results support a role for RNA polymerase II in viroid replication and provide the first direct evidence of an association in vivo between host RNA polymerase II and CEV.

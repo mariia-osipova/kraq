@@ -1,0 +1,3 @@
+The myotubularin family of lipid phosphatases.
+
+The myotubularins (MTMs) constitute a large family of phosphoinositide lipid 3-phosphatases with specificity for PtdIns3P and PtdIns (3,5)P2. Mutations in MTM proteins are associated with inherited conditions such as myotubular myopathy and Charcot-Marie-Tooth syndrome. The substrate lipids are known to be regulators of the endosomal pathway through recruitment of specific effector proteins. Hydrolysis of PtdIns (3,5)P2 provides a biosynthetic pathway to the production of PtdIns5P, which itself can allosterically activate MTMs. We review the properties of this intriguing family of proteins and discuss potential physiological functions that include regulation of the endocytic pathway.

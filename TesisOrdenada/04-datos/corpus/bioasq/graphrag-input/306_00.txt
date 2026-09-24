@@ -1,0 +1,3 @@
+Multiple functions of junctin and junctate, two distinct isoforms of aspartyl beta-hydroxylase.
+
+The single genomic locus, AbetaH-J-J, encodes three functionally distinct proteins aspartyl beta-hydroxylase, junctin and junctate by alternative splicing. Among these three proteins, junctin and junctate could play important roles in the regulation of intracellular Ca(2+) by regulating either Ca(2+) release from intracellular Ca(2+) stores or Ca(2+) influx in various biological processes. Here we review recent findings concerning the expressional regulations and the proposed functions of junctin and junctate.

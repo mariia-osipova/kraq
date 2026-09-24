@@ -1,0 +1,8 @@
+--- /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Local_BioASQ_test1_NoPromptTuning/Local_BioASQ_test1_NoPromptTuning/src/Benchmarks/generate_random_fragment_questions_base.py	2025-04-24 20:31:23.000000000 -0300
++++ /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Local_TriviaQA_Mistral7Bv0.1_300/Local_TriviaQA_Mistral7Bv0.1_300/src/Benchmarks/generate_random_fragment_questions_base.py	2025-04-29 14:21:24.000000000 -0300
+@@ -273,4 +273,4 @@
+ 
+ if __name__ == "__main__":
+     print("Comenzando análisis de preguntas random vs. base")
+-    generate_and_analyze_questions(num_iterations=1000)
++    generate_and_analyze_questions(num_iterations=300)

@@ -1,0 +1,3 @@
+Substrates of the BRCA1-dependent ubiquitin ligase.
+
+Discovering the precise function of the breast and ovarian specific tumor suppressor, BRCA1, has proven to be quite complicated. It has been determined that BRCA1, together with BARD1, comprise an E3 ubiquitin ligase. Since it is now known that BRCA1 is an enzyme, the challenge for BRCA1 research is to learn how this enzymatic activity functions in normal breast and ovarian cells in order to suppress cancerous transformation. This review will survey the known ubiquitination substrates of BRCA1 and suggest how these reactions may influence the genomic stability and proliferation of breast cells.

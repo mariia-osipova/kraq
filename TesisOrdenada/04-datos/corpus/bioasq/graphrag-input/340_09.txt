@@ -1,0 +1,3 @@
+Evolutionary changes in the genetic code.
+
+The genetic code has been influenced by directional mutation pressure affecting the base composition of DNA, sometimes in the direction of increased GC content and at other times, in the direction of AT. Such pressure led to changes in species-specific usages of codons and tRNA anticodons, and also in amino acid assignments of codons in mitochondria and in several intact organisms. These code changes are probably recent evolutionary events. The genetic code is not 'frozen', but instead it is still evolving.

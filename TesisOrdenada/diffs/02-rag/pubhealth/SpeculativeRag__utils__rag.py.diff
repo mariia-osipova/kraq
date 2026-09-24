@@ -1,0 +1,30 @@
+--- /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/SpeculativeRag/utils/rag.py	2025-04-29 01:06:11.000000000 -0300
++++ /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_pubhealth_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_pubhealth_solver/SpeculativeRag/utils/rag.py	2025-05-09 23:05:47.000000000 -0300
+@@ -36,15 +36,15 @@
+             api_key="not-needed"
+         )
+     
+-    prompt = """Response to the instruction. Also provide a concise rationale that justifies the response.
++    prompt = """Given the following medical claim and evidence, determine whether it is true, false, or a mixture of both. Then, provide a brief rationale explaining your reasoning..
+ 
+-###Instruction: 
++###Claim: 
+ {instruction}
+ ###Evidence:
+ {evidence}
+ 
+ Your response must be a valid JSON object with the following format:
+-{{"response": "your response here", "rationale": "your rationale here"}}
++{{"response": "<true/false/mixture>", "rationale": "<your explanation>"}}
+ """
+ 
+     # Format evidence with numbered citations
+@@ -53,7 +53,7 @@
+     )
+     
+     messages = [
+-        {"role": "system", "content": "You are a helpful assistant. You can only use the evidence provided to answer the question."},
++        {"role": "system", "content": "You are a helpful assistant."},
+         {
+             "role": "user",
+             "content": prompt.format(

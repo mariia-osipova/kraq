@@ -1,0 +1,3 @@
+Disease modifying therapies for Alzheimer's disease targeting Aβ oligomers: implications for therapeutic mechanisms.
+
+Several lines of evidence indicate that amyloid β (Aβ), particularly Aβ oligomers (AβOs), plays a causative role in Alzheimer's disease. However, the mechanisms underlying the action of an anti-AβO antibody to clarify the toxic action of AβOs remain elusive. Here, we showed that the anti-AβO antibody (monoclonal 72D9) can modify the Aβ aggregation pathway. We also found that 72D9 directly sequesters both extracellular and intraneuronal AβOs in a nontoxic state. Thus, therapeutic intervention targeting AβOs is a promising strategy for neuronal protection in Alzheimer's disease.

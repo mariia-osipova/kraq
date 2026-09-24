@@ -1,0 +1,3 @@
+Solution structure of the BRK domains from CHD7.
+
+CHD7 is a member of the chromodomain helicase DNA binding domain (CHD) family of ATP-dependent chromatin remodelling enzymes. It is mutated in CHARGE syndrome, a multiple congenital anomaly condition. CHD7 is one of a subset of CHD proteins, unique to metazoans that contain the BRK domain, a protein module also found in the Brahma/BRG1 family of helicases. We describe here the NMR solution structure of the two BRK domains of CHD7. Each domain has a compact betabetaalphabeta fold. The second domain has a C-terminal extension consisting of two additional helices. The structure differs from those of other domains present in chromatin-associated proteins.

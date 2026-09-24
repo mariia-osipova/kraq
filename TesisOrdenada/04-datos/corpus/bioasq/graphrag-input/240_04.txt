@@ -1,0 +1,3 @@
+Signaling pathways in medulloblastoma.
+
+Medulloblastoma is the most common brain tumor of childhood. Multiple signaling pathways have been associated with medulloblastoma formation and growth. These include the developmental pathways Hedgehog, (Hh) Notch, and Wnt as well as the receptor tyrosine kinases (RTK) c-Met, erbB2, IGF-R and TrkC, and the oncoprotein Myc. Here we review the involvement of these pathways in medulloblastoma malignancy with a focus on their mode of deregulation, prognostic value, functional effects, cellular and molecular mechanisms of action, and implications for therapy.

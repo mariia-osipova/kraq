@@ -1,0 +1,3 @@
+A first-in-class NAE inhibitor, MLN4924, blocks lentiviral infection in myeloid cells by disrupting neddylation-dependent Vpx-mediated SAMHD1 degradation.
+
+MLN4924 is a first-in-class cancer drug that inhibits the Nedd8-activating enzyme (NAE). Herein, we report that MLN4924 inhibits Vpx/Vpr-induced SAMHD1 degradation by inhibiting the neddylation of E3 ubiquitin ligase and blocks macaque simian immunodeficiency virus (SIVmac) replication in myeloid cells. SAMHD1 is required for MLN4924-mediated SIVmac inhibition. Our findings indicate the potential efficacy of inhibiting neddylation as an antiretroviral strategy and identify the readily available anticancer drug MLN4924 as a candidate agent for that purpose.

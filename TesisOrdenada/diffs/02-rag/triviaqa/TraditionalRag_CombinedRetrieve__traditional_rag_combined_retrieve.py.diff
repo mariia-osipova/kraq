@@ -1,0 +1,25 @@
+--- /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/TraditionalRag_CombinedRetrieve/traditional_rag_combined_retrieve.py	2025-05-25 18:59:26.000000000 -0300
++++ /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_triviaQA_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_triviaQA_solver/TraditionalRag_CombinedRetrieve/traditional_rag_combined_retrieve.py	2025-05-09 11:05:10.000000000 -0300
+@@ -375,13 +375,12 @@
+         # Etapa 5: Generar respuesta con LLM
+         prompt_start_time = perf_counter()
+         
+-        prompt = f"""Below is an instruction that describes a task. Write a response for it and state
++        prompt = f"""Below is an instruction that describes a task. Write a response using the evidence provided for it and state
+  your explanation supporting your response.
+  ### Evidence:
+  {context}
+  ### Instruction: 
+  {query}
+- ### Response:
+ """
+         prompt_time = perf_counter() - prompt_start_time
+         
+@@ -395,7 +394,6 @@
+         response = await llm_client.chat.completions.create(
+             model=llm_model,
+             messages=[
+-                {"role": "system", "content": "You are a helpful assistant."},
+                 {"role": "user", "content": prompt}
+             ],
+             temperature=0.0

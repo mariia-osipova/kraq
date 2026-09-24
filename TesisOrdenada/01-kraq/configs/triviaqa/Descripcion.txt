@@ -1,0 +1,5 @@
+8000 = vllm
+1234 = lmstudio
+11434 = ollama
+
+Corriendo indexacion de graphrag para primeras 300 preguntas de TriviaQA con embeddings nomic en ollama y llm mistral-7b-instruct-v0.2-awq en vllm con 15 llamadas concurrentes 

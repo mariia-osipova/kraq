@@ -1,0 +1,20 @@
+--- /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/TraditionalRag/run_traditional_rag.py	2025-04-26 13:45:26.000000000 -0300
++++ /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_pubhealth_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_pubhealth_solver/TraditionalRag/run_traditional_rag.py	2025-05-03 15:08:30.000000000 -0300
+@@ -18,7 +18,7 @@
+ 
+ # Lista de preguntas de prueba
+ TEST_QUESTIONS = [
+-    "Can sorafenib activate AMPK?"
++    "Three-in-One Pill Shows Promise in Beating High Blood Pressure"
+ ]
+ 
+ async def run_traditional_rag_test():
+@@ -54,7 +54,7 @@
+                 llm_client=llm_client,                # Cliente para LLM
+                 embedding_model=EMBEDDING_MODEL,
+                 llm_model=LLM_MODEL,
+-                top_k=15,
++                top_k=10,
+                 debug_prints=True,
+                 verbose_timing=True,
+                 collection_name="chunks"  # Cambiado a "chunks" por defecto

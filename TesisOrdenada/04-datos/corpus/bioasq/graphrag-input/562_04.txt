@@ -1,0 +1,3 @@
+Towards targeted therapy of chronic lymphocytic leukemia.
+
+The B cell antigen receptor (BCR) and its downstream pathways are pivotal in the pathogenesis of chronic lymphocytic leukemia (CLL). Recently, inhibitors of kinases in the BCR pathway have shown promising clinical activity in CLL. Based upon these results, the treatment paradigm for CLL will likely undergo major changes. The kinases essential for BCR signal transduction, which are emerging as targets for CLL treatment, and the specific inhibitors under development are the focus of this chapter. In particular, the BTK inhibitor ibrutinib and the PI3K inhibitor idelalisib (GS-1101) are two evolving targeted therapies with the most mature clinical data.

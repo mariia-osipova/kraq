@@ -1,0 +1,3 @@
+Mutations in SPINK5, encoding a serine protease inhibitor, cause Netherton syndrome.
+
+We describe here eleven different mutations in SPINK5, encoding the serine protease inhibitor LEKTI, in 13 families with Netherton syndrome (NS, MIM256500). Most of these mutations predict premature termination codons. These results disclose a critical role of SPINK5 in epidermal barrier function and immunity, and suggest a new pathway for high serum IgE levels and atopic manifestations.

@@ -1,0 +1,3 @@
+Genetic engineering of human pluripotent cells using TALE nucleases.
+
+Targeted genetic engineering of human pluripotent cells is a prerequisite for exploiting their full potential. Such genetic manipulations can be achieved using site-specific nucleases. Here we engineered transcription activator-like effector nucleases (TALENs) for five distinct genomic loci. At all loci tested we obtained human embryonic stem cell (ESC) and induced pluripotent stem cell (iPSC) clones carrying transgenic cassettes solely at the TALEN-specified location. Our data suggest that TALENs employing the specific architectures described here mediate site-specific genome modification in human pluripotent cells with similar efficiency and precision as do zinc-finger nucleases (ZFNs).

@@ -1,0 +1,3 @@
+Conformations of immunoglobulin hypervariable regions.
+
+On the basis of comparative studies of known antibody structures and sequences it has been argued that there is a small repertoire of main-chain conformations for at least five of the six hypervariable regions of antibodies, and that the particular conformation adopted is determined by a few key conserved residues. These hypotheses are now supported by reasonably successful predictions of the structures of most hypervariable regions of various antibodies, as revealed by comparison with their subsequently determined structures.

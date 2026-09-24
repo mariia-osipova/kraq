@@ -1,0 +1,3 @@
+Repressing the repressor: a lincRNA as a MicroRNA sponge in embryonic stem cell self-renewal.
+
+Large intergenic noncoding (linc) RNAs constitute a new dimension of posttranscriptional gene regulation. In this issue of Developmental Cell, Wang et al. (2013) find that linc-RoR maintains human embryonic stem cell self-renewal by functioning as a sponge to trap miR-145, thus regulating core pluripotency factors Oct4, Nanog, and Sox2.

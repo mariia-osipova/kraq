@@ -1,0 +1,3 @@
+Evaluating 3D-printed biomaterials as scaffolds for vascularized bone tissue engineering.
+
+There is an unmet need for a consistent set of tools for the evaluation of 3D-printed constructs. A toolbox developed to design, characterize, and evaluate 3D-printed poly(propylene fumarate) scaffolds is proposed for vascularized engineered tissues. This toolbox combines modular design and non-destructive fabricated design evaluation, evaluates biocompatibility and mechanical properties, and models angiogenesis.

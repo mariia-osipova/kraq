@@ -1,0 +1,3 @@
+Transvection and other homology effects.
+
+The presence of homologous nucleic acid sequences can exert profound effects on chromosomal and gene function in a wide range of organisms. These homology effects reveal remarkable forms of regulation as well as suggest possible avenues for the development of new technologies.

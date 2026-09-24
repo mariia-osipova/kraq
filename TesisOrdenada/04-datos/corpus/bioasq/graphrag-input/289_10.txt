@@ -1,0 +1,3 @@
+Zinc finger nucleases as tools to understand and treat human diseases.
+
+Recent work has shown that it is possible to target regulatory elements to DNA sequences of an investigator's choosing, increasing the armamentarium for probing gene function. In this review, we discuss the development and use of designer zinc finger proteins (ZFPs) as sequence specific tools. While the main focus of this review is to discuss the attachment of the FokI nuclease to ZFPs and the ability of the resulting fusion protein (termed zinc finger nucleases (ZFNs)) to genomically manipulate a gene of interest, we will also cover the utility of other functional domains, such as transcriptional activators and repressors, and highlight how these are being used as discovery and therapeutic tools.

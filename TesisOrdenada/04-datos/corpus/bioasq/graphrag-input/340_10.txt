@@ -1,0 +1,3 @@
+Accumulation of adenine and thymine in a groE-homologous operon of an intracellular symbiont.
+
+As a result of the nucleotide sequence analysis of an aphid endosymbiont's operon homologous to the Escherichia coli groE, we noted that directional base substitutions tending toward an increase of A + T content represent an obvious evolutionary trend in this prokaryotic operon, housed for a long period by an eukaryotic cell. This result, when taken together with previous reports, raised the possibility that genomic DNA of prokaryotes residing in an eukaryotic cell is subject to A/T-biased directional mutation pressure and/or both negative and positive selection operating under conditions specific to the intracellular environments.

@@ -1,0 +1,3 @@
+Laser ablation electrospray ionization for atmospheric pressure molecular imaging mass spectrometry.
+
+Laser ablation electrospray ionization (LAESI) is a novel method for the direct imaging of biological tissues by mass spectrometry. By performing ionization in the ambient environment, this technique enables in vivo studies with potential for single-cell analysis. A unique aspect of LAESI mass spectrometric imaging (MSI) is depth profiling that, in combination with lateral imaging, permits 3D molecular imaging for the first time under native conditions. With current lateral and depth resolutions of approximately 100 and approximately 40 microm, respectively, LAESI MSI helps to explore the molecular architecture of live tissues.

@@ -1,0 +1,3 @@
+Copper-mediated amidation of heterocyclic and aromatic C-H bonds.
+
+A copper-mediated aerobic coupling reaction enables direct amidation of heterocycles or aromatics having weakly acidic C-H bonds with a variety of nitrogen nucleophiles. These reactions provide efficient access to many biologically important skeletons, including ones with the potential to serve as inhibitors of HMTs.

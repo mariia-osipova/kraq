@@ -1,0 +1,3 @@
+Exosomes: the future of biomarkers in medicine.
+
+Exosomes are nanovesicles secreted into the extracellular environment upon internal vesicle fusion with the plasma membrane. The molecular content of exosomes is a fingerprint of the releasing cell type and of its status. For this reason, and because they are released in easily accessible body fluids such as blood and urine, they represent a precious biomedical tool. A growing body of evidence suggests that exosomes may be used as biomarkers for the diagnosis and prognosis of malignant tumors. This article focuses on the exploitation of exosomes as diagnostic tools for human tumors and discusses possible applications of the same strategies to other pathologies, such as neurodegenerative diseases.

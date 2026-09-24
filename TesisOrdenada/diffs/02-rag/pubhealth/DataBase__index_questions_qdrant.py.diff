@@ -1,0 +1,22 @@
+--- /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/DataBase/index_questions_qdrant.py	2025-04-28 23:31:20.000000000 -0300
++++ /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_pubhealth_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_pubhealth_solver/DataBase/index_questions_qdrant.py	2025-05-03 14:55:09.000000000 -0300
+@@ -23,7 +23,7 @@
+ OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434/v1")
+ EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "nomic-embed-text")
+ BENCHMARK_FILE = "DataBase/qa_benchmark.json"
+-BATCH_SIZE = 100  # Número de preguntas a procesar en cada batch
++BATCH_SIZE = 3000  # Número de preguntas a procesar en cada batch
+ VECTOR_DIMENSION = 768  # Dimensión para nomic-embed-text
+ 
+ # Configuración de Qdrant
+@@ -87,8 +87,8 @@
+         
+         processed_questions = []
+         
+-        for question_entry in questions_data:
+-            question_id = question_entry["id"]
++        for i, question_entry in enumerate(questions_data):
++            question_id = i
+             question_text = question_entry["question"]
+             answer = question_entry["answer"]
+             

@@ -1,0 +1,211 @@
+--- /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/Speculative_Rag_Modified/BenchMarks/benchmark_modified_train.py	2025-05-10 01:36:28.000000000 -0300
++++ /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_triviaQA_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_triviaQA_solver/Speculative_Rag_Modified/BenchMarks/benchmark_modified_train.py	2025-05-22 18:54:15.000000000 -0300
+@@ -42,49 +42,23 @@
+ # Modelo para el cálculo de similitud coseno
+ sentence_model = SentenceTransformer('all-MiniLM-L6-v2')
+ 
+-def calculate_cosine_similarity(text1: str, text2: Any) -> float:
++def calculate_cosine_similarity(text1: str, text2: str) -> float:
+     """
+     Calcula la similitud coseno entre dos textos
+     """
+-    # Convertir a string si es una lista
+-    if isinstance(text1, list):
+-        text1 = str(text1)
+-    if isinstance(text2, list):
+-        text2 = str(text2)
+-    
++    # Verificar que los textos no sean None o vacíos
+     if not text1 or not text2:
+         logger.warning("Uno de los textos está vacío o es None. Retornando similitud 0.0")
+         return 0.0
+-    
+-    try:
+-        # Especificar el dispositivo CUDA:1
+-        device = torch.device("cuda:1")
+         
+-        # Asegurarnos de que el modelo esté en CUDA:1
+-        if not hasattr(calculate_cosine_similarity, 'sentence_model'):
+-            calculate_cosine_similarity.sentence_model = SentenceTransformer('all-MiniLM-L6-v2', device="cuda:1")
+-        
+-        # Generar embeddings y moverlos a CUDA:1
+-        embedding1 = calculate_cosine_similarity.sentence_model.encode(text1, convert_to_tensor=True)
+-        embedding2 = calculate_cosine_similarity.sentence_model.encode(text2, convert_to_tensor=True)
+-        
+-        embedding1 = embedding1.to(device)
+-        embedding2 = embedding2.to(device)
+-        
+-        # Asegúrate de que los tensores sean unidimensionales (vectores)
+-        if len(embedding1.shape) > 1 and embedding1.shape[0] > 1:
+-            embedding1 = torch.mean(embedding1, dim=0)
+-        if len(embedding2.shape) > 1 and embedding2.shape[0] > 1:
+-            embedding2 = torch.mean(embedding2, dim=0)
+-            
+-        similarity = util.pytorch_cos_sim(embedding1, embedding2)
+-        
+-        # Asegúrate de que el resultado es un escalar
+-        if isinstance(similarity, torch.Tensor) and similarity.numel() > 1:
+-            similarity = similarity.mean()
+-            
+-        # Mover el resultado a CPU antes de convertirlo a Python
+-        return similarity.cpu().item()
++    try:
++        # Generar embeddings
++        embedding1 = sentence_model.encode(text1, convert_to_tensor=True)
++        embedding2 = sentence_model.encode(text2, convert_to_tensor=True)
++        
++        # Calcular similitud coseno
++        similarity = util.pytorch_cos_sim(embedding1, embedding2).item()
++        return similarity
+     except Exception as e:
+         logger.error(f"Error calculando similitud coseno: {e}")
+         return 0.0
+@@ -119,7 +93,7 @@
+ Generated Answer: {generated_answer}
+ Reference Answer: {reference_answer}
+ 
+-The reference answer represents the truth. The generated answer must match the meaning of the reference answer to be considered correct or if its a factoid answer it must be the same as the reference answer. If the generated answer is more specific but the core meaning is the same, it is also considered correct.
++The reference answer represents the truth. The generated answer must match the meaning of the reference answer to be considered correct. If the generated answer is more specific but the core meaning is the same, it is also considered correct.
+ 
+ Respond with ONLY a single digit:
+ 1 - CORRECT: 
+@@ -192,31 +166,24 @@
+         logger.error(f"Error obteniendo preguntas de Qdrant: {e}")
+         return []
+ 
+-async def run_benchmark_with_qdrant(
+-    limit: int = 300,
+-    questions: Optional[List[Dict[str, Any]]] = None,
+-    results_dir: Optional[Path] = None,
+-    k: int = 5,
+-    m: int = 10,
+-    top_k: int = 20
+-) -> None:
++async def run_benchmark_with_qdrant(limit: int = 1000, results_dir: Optional[Path] = None, k: int = 2, m: int = 5, top_k: int = 10, **kwargs):
+     """
+     Ejecuta el benchmark usando las preguntas almacenadas en Qdrant
+     
+     Args:
+         limit: Número máximo de preguntas a evaluar
+-        questions: Lista opcional de preguntas predefinidas
+-        results_dir: Directorio opcional para resultados
++        results_dir: Directorio para guardar resultados (opcional)
+         k: Número de clusters
+         m: Número de subsets de documentos
+         top_k: Número de documentos a recuperar
++        **kwargs: Parámetros adicionales
+     """
+-    logger.info(f"Iniciando benchmark de Modified RAG con {limit} preguntas")
++    logger.info(f"Iniciando benchmark de Modified RAG con {limit} preguntas de Qdrant")
+     
+     # Inicializar clientes
+     vllm_client = AsyncOpenAI(
+         base_url=VLLM_BASE_URL,
+-        api_key="not-needed"
++        api_key="not-needed"  # vLLM no requiere API key
+     )
+     
+     ollama_client = AsyncOpenAI(
+@@ -224,10 +191,11 @@
+         api_key="ollama"
+     )
+     
++    # Clientes específicos para drafter y verifier (por ahora usan el mismo, pero podrían ser diferentes)
+     drafter_client = vllm_client
+     verifier_client = vllm_client
+     
+-    # Usar directorio de resultados personalizado si se proporciona
++    # Usar el directorio de resultados proporcionado o el predeterminado
+     if results_dir is None:
+         results_dir = Path(__file__).parent / "benchmark_results_modified_qdrant"
+     results_dir.mkdir(exist_ok=True)
+@@ -236,32 +204,6 @@
+     answer_dir = results_dir / "answers"
+     answer_dir.mkdir(exist_ok=True)
+     
+-    # Usar preguntas proporcionadas o obtenerlas de Qdrant
+-    if questions is not None:
+-        all_questions = questions[:limit]
+-    else:
+-        all_questions = await get_questions_from_qdrant(limit=limit)
+-    
+-    # Modificar los parámetros para Modified RAG
+-    params = {
+-        "embedding_model": EMBEDDING_MODEL,
+-        "k": k,
+-        "seed": 23,
+-        "client": ollama_client,
+-        "drafter_model": DRAFTER_MODEL,
+-        "verifier_model": VERIFIER_MODEL,
+-        "m": m,
+-        "top_k": top_k,
+-        "verbose": False,
+-        "debug_prints": True,
+-        "collection_name": RETRIEVAL_COLLECTION,
+-        "questions_collection": SIMILAR_QUESTIONS_COLLECTION,
+-        "ollama_client": ollama_client,
+-        "llm_client": vllm_client,
+-        "drafter_client": drafter_client,
+-        "verifier_client": verifier_client
+-    }
+-    
+     # Verificar si existe checkpoint previo
+     answer_checkpoint = answer_dir / "partial_results.json"
+     
+@@ -279,6 +221,13 @@
+             logger.error(f"Error cargando checkpoint: {e}")
+             answer_results = []
+     
++    # Obtener preguntas de Qdrant
++    all_questions = await get_questions_from_qdrant(limit=limit)
++    
++    if not all_questions:
++        logger.error("No se pudieron obtener preguntas de Qdrant. Abortando benchmark.")
++        return
++    
+     # Filtrar preguntas que ya se procesaron
+     questions = [q for q in all_questions if q["question_id"] not in processed_question_ids]
+     
+@@ -367,6 +316,33 @@
+                 # Capturar la salida para extraer los tiempos
+                 time_logger = TimeCaptureLogger()
+                 
++                # Configurar parámetros para Modified RAG
++                params = {
++                    "embedding_model": EMBEDDING_MODEL,
++                    "k": k,  # Usar el valor recibido como parámetro
++                    "seed": 23,
++                    "client": ollama_client,
++                    "drafter_model": DRAFTER_MODEL,
++                    "verifier_model": VERIFIER_MODEL,
++                    "m": m,  # Usar el valor recibido como parámetro
++                    "top_k": top_k,  # Usar el valor recibido como parámetro
++                    "verbose": False,
++                    "debug_prints": True,
++                    "print_documents": True,
++                    "print_embeddings": True,
++                    "print_clusters": True,
++                    "print_drafts": True,
++                    "print_scores": True,
++                    "collection_name": RETRIEVAL_COLLECTION,
++                    "questions_collection": SIMILAR_QUESTIONS_COLLECTION,
++                    "ollama_client": ollama_client,
++                    "llm_client": vllm_client,
++                    "drafter_client": drafter_client,
++                    "verifier_client": verifier_client
++                }
++                # Agregar cualquier otro parámetro incluido en kwargs
++                params.update(kwargs)
++                
+                 # Reemplazar temporalmente sys.stdout para capturar los tiempos
+                 original_stdout = sys.stdout
+                 sys.stdout = time_logger
+@@ -568,7 +544,7 @@
+     # Usar valor de límite desde línea de comandos si se proporciona
+     import argparse
+     parser = argparse.ArgumentParser(description="Benchmark para Modified RAG con preguntas de Qdrant")
+-    parser.add_argument("--limit", type=int, default=300, help="Número máximo de preguntas a evaluar")
++    parser.add_argument("--limit", type=int, default=1000, help="Número máximo de preguntas a evaluar")
+     args = parser.parse_args()
+     
+     logger.info(f"Iniciando benchmark con límite de {args.limit} preguntas")

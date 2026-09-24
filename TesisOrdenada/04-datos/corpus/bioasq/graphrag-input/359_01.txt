@@ -1,0 +1,3 @@
+Ras trafficking, localization and compartmentalized signalling.
+
+Ras proteins are proto-oncogenes that are frequently mutated in human cancers. Three closely related isoforms, HRAS, KRAS and NRAS, are expressed in all cells and have overlapping but distinctive functions. Recent work has revealed how differences between the Ras isoforms in their trafficking, localization and protein-membrane orientation enable signalling specificity to be determined. We review the various strategies used to characterize compartmentalized Ras localization and signalling. Localization is an important contextual modifier of signalling networks and insights from the Ras system are of widespread relevance for researchers interested in signalling initiated from membranes.

@@ -1,0 +1,3 @@
+The Drosophila zeste gene and transvection.
+
+The zeste locus of Drosophila melanogaster encodes a DNA-binding protein that can influence transcription. A number of sites recognized by this protein fall within genes associated with transvection, a phenomenon suggesting a form of gene regulation that is responsive to the proximity of a gene to its homologous allele on another chromosome. These recent observations continue a history of studies concerning zeste and transvection which has inspired molecular models linking chromosome structure and positioning to the modulation of gene expression.

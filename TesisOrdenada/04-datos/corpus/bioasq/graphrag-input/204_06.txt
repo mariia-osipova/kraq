@@ -1,0 +1,3 @@
+The genetic basis of tuberous sclerosis.
+
+Tuberous sclerosis is a relatively common inherited disease that causes multiple benign tumours in different organs, frequently leading to skin rashes, seizures and mental handicap. The disease can be caused by mutations in either of two genes, TSC2, identified in 1993, and TSC1, only recently identified. Here we review the current state of knowledge of the molecular genetics of tuberous sclerosis and the spectrum of mutations seen in and the implications of recent findings for patients. Although both genes appear to function as tumour suppressors, the function of their protein products is not understood. A speculative model of how these proteins might function is briefly described.

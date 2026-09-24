@@ -1,0 +1,3 @@
+Mechanism-based neddylation inhibitor.
+
+Brownell et al. (2010) elucidate the mechanism of action of MLN4924, a NEDD8-activating enzyme inhibitor. MLN4924 requires the activity of the enzyme to generate a NEDD8-adenylate analog that potently and selectively shuts down this posttranslational modification system.

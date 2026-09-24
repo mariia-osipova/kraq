@@ -1,0 +1,3 @@
+RNA epigenetics.
+
+Mammalian messenger RNA (mRNA) and long noncoding RNA (lncRNA) contain tens of thousands of posttranscriptional chemical modifications. Among these, the N(6)-methyl-adenosine (m(6)A) modification is the most abundant and can be removed by specific mammalian enzymes. m(6)A modification is recognized by families of RNA binding proteins that affect many aspects of mRNA function. mRNA/lncRNA modification represents another layer of epigenetic regulation of gene expression, analogous to DNA methylation and histone modification.

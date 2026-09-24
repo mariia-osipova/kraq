@@ -1,0 +1,3 @@
+The physiology of cardiac calcium handling.
+
+Cardiac calcium (Ca(2+)) handling subsumes the mechanisms maintaining the myocardial Ca(2+) homeostasis that contribute essentially to cardiac performance. This review addresses the interaction of transplasmalemmal and transsarcoplasmic Ca(2+) flux, its potential modifications due to β-adrenergic stimulation and its implications on cardiac action potential.

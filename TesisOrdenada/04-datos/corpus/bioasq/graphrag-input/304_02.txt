@@ -1,0 +1,3 @@
+DMSO enhances electrospray response, boosting sensitivity of proteomic experiments.
+
+We report that low percentages of dimethylsulfoxide (DMSO) in liquid chromatography solvents lead to a strong enhancement of electrospray ionization of peptides, improving the sensitivity of protein identification in bottom-up proteomics by up to tenfold. The method can be easily implemented on any LC-MS/MS system without modification to hardware or software and at no additional cost.

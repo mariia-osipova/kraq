@@ -1,0 +1,3 @@
+In vivo and in vitro studies of angiogenin--a potent angiogenic factor.
+
+Angiogenin is a potent blood-vessel-inducing polypeptide with a molecular weight of 14,000 that has a unique ribonucleolytic activity. First isolated from the conditioned medium of tumour cells, angiogenin has since been purified from normal plasma, which suggested that its propensity to induce neovascularization should be strictly controlled. Modulation of that activity might involve interaction of angiogenin with cell-surface receptors and extracellular matrix of endothelial cells, tight-binding inhibition of both its ribonucleolytic activity and cell binding property by ribonuclease inhibitor, as well as the overall influence of divalent copper, a modulator of angiogenesis.

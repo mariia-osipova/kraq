@@ -1,0 +1,3 @@
+Small molecule antagonists for CXCR2 and CXCR1 inhibit human colon cancer liver metastases.
+
+CXCR1 and CXCR2 are G-protein coupled receptors, that have been shown to play important role in tumor growth and metastasis, and are prime targets for the development of novel therapeutics. Here, we report that targeting CXCR2 and CXCR1 activity using orally active small molecule antagonist (SCH-527123, SCH-479833) inhibits human colon cancer liver metastasis mediated by decreased neovascularization and enhanced malignant cell apoptosis. There were no differences in primary tumor growth. These studies demonstrate the important role of CXCR2/1 in colon cancer metastasis and that inhibition of CXCR2 and CXCR1, small molecule antagonists provides a novel therapeutic strategy.

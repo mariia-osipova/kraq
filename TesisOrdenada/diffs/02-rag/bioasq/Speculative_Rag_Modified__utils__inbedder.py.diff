@@ -1,0 +1,49 @@
+--- /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/Speculative_Rag_Modified/utils/inbedder.py	2025-04-29 18:21:19.000000000 -0300
++++ /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_vsequential_BioASQ_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_vsequential_BioASQ_solver/Speculative_Rag_Modified/utils/inbedder.py	2025-04-26 13:19:06.000000000 -0300
+@@ -101,17 +101,17 @@
+             n_mask: Número de tokens de máscara a usar
+             
+         Returns:
+-            Tuple de (Tensor con embeddings generados, tiempo transcurrido)
++            Tuple con el tensor de embeddings generados y el tiempo de procesamiento (solo el batch)
+         """
+         num_texts = len(input_texts)
+-        batch_size = 30  # Tamaño de batch fijo en 30
++        batch_size = 15  # Tamaño de batch fijo en 15
+         
+         # Calcular número de batches
+         num_batches = math.ceil(num_texts / batch_size)
+         logger.info(f"InBedder: procesando {num_texts} textos en {num_batches} batches de hasta {batch_size} textos en paralelo")
+         
+         all_results = []
+-        total_start_time = time.time()  # Medir tiempo total
++        batch_processing_time = 0.0
+         
+         # Procesar por batches
+         for batch_idx in range(num_batches):
+@@ -129,6 +129,7 @@
+             all_results.extend(batch_results)
+             
+             elapsed = time.time() - start_time
++            batch_processing_time += elapsed  # Acumular tiempo total de procesamiento de batches
+             logger.info(f"InBedder: batch {batch_idx+1}/{num_batches} completado en {elapsed:.2f} segundos")
+             
+             # Pequeña pausa entre batches para evitar sobrecarga y permitir liberación de memoria
+@@ -136,14 +137,13 @@
+                 await asyncio.sleep(0.1)
+                 torch.cuda.empty_cache()  # Liberar memoria CUDA entre batches
+         
+-        total_elapsed = time.time() - total_start_time
+-        
+         # Combinar resultados
+         if all_results:
+-            return torch.cat(all_results, dim=0), total_elapsed
++            embeddings = torch.cat(all_results, dim=0)
++            return embeddings, batch_processing_time
+         else:
+             logger.warning("No se generaron embeddings. Lista de textos vacía.")
+-            return torch.zeros((0, self.model.config.hidden_size)), total_elapsed
++            return torch.zeros((0, self.model.config.hidden_size)), 0.0
+     
+     def compute_similarity(self, embeddings1, embeddings2):
+         """

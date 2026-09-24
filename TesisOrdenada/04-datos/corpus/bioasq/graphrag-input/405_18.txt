@@ -1,0 +1,3 @@
+Essential factors associated with hepatic angiogenesis.
+
+Angiogenesis, the growth of new blood vessels, is essential during tissue repair. In contrast, uncontrolled angiogenesis promotes tumor. A balance between proangiogenic and antiangiogenic growth factors and cytokines tightly controls angiogenesis. With the identification of several proangiogenic molecules such as the vascular endothelial cell growth factor (VEGF), the fibroblast growth factors (FGFs), and the angiopoietins, and the recent description of specific inhibitors of angiogenesis such as platelet factor, angiostatin, endostatin, and vasostatin, it is recognized that therapeutic interference with vasculature formation offers a tool for clinical applications in various pathologies.

@@ -1,0 +1,3 @@
+Isolation of an activator-dependent, promoter-specific chromatin remodeling factor.
+
+Repressed PHO5 gene chromatin, isolated from yeast in the native state, was remodeled by yeast extract in a gene activator-dependent, ATP-dependent manner. The product of the reaction bore the hallmark of the process in vivo, the selective removal of promoter nucleosomes, without effect on open reading frame nucleosomes. Fractionation of the extract identified a single protein, chromodomain helicase DNA binding protein 1 (Chd1), capable of the remodeling activity. Deletion of the CHD1 gene in an isw1Δ pho80Δ strain abolished PHO5 gene expression, demonstrating the relevance of the remodeling reaction in vitro to the process in vivo.

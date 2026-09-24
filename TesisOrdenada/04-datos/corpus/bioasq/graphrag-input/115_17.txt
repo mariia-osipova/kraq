@@ -1,0 +1,3 @@
+Where does DNA replication start in archaea?
+
+Genome-wide measures of DNA strand composition have been used to find archaeal DNA replication origins. Archaea seem to replicate using a single origin (as do eubacteria) even though archaeal replication factors are more like those of eukaryotes.

@@ -1,0 +1,3 @@
+Endoplasmic reticulum aminopeptidases: biochemistry, physiology and pathology.
+
+The human endoplasmic reticulum aminopeptidase (ERAP) 1 and 2 proteins were initially identified as homologues of human placental leucine aminopeptidase/insulin-regulated aminopeptidase. They are categorized as a unique class of proteases based on their subcellular localization on the luminal side of the endoplasmic reticulum. ERAPs play an important role in the N-terminal processing of the antigenic precursors that are presented on the major histocompatibility complex (MHC) class I molecules. ERAPs are also implicated in the regulation of a wide variety of physiological phenomena and pathogenic conditions. In this review, the current knowledge on ERAPs is summarized.

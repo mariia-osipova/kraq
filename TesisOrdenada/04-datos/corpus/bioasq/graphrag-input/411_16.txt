@@ -1,0 +1,3 @@
+Multifunctional deadenylase complexes diversify mRNA control.
+
+Dynamic changes of the lengths of mRNA poly(A) tails are catalysed by diverse deadenylase enzymes. Modulating the length of the poly(A) tail of an mRNA is a widespread means of controlling protein production and mRNA stability. Recent insights illuminate the specialized activities, biological functions and regulation of deadenylases. We propose that the recruitment of multifunctional deadenylase complexes provides unique opportunities to control mRNAs and that the heterogeneity of the deadenylase complexes is exploited to control translation and mRNA stability.

@@ -1,0 +1,3 @@
+The neuroepithelioma breakpoint on chromosome 22 is proximal to the meningioma locus.
+
+The recurrent translocation breakpoint on chromosome 22 of neuroepithelioma has been localized between two probes, D22S1 and D22S15, by both in situ hybridization and somatic cell hybrids. These two probes have further been shown to be genetically linked at theta = 0.0 and a lod score of 5.3. The two probes were unaffected by a partial deletion of the chromosome 22 long arm of a meningioma, showing that the meningioma locus is distal to that of the neuroepithelioma.

@@ -1,0 +1,3 @@
+TorsinA accumulation in Lewy bodies in sporadic Parkinson's disease.
+
+Parkinson's disease (PD) is a neurodegnerative disorder that is pathologically characterized by the presence of Lewy bodies in the brain. We show that Lewy bodies in PD are strongly immunoreactive for torsinA, the protein product of the DYT1 gene, which is associated with primary generalized dystonia. In the substantia nigra, torsinA immunoreactivity is localized to the periphery of Lewy bodies, whereas, in cortical Lewy bodies it is uniformly distributed. The significance of this finding is unknown, but may implicate torsinA in neuronal dysfunction that occurs in PD as well as in primary dystonia.

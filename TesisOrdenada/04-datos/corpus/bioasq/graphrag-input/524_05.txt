@@ -1,0 +1,3 @@
+Regulated translational bypass of stop codons in yeast.
+
+Stop codons are used to signal the ribosome to terminate the decoding of an mRNA template. Recent studies on translation termination in the yeast Saccharomyces cerevisiae have not only enabled the identification of the key components of the termination machinery, but have also revealed several regulatory mechanisms that might enable the controlled synthesis of C-terminally extended polypeptides via stop-codon readthrough. These include both genetic and epigenetic mechanisms. Rather than being a translation 'error', stop-codon readthrough can have important effects on other cellular processes such as mRNA degradation and, in some cases, can confer a beneficial phenotype to the cell.

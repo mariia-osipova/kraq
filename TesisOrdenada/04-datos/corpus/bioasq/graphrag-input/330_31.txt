@@ -1,0 +1,3 @@
+[Current therapy of chronic myeloid leukemia].
+
+Chronic myeloid leukemia (CML) originates from a hematopoietic stem cell carrying the Philadelphia (Ph) chromosome and oncogenic BCR-ABL1 fusion gene. The first tyrosine-kinase inhibitor (TKI) imatinib was introduced to clinical practice 10 years ago, and it radically improved the outcome of CML patients. The rare patients that are imatinib resistant or intolerant can be treated with second generation TKIs such as dasatinib or nilotinib. As second generation TKIs appear to be more effective than imatinib and well tolerated, they may become standard first-line treatment for CML. The major future aim in CML is curative drug therapy.

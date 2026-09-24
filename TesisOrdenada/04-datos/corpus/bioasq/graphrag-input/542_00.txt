@@ -1,0 +1,3 @@
+Ancora: a web resource for exploring highly conserved noncoding elements and their association with developmental regulatory genes.
+
+Metazoan genomes contain arrays of highly conserved noncoding elements (HCNEs) that span developmental regulatory genes and define regulatory domains. We describe Ancora http://ancora.genereg.net, a web resource that provides data and tools for exploring genomic organization of HCNEs for multiple genomes. Ancora includes a genome browser that shows HCNE locations and features novel HCNE density plots as a powerful tool to discover developmental regulatory genes and distinguish their regulatory elements and domains.

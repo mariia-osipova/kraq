@@ -1,0 +1,3 @@
+Disease modifying drugs targeting β-amyloid.
+
+At this time there are no effective methods to alter the disease course in Alzheimer's disease. All FDA approved interventions are for symptomatic relief only. However, it is an exciting time as many agents in development have theorhetical potential to impact the disease course. This review discusses some of the agents that have been in clinical trials, particularly those that affect amyloid processing. Some agents have failed while others still provide hope. Since amyloid is the peptide most closely linked to disease pathogenesis, it is possible that some of the anti-amyloid agents will impact the disease progression in a meaningful way.

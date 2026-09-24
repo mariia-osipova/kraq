@@ -1,0 +1,3 @@
+Integrins in cancer: biological implications and therapeutic opportunities.
+
+The integrin family of cell adhesion receptors regulates a diverse array of cellular functions crucial to the initiation, progression and metastasis of solid tumours. The importance of integrins in several cell types that affect tumour progression has made them an appealing target for cancer therapy. Integrin antagonists, including the alphavbeta3 and alphavbeta5 inhibitor cilengitide, have shown encouraging activity in Phase II clinical trials and cilengitide is currently being tested in a Phase III trial in patients with glioblastoma. These exciting clinical developments emphasize the need to identify how integrin antagonists influence the tumour and its microenvironment.

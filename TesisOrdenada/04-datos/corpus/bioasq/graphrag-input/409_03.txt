@@ -1,0 +1,3 @@
+Picking pyknons out of the human genome.
+
+In a recent paper in PNAS, Rigoutsos et al. (2006) describe a nonrandom pattern of repeated elements, called pyknons, which are found more frequently in the 3' untranslated regions of genes than in other regions of the human genome. Although it is unclear how pyknons might have arisen, it is possible that they may be involved in a new form of gene regulation.

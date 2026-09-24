@@ -1,0 +1,3 @@
+Bapineuzumab captures the N-terminus of the Alzheimer's disease amyloid-beta peptide in a helical conformation.
+
+Bapineuzumab is a humanized antibody developed by Pfizer and Johnson & Johnson targeting the amyloid (Aβ) plaques that underlie Alzheimer's disease neuropathology. Here we report the crystal structure of a Fab-Aβ peptide complex that reveals Bapineuzumab surprisingly captures Aβ in a monomeric helical conformation at the N-terminus. Microscale thermophoresis suggests that the Fab binds soluble Aβ(1-40) with a K(D) of 89 (±9) nM. The structure explains the antibody's exquisite selectivity for particular Aβ species and why it cannot recognize N-terminally modified or truncated Aβ peptides.

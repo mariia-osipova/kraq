@@ -1,0 +1,3 @@
+Jarid2 links MicroRNA and chromatin in Th17 cells.
+
+In this issue of Immunity, Escobar et al. (2014) bring microRNAs and chromatin together by showing how activation-induced miR-155 targets the chromatin protein Jarid2 to regulate proinflammatory cytokine production in T helper 17 cells.

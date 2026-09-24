@@ -1,0 +1,3 @@
+Inhibition of Porphyromonas gingivalis biofilm by oxantel.
+
+Porphyromonas gingivalis is a major pathogen of chronic periodontitis and exists in a biofilm on the surface of the tooth root. Oxantel, a cholinergic anthelmintic and fumarate reductase inhibitor, significantly inhibited biofilm formation by P. gingivalis and disrupted established biofilms at concentrations below its MIC against planktonic cells. Oxantel was more effective against P. gingivalis in biofilm than metronidazole, a commonly used antibiotic for periodontitis.

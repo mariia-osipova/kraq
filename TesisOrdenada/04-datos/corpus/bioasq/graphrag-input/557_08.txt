@@ -1,0 +1,3 @@
+DNA-dependent RNA polymerase II of plant origin transcribes viroid RNA into full-length copies.
+
+DNA-dependent RNA polymerase II purified from healthy plant tissue is capable of synthesizing linear (-)-viroid RNA copies of full length from (+)-viroid RNA templates in vitro. Together with the specific alpha-amanitin sensitivity of viroid replication observed in vivo, these findings suggest that viroids replicate by an entirely novel mechanism in which infecting viroid RNA molecules are copied by the host enzyme which is normally responsible for the synthesis of nuclear precursors to messenger RNA.

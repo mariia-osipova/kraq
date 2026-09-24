@@ -1,0 +1,3 @@
+Mutations in EZH2 cause Weaver syndrome.
+
+We used trio-based whole-exome sequencing to analyze two families affected by Weaver syndrome, including one of the original families reported in 1974. Filtering of rare variants in the affected probands against the parental variants identified two different de novo mutations in the enhancer of zeste homolog 2 (EZH2). Sanger sequencing of EZH2 in a third classically-affected proband identified a third de novo mutation in this gene. These data show that mutations in EZH2 cause Weaver syndrome.

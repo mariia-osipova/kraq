@@ -1,0 +1,3 @@
+TRIAD1 inhibits MDM2-mediated p53 ubiquitination and degradation.
+
+Murine double minute (MDM2) is an E3 ligase that promotes ubiquitination and degradation of tumor suppressor protein 53 (p53). MDM2-mediated regulation of p53 has been investigated as a classical tumorigenesis pathway. Here, we describe TRIAD1 as a novel modulator of the p53-MDM2 axis that induces p53 activation by inhibiting its regulation by MDM2. Ablation of TRIAD1 attenuates p53 levels activity upon DNA damage, whereas ectopic expression of TRIAD1 promotes p53 stability by inhibiting MDM2-mediated ubiquitination/degradation. Moreover, TRIAD1 binds to the C-terminus of p53 to promote its dissociation from MDM2. These results implicate TRIAD1 as a novel regulatory factor of p53-MDM2.

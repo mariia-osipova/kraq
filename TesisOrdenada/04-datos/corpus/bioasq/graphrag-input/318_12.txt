@@ -1,0 +1,3 @@
+A key role for EZH2 and associated genes in mouse and human adult T-cell acute leukemia.
+
+In this study, we show the high frequency of spontaneous γδ T-cell leukemia (T-ALL) occurrence in mice with biallelic deletion of enhancer of zeste homolog 2 (Ezh2). Tumor cells show little residual H3K27 trimethylation marks compared with controls. EZH2 is a component of the PRC2 Polycomb group protein complex, which is associated with DNA methyltransferases. Using next-generation sequencing, we identify alteration in gene expression levels of EZH2 and acquired mutations in PRC2-associated genes (DNMT3A and JARID2) in human adult T-ALL. Together, these studies document that deregulation of EZH2 and associated genes leads to the development of mouse, and likely human, T-ALL.

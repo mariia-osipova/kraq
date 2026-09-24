@@ -1,0 +1,589 @@
+--- /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/Speculative_Rag_Modified/BenchMarks/benchmark_modified_train.py	2025-05-10 01:36:28.000000000 -0300
++++ /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_vsequential_BioASQ_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_vsequential_BioASQ_solver/Speculative_Rag_Modified/BenchMarks/benchmark_modified_train.py	2025-05-20 13:09:43.000000000 -0300
+@@ -40,7 +40,7 @@
+ SIMILAR_QUESTIONS_COLLECTION = "questions-index-finetuned"  # Colección para preguntas similares
+ 
+ # Modelo para el cálculo de similitud coseno
+-sentence_model = SentenceTransformer('all-MiniLM-L6-v2')
++sentence_model = SentenceTransformer('all-MiniLM-L6-v2', device="cuda:1")
+ 
+ def calculate_cosine_similarity(text1: str, text2: Any) -> float:
+     """
+@@ -105,41 +105,106 @@
+     question: str,
+     generated_answer: str,
+     reference_answer: str,
++    answer_type: str = "ideal_answer",
+     client: AsyncOpenAI = None
+ ) -> int:
+     """
+-    Evalúa si la respuesta generada es correcta para preguntas de tipo trivia simple
+-    usando exclusivamente el LLM para el juicio
++    Evalúa si la respuesta generada es correcta según criterios más estrictos
+     """
+     try:
+-        # Prompt para evaluación
+-        prompt = f"""You are an expert evaluator for question answering systems. Your task is to determine if the generated answer correctly responds to the question according to the reference answer.
++        # Diferentes prompts según el tipo de respuesta
++        if answer_type == "exact_answer":
++            # Para respuestas exactas (con lista de verdades)
++            if isinstance(reference_answer, list) and len(reference_answer) > 0:
++                # Convertir cada elemento a string y unirlos
++                reference_str = ", ".join([str(ans) for ans in reference_answer])
++                prompt = f"""
++You are an expert evaluator of question answering systems with a focus on factual accuracy. Assess if the generated answer correctly addresses the question based on the reference answers.
++
++Question: {question}
++Generated Answer: {generated_answer}
++Reference Answers: {reference_str}
++
++The reference answers are provided as a list of true answers to the question.
++
++The generated answer should cover most items in the reference answers
++
++Contradicting ANY of the reference answers is a critical error
++Including incorrect information invalidates the answer
++
++Is the generated answer correct?
++Answer with a single digit:
++1 - Yes, the generated answer meets the criteria for correctness
++0 - No, the generated answer fails to meet one or more key criteria
++
++Your response (just the digit 1 or 0):
++"""
++            else:
++                # Una sola respuesta exacta
++                prompt = f"""
++You are an expert evaluator of question answering systems with a focus on factual accuracy. Assess if the generated answer correctly addresses the question based on the reference answer.
+ 
+ Question: {question}
+ Generated Answer: {generated_answer}
+ Reference Answer: {reference_answer}
+ 
+-The reference answer represents the truth. The generated answer must match the meaning of the reference answer to be considered correct or if its a factoid answer it must be the same as the reference answer. If the generated answer is more specific but the core meaning is the same, it is also considered correct.
++The reference answer represents the ground truth to the question.
+ 
+-Respond with ONLY a single digit:
+-1 - CORRECT: 
+-0 - INCORRECT: 
++The generated answer MUST contain the essential information from the reference answer
++
++It must not contain any statements that contradict the reference answer
++
++While the wording may differ, the core facts and meaning must be preserved. Partial answers that miss key points should be considered incorrect.
++
++Is the generated answer correct?
++Answer with a single digit:
++1 - Yes, the generated answer meets the criteria for correctness
++0 - No, the generated answer fails to meet one or more key criteria
++
++Your response (just the digit 1 or 0):
++"""
++        else:
++            # Para respuestas ideales (considerando referencia como verdad)
++            prompt = f"""
++You are an expert evaluator of question answering systems with a focus on completeness and accuracy. Assess if the generated answer correctly addresses the question based on the reference answer.
++
++Question: {question}
++Generated Answer: {generated_answer}
++Reference Answer: {reference_answer}
++
++Question: {question}
++Generated Answer: {generated_answer}
++Reference Answer: {reference_answer}
++
++The reference answer represents the ground truth to the question.
++
++The generated answer MUST contain the essential information from the reference answer
++
++It must not contain any statements that contradict the reference answer
++
++While the wording may differ, the core facts and meaning must be preserved. Partial answers that miss key points should be considered incorrect.
++
++Is the generated answer correct?
++Answer with a single digit:
++1 - Yes, the generated answer meets the criteria for correctness
++0 - No, the generated answer fails to meet one or more key criteria
++
++Your response (just the digit 1 or 0):
++"""
+ 
+-Your verdict (just the digit 1 or 0):"""
+-        
+         # Usar el modelo para la evaluación
+         response = await client.chat.completions.create(
+             model=VERIFIER_MODEL,
+             messages=[{"role": "user", "content": prompt}],
+             temperature=0.0,
+-            max_tokens=5
++            max_tokens=10
+         )
+         
+         answer_text = response.choices[0].message.content.strip()
+         return 1 if answer_text.startswith("1") else 0
+             
+     except Exception as e:
+-        logger.error(f"Error evaluando corrección: {e}")
++        logger.error(f"Error evaluando corrección con modelo local: {e}")
+         return 0  # Por defecto, si hay error, consideramos la respuesta incorrecta
+ 
+ async def get_questions_from_qdrant(limit: int = 100) -> List[Dict[str, Any]]:
+@@ -167,7 +232,7 @@
+             with_vectors=False
+         )
+         
+-        # Procesar las preguntas - ahora solo buscamos "answer"
++        # Filtrar a solo las preguntas que tienen respuestas ideales y/o exactas
+         questions = []
+         for point in points:
+             question_data = {
+@@ -175,12 +240,16 @@
+                 "question": point.payload.get("question", "")
+             }
+             
+-            # Agregar respuesta si existe
+-            if "answer" in point.payload and point.payload["answer"]:
+-                question_data["answer"] = point.payload["answer"]
++            # Agregar respuesta ideal si existe
++            if "ideal_answer" in point.payload and point.payload["ideal_answer"]:
++                    question_data["ideal_answer"] = point.payload["ideal_answer"]
++            
++            # Agregar respuesta exacta si existe - mantener el formato original
++            if "exact_answer" in point.payload and point.payload["exact_answer"]:
++                    question_data["exact_answer"] = point.payload["exact_answer"]
+             
+-            # Solo agregamos preguntas que tengan respuesta
+-            if "answer" in question_data:
++            # Solo agregamos preguntas que tengan al menos un tipo de respuesta
++            if "ideal_answer" in question_data or "exact_answer" in question_data:
+                 questions.append(question_data)
+         
+         await qdrant_client.close()
+@@ -193,30 +262,32 @@
+         return []
+ 
+ async def run_benchmark_with_qdrant(
+-    limit: int = 300,
+-    questions: Optional[List[Dict[str, Any]]] = None,
+-    results_dir: Optional[Path] = None,
+-    k: int = 5,
+-    m: int = 10,
+-    top_k: int = 20
+-) -> None:
++    limit: int = 1000,
++    questions: List[Dict[str, Any]] = None,
++    results_dir: Path = None,
++    **params
++):
+     """
+     Ejecuta el benchmark usando las preguntas almacenadas en Qdrant
+     
+     Args:
+         limit: Número máximo de preguntas a evaluar
+-        questions: Lista opcional de preguntas predefinidas
++        questions: Lista opcional de preguntas pre-seleccionadas
+         results_dir: Directorio opcional para resultados
+-        k: Número de clusters
+-        m: Número de subsets de documentos
+-        top_k: Número de documentos a recuperar
+     """
+-    logger.info(f"Iniciando benchmark de Modified RAG con {limit} preguntas")
++    logger.info(f"Iniciando benchmark de Modified RAG con {limit} preguntas de Qdrant")
++    
++    # Usar directorio de resultados personalizado si se proporciona
++    if results_dir is None:
++        results_dir = Path(__file__).parent / "benchmark_results_modified_qdrant"
++    
++    # Asegurar que el directorio existe
++    results_dir.mkdir(exist_ok=True, parents=True)
+     
+     # Inicializar clientes
+     vllm_client = AsyncOpenAI(
+         base_url=VLLM_BASE_URL,
+-        api_key="not-needed"
++        api_key="not-needed"  # vLLM no requiere API key
+     )
+     
+     ollama_client = AsyncOpenAI(
+@@ -224,63 +295,59 @@
+         api_key="ollama"
+     )
+     
++    # Clientes específicos para drafter y verifier (por ahora usan el mismo, pero podrían ser diferentes)
+     drafter_client = vllm_client
+     verifier_client = vllm_client
+     
+-    # Usar directorio de resultados personalizado si se proporciona
+-    if results_dir is None:
+-        results_dir = Path(__file__).parent / "benchmark_results_modified_qdrant"
+-    results_dir.mkdir(exist_ok=True)
+-    
+-    # Crear directorio para respuestas
+-    answer_dir = results_dir / "answers"
+-    answer_dir.mkdir(exist_ok=True)
+-    
+-    # Usar preguntas proporcionadas o obtenerlas de Qdrant
+-    if questions is not None:
+-        all_questions = questions[:limit]
+-    else:
+-        all_questions = await get_questions_from_qdrant(limit=limit)
+-    
+-    # Modificar los parámetros para Modified RAG
+-    params = {
+-        "embedding_model": EMBEDDING_MODEL,
+-        "k": k,
+-        "seed": 23,
+-        "client": ollama_client,
+-        "drafter_model": DRAFTER_MODEL,
+-        "verifier_model": VERIFIER_MODEL,
+-        "m": m,
+-        "top_k": top_k,
+-        "verbose": False,
+-        "debug_prints": True,
+-        "collection_name": RETRIEVAL_COLLECTION,
+-        "questions_collection": SIMILAR_QUESTIONS_COLLECTION,
+-        "ollama_client": ollama_client,
+-        "llm_client": vllm_client,
+-        "drafter_client": drafter_client,
+-        "verifier_client": verifier_client
+-    }
+-    
+-    # Verificar si existe checkpoint previo
+-    answer_checkpoint = answer_dir / "partial_results.json"
++    # Crear subdirectorios para cada tipo de respuesta
++    ideal_dir = results_dir / "ideal_answers"
++    exact_dir = results_dir / "exact_answers"
++    ideal_dir.mkdir(exist_ok=True)
++    exact_dir.mkdir(exist_ok=True)
++    
++    # Verificar si existen checkpoints previos
++    ideal_checkpoint = ideal_dir / "partial_results.json"
++    exact_checkpoint = exact_dir / "partial_results.json"
+     
+     # Cargar resultados previos si existen
+-    answer_results = []
++    ideal_results = []
++    exact_results = []
+     processed_question_ids = set()
+     
+-    if answer_checkpoint.exists():
++    if ideal_checkpoint.exists():
+         try:
+-            with open(answer_checkpoint, "r", encoding="utf-8") as f:
+-                answer_results = json.load(f)
+-                logger.info(f"Cargados {len(answer_results)} resultados previos")
+-                processed_question_ids.update([r["question_id"] for r in answer_results])
++            with open(ideal_checkpoint, "r", encoding="utf-8") as f:
++                ideal_results = json.load(f)
++                logger.info(f"Cargados {len(ideal_results)} resultados previos de respuestas ideales")
++                # Añadir IDs de preguntas ya procesadas
++                processed_question_ids.update([r["question_id"] for r in ideal_results])
+         except Exception as e:
+-            logger.error(f"Error cargando checkpoint: {e}")
+-            answer_results = []
++            logger.error(f"Error cargando checkpoint de respuestas ideales: {e}")
++            ideal_results = []
++    
++    if exact_checkpoint.exists():
++        try:
++            with open(exact_checkpoint, "r", encoding="utf-8") as f:
++                exact_results = json.load(f)
++                logger.info(f"Cargados {len(exact_results)} resultados previos de respuestas exactas")
++                # Añadir IDs de preguntas ya procesadas
++                processed_question_ids.update([r["question_id"] for r in exact_results])
++        except Exception as e:
++            logger.error(f"Error cargando checkpoint de respuestas exactas: {e}")
++            exact_results = []
++    
++    # Obtener preguntas de Qdrant
++    all_questions = await get_questions_from_qdrant(limit=limit)
++    
++    if not all_questions:
++        logger.error("No se pudieron obtener preguntas de Qdrant. Abortando benchmark.")
++        return
+     
+     # Filtrar preguntas que ya se procesaron
+-    questions = [q for q in all_questions if q["question_id"] not in processed_question_ids]
++    questions = []
++    for q in all_questions:
++        if q["question_id"] not in processed_question_ids:
++            questions.append(q)
+     
+     total_questions = len(all_questions)
+     remaining_questions = len(questions)
+@@ -293,16 +360,20 @@
+     if remaining_questions == 0:
+         logger.info("Todas las preguntas ya fueron procesadas. Generando informes finales.")
+         # Guardar todos los resultados
+-        with open(answer_dir / "full_results.json", "w", encoding="utf-8") as f:
+-            json.dump(answer_results, f, indent=2, ensure_ascii=False)
++        with open(ideal_dir / "full_results.json", "w", encoding="utf-8") as f:
++            json.dump(ideal_results, f, indent=2, ensure_ascii=False)
++        
++        with open(exact_dir / "full_results.json", "w", encoding="utf-8") as f:
++            json.dump(exact_results, f, indent=2, ensure_ascii=False)
+         
+-        # Calcular estadísticas
+-        await generate_stats_report(answer_results, answer_dir, "Answer Results")
++        # Calcular estadísticas para cada tipo de respuesta
++        await generate_stats_report(ideal_results, ideal_dir, "Ideal Answers")
++        await generate_stats_report(exact_results, exact_dir, "Exact Answers")
+         
+         logger.info(f"Benchmark completado. Resultados guardados en {results_dir}")
+         return
+     
+-    # Procesar cada pregunta restante
++    # Procesar cada pregunta restante, generando una única respuesta para evaluar con ambos tipos de referencia
+     for i, question_data in enumerate(tqdm(questions, desc="Evaluando preguntas")):
+         question = question_data["question"]
+         question_id = question_data.get("question_id", "unknown")
+@@ -313,10 +384,13 @@
+         has_response = False
+         response = ""
+         execution_times = {}
++        inbedder_time = 0
++        retrieval_time = 0
++        similar_question_time = 0
+         total_time = 0
+     
+-        # Solo ejecutar el algoritmo si tiene respuesta de referencia
+-        if "answer" in question_data:
++        # Solo ejecutar el algoritmo si tiene al menos una respuesta de referencia
++        if "ideal_answer" in question_data or "exact_answer" in question_data:
+             try:
+                 # Clase personalizada para capturar los tiempos de ejecución
+                 class TimeCaptureLogger:
+@@ -333,7 +407,7 @@
+                             self.times["inbedder_time"] = float(text.split(":")[1].strip().split()[0])
+                         elif "⏱️ Document retrieval time:" in text:
+                             self.times["retrieval_time"] = float(text.split(":")[1].strip().split()[0])
+-                        elif "Similar question search time:" in text:
++                        elif "Search time:" in text and "similar question" in text.lower():
+                             self.times["similar_question_time"] = float(text.split(":")[1].strip().split()[0])
+                         elif "⏱️ Clustering time:" in text:
+                             self.times["clustering_time"] = float(text.split(":")[1].strip().split()[0])
+@@ -367,12 +441,37 @@
+                 # Capturar la salida para extraer los tiempos
+                 time_logger = TimeCaptureLogger()
+                 
++                # Usar los parámetros recibidos o valores predeterminados si no se proporcionan
++                k = params.get('k', 4)
++                m = params.get('m', 8)
++                top_k = params.get('top_k', 15)
++                seed = params.get('seed', 23)
++                
++                run_params = {
++                    "embedding_model": EMBEDDING_MODEL,
++                    "k": k,
++                    "seed": seed,
++                    "client": ollama_client,
++                    "drafter_model": DRAFTER_MODEL,
++                    "verifier_model": VERIFIER_MODEL,
++                    "m": m,
++                    "top_k": top_k,
++                    "verbose": False,
++                    "debug_prints": True,
++                    "collection_name": RETRIEVAL_COLLECTION,  # Colección para documentos
++                    "questions_collection": SIMILAR_QUESTIONS_COLLECTION,  # Colección para preguntas similares
++                    "ollama_client": ollama_client,  # Cliente para embeddings
++                    "llm_client": vllm_client,  # Cliente general para LLM
++                    "drafter_client": drafter_client,  # Cliente específico para drafter
++                    "verifier_client": verifier_client  # Cliente específico para verifier
++                }
++                
+                 # Reemplazar temporalmente sys.stdout para capturar los tiempos
+                 original_stdout = sys.stdout
+                 sys.stdout = time_logger
+                 
+-                # Ejecutar Modified RAG
+-                response, total_time = await modified_rag(query=question, **params)
++                # Ejecutar Modified RAG una sola vez
++                response, total_time = await modified_rag(query=question, **run_params)
+                 
+                 has_response = True
+                 
+@@ -381,38 +480,42 @@
+                 
+                 # Obtener los tiempos capturados internos del algoritmo
+                 execution_times = time_logger.times
++                inbedder_time = execution_times.get("inbedder_time", 0)
++                retrieval_time = execution_times.get("retrieval_time", 0)
++                similar_question_time = execution_times.get("similar_question_time", 0)
+                 
+             except Exception as e:
+                 logger.error(f"Error ejecutando Modified RAG: {e}")
+                 response = "Error generando respuesta"
+-                if 'original_stdout' in locals():
+-                    sys.stdout = original_stdout
++                sys.stdout = original_stdout
+         
+-            # Evaluar la respuesta contra la respuesta de referencia
+-            if has_response:
++            # Evaluar la misma respuesta contra la respuesta ideal si está disponible
++            if "ideal_answer" in question_data and has_response:
+                 eval_start_time = time.time()
+-                reference = question_data["answer"]
++                ideal_reference = question_data["ideal_answer"]
+         
+                 # Calcular métricas
+-                cosine_sim = calculate_cosine_similarity(response, reference)
+-                precision, recall, f1 = calculate_bert_score(response, reference)
++                cosine_sim = calculate_cosine_similarity(response, ideal_reference)
++                precision, recall, f1 = calculate_bert_score(response, ideal_reference)
+         
+                 # Evaluar corrección usando modelo local
+                 is_correct = await evaluate_correctness(
+                     question=question,
+                     generated_answer=response,
+-                    reference_answer=reference,
++                    reference_answer=ideal_reference,
++                    answer_type="ideal_answer",
+                     client=verifier_client
+                 )
+                 
+                 eval_time = time.time() - eval_start_time
+-                logger.debug(f"Tiempo de evaluación: {eval_time:.2f}s")
++                logger.debug(f"Tiempo de evaluación para respuesta ideal: {eval_time:.2f}s")
+                 
+-                # Crear diccionario con resultados
+-                result = {
++                # Crear diccionario con resultados, usando solo el tiempo de ejecución del algoritmo
++                ideal_result = {
+                     "question_id": question_id,
+                     "question": question,
+-                    "reference_answer": reference,
++                    "reference_answer": ideal_reference,
++                    "answer_type": "ideal_answer",
+                     "generated_answer": response,
+                     "cosine_similarity": cosine_sim,
+                     "bert_score_precision": precision,
+@@ -426,24 +529,107 @@
+                     "similar_question_time": execution_times.get("similar_question_time", 0),
+                     "clustering_time": execution_times.get("clustering_time", 0),
+                     "draft_sequential_time": execution_times.get("draft_sequential_time", 0),
++                    "draft_average_time": execution_times.get("draft_average_time", 0),
++                    "draft_parallel_estimate": execution_times.get("draft_parallel_estimate", 0),
++                    "verify_sequential_time": execution_times.get("verify_sequential_time", 0),
++                    "verify_average_time": execution_times.get("verify_average_time", 0),
++                    "verify_parallel_estimate": execution_times.get("verify_parallel_estimate", 0)
++                }
++                
++                ideal_results.append(ideal_result)
++                
++                # Guardar resultados parciales después de cada 5 preguntas
++                if len(ideal_results) % 5 == 0:
++                    with open(ideal_dir / "partial_results.json", "w", encoding="utf-8") as f:
++                        json.dump(ideal_results, f, indent=2, ensure_ascii=False)
++            
++            # Evaluar la misma respuesta contra las respuestas exactas si están disponibles
++            if "exact_answer" in question_data and has_response:
++                eval_start_time = time.time()
++                exact_references = question_data["exact_answer"]
++                
++                # Evaluar en una sola vez usando toda la lista de respuestas exactas
++                # Calculamos similitud coseno con el mejor elemento individual para mantener coherencia en métricas
++                if isinstance(exact_references, list) and len(exact_references) > 0:
++                    # Para cosine similarity, usamos la mejor puntuación individual
++                    best_cosine_sim = max([calculate_cosine_similarity(response, str(ref)) for ref in exact_references])
++                    
++                    # Para BERTScore, hacemos una sola evaluación con la referencia más larga o representativa
++                    # Otra opción sería concatenar todas las referencias con separador
++                    representative_ref = str(max(exact_references, key=lambda x: len(str(x))))  # Tomamos la más larga
++                    precision, recall, f1 = calculate_bert_score(response, representative_ref)
++                    
++                    # Para la evaluación de corrección, pasamos toda la lista al evaluador
++                    exact_is_correct = await evaluate_correctness(
++                        question=question,
++                        generated_answer=response,
++                        reference_answer=exact_references,  # Pasamos la lista completa 
++                        answer_type="exact_answer",
++                        client=verifier_client
++                    )
++                else:
++                    # Si solo hay una respuesta exacta o no es una lista
++                    single_ref = exact_references[0] if isinstance(exact_references, list) else exact_references
++                    single_ref_str = str(single_ref)
++                    best_cosine_sim = calculate_cosine_similarity(response, single_ref_str)
++                    precision, recall, f1 = calculate_bert_score(response, single_ref_str)
++                    exact_is_correct = await evaluate_correctness(
++                        question=question,
++                        generated_answer=response,
++                        reference_answer=single_ref,
++                        answer_type="exact_answer",
++                        client=verifier_client
++                    )
++                
++                eval_time = time.time() - eval_start_time
++                logger.debug(f"Tiempo de evaluación para respuesta exacta: {eval_time:.2f}s")
++                
++                # Crear diccionario con los resultados
++                exact_result = {
++                    "question_id": question_id,
++                    "question": question,
++                    "reference_answer": exact_references,  # Guardamos todas las referencias
++                    "answer_type": "exact_answer",
++                    "generated_answer": response,
++                    "cosine_similarity": best_cosine_sim,
++                    "bert_score_precision": precision,
++                    "bert_score_recall": recall,
++                    "bert_score_f1": f1,
++                    "is_correct": exact_is_correct,
++                    "total_time": total_time,
++                    "query_embedding_time": execution_times.get("query_embedding_time", 0),
++                    "inbedder_time": execution_times.get("inbedder_time", 0),
++                    "retrieval_time": execution_times.get("retrieval_time", 0),
++                    "similar_question_time": execution_times.get("similar_question_time", 0),
++                    "clustering_time": execution_times.get("clustering_time", 0),
++                    "draft_sequential_time": execution_times.get("draft_sequential_time", 0),
++                    "draft_average_time": execution_times.get("draft_average_time", 0),
+                     "draft_parallel_estimate": execution_times.get("draft_parallel_estimate", 0),
+                     "verify_sequential_time": execution_times.get("verify_sequential_time", 0),
++                    "verify_average_time": execution_times.get("verify_average_time", 0),
+                     "verify_parallel_estimate": execution_times.get("verify_parallel_estimate", 0)
+                 }
+                 
+-                answer_results.append(result)
++                exact_results.append(exact_result)
+                 
+-                # Guardar resultados parciales cada 5 preguntas
+-                if len(answer_results) % 5 == 0:
+-                    with open(answer_dir / "partial_results.json", "w", encoding="utf-8") as f:
+-                        json.dump(answer_results, f, indent=2, ensure_ascii=False)
+-    
+-    # Guardar todos los resultados al finalizar
+-    with open(answer_dir / "full_results.json", "w", encoding="utf-8") as f:
+-        json.dump(answer_results, f, indent=2, ensure_ascii=False)
++                # Guardar resultados parciales después de cada 5 preguntas
++                if len(exact_results) % 5 == 0:
++                    with open(exact_dir / "partial_results.json", "w", encoding="utf-8") as f:
++                        json.dump(exact_results, f, indent=2, ensure_ascii=False)
++            
++            # Pequeña pausa para evitar sobrecarga
++            await asyncio.sleep(1)
+     
+-    # Generar informe de estadísticas
+-    await generate_stats_report(answer_results, answer_dir, "Answer Results")
++    # Guardar todos los resultados
++    with open(ideal_dir / "full_results.json", "w", encoding="utf-8") as f:
++        json.dump(ideal_results, f, indent=2, ensure_ascii=False)
++    
++    with open(exact_dir / "full_results.json", "w", encoding="utf-8") as f:
++        json.dump(exact_results, f, indent=2, ensure_ascii=False)
++    
++    # Calcular estadísticas para cada tipo de respuesta
++    await generate_stats_report(ideal_results, ideal_dir, "Modified RAG - Ideal Answer Results")
++    await generate_stats_report(exact_results, exact_dir, "Modified RAG - Exact Answer Results")
+     
+     logger.info(f"Benchmark completado. Resultados guardados en {results_dir}")
+ 
+@@ -548,8 +734,8 @@
+         f.write(f"- Tiempo de clustering: {avg_clustering_time:.2f} segundos\n")
+         
+         f.write("\nTiempos de drafting y verificación:\n")
+-        f.write(f"- Tiempo secuencial de drafting: {avg_draft_sequential:.2f} segundos\n")
+-        f.write(f"- Tiempo paralelo de drafting: {avg_draft_parallel:.2f} segundos\n")
++        f.write(f"- Tiempo secuencial de LLM: {avg_draft_sequential:.2f} segundos\n")
++        f.write(f"- Tiempo paralelo de LLM: {avg_draft_parallel:.2f} segundos\n")
+         f.write(f"- Tiempo secuencial de verificación: {avg_verify_sequential:.2f} segundos\n")
+         f.write(f"- Tiempo paralelo de verificación: {avg_verify_parallel:.2f} segundos\n")
+         

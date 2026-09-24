@@ -1,0 +1,27 @@
+--- /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/Speculative_Rag_Modified/run_modified_rag.py	2025-04-26 12:40:20.000000000 -0300
++++ /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_pubhealth_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_pubhealth_solver/Speculative_Rag_Modified/run_modified_rag.py	2025-05-03 22:35:08.000000000 -0300
+@@ -27,7 +27,7 @@
+ 
+ # Lista de preguntas de prueba
+ TEST_QUESTIONS = [
+-    "Can sorafenib activate AMPK?"
++    "If Congress does not pass the renewal of the payroll tax cut before the end of the year, nearly 160 million working families will see their taxes go up by roughly $1,000."
+ ]
+ 
+ async def run_modified_rag_test():
+@@ -54,13 +54,13 @@
+     n_cores = multiprocessing.cpu_count()
+     params = {
+         "embedding_model": EMBEDDING_MODEL,
+-        "k": 4,  # Número de clusters
++        "k": 2,  # Número de clusters
+         "seed": 42,
+         "client": ollama_client,  # Cliente genérico
+         "drafter_model": DRAFTER_MODEL,
+         "verifier_model": VERIFIER_MODEL,
+         "m": 5,  # Número de subsets de documentos
+-        "top_k": 15,  # Documentos a recuperar
++        "top_k": 10,  # Documentos a recuperar
+         "verbose": True,
+         "debug_prints": True,
+         "print_documents": True,

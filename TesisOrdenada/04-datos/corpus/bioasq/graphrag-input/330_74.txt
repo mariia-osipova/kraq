@@ -1,0 +1,3 @@
+[Molecular pathogenesis of chronic myeloid leukemia].
+
+Chronic myeloid leukemia (CML) is a paradigm for neoplasias that are defined by a unique genetic aberration, the BCR-ABL1 fusion gene. CML is also the best example for molecular target therapy. The development of protein tyrosine kinase inhibitor, imatinib, has entirely changed the strategy of therapy for CML. Nonetheless, many fields of pathogenesis for CML have not been elucidated, such as the mechanisms of blastic crisis, the causes of genetic instability including the inactivation of tumor suppressor genes, and oncogenic signaling pathways downstreams of the BCR-ABL1 fusion gene product. Herein, we review current knowledge on the molecular pathogenesis of CML.

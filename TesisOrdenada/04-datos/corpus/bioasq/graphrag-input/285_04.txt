@@ -1,0 +1,3 @@
+A multimaterial bioink method for 3D printing tunable, cell-compatible hydrogels.
+
+A multimaterial bio-ink method using polyethylene glycol crosslinking is presented for expanding the biomaterial palette required for 3D bioprinting of more mimetic and customizable tissue and organ constructs. Lightly crosslinked, soft hydrogels are produced from precursor solutions of various materials and 3D printed. Rheological and biological characterizations are presented, and the promise of this new bio-ink synthesis strategy is discussed.

@@ -1,0 +1,227 @@
+--- /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/Speculative_Rag_Modified/BenchMarks/exact_match.py	2025-05-21 20:07:47.000000000 -0300
++++ /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_triviaQA_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_triviaQA_solver/Speculative_Rag_Modified/BenchMarks/exact_match.py	2025-05-22 18:54:39.000000000 -0300
+@@ -1,93 +1,77 @@
+ import json
+ from pathlib import Path
+-from typing import Dict, List, Union, Any
++from typing import Dict, List, Union
+ from loguru import logger
+ import re
+ from datetime import datetime
+-import traceback
+ 
+-def extract_label(text: Any) -> str:
++def extract_label(text: Union[str, dict]) -> str:
+     """
+     Extrae la respuesta principal del texto generado.
+-    Maneja diferentes tipos de datos para la respuesta.
++    Maneja tanto textos en formato string como respuestas en formato diccionario.
+     
+     Args:
+-        text (Any): El texto o diccionario con la respuesta generada
++        text (Union[str, dict]): El texto o diccionario con la respuesta generada
+         
+     Returns:
+-        str: La respuesta extraída como texto
++        str: La respuesta extraída
+     """
+-    # Si es None, devolver cadena vacía
+-    if text is None:
+-        return ""
+-        
+     # Si el texto es un diccionario
+     if isinstance(text, dict):
+-        # Convertir el diccionario a una representación de texto simple
+-        # Tomamos el primer valor que no sea "no information found"
+-        for key, value in text.items():
+-            if isinstance(value, str) and value and value != "no information found":
+-                return value.lower().strip()
+-        
+-        # Si no hay valores válidos, convertir todo el diccionario a texto
+-        return str(text).lower().strip()
+-    
+-    # Si es string, usar directamente
+-    if isinstance(text, str):
+-        return text.lower().strip()
++        # Intentar extraer la primera respuesta del diccionario
++        if text:
++            # Tomar el primer valor que no sea "no information found"
++            for key, value in text.items():
++                if value and value != "no information found":
++                    return value.lower().strip()
++            # Si no hay valores válidos, tomar el primer valor
++            return next(iter(text.values())).lower().strip()
++        return ""
+     
+-    # Para cualquier otro tipo, convertir a string
+-    return str(text).lower().strip()
++    # Si es string, procesar normalmente
++    if not isinstance(text, str):
++        return ""
++        
++    # Dividir por párrafos
++    paragraphs = text.split('\n')
++    
++    # Tomar el primer párrafo no vacío
++    for paragraph in paragraphs:
++        if paragraph.strip():
++            return paragraph.strip().lower()
++    
++    return ""
+ 
+-def calculate_exact_match(generated_answer: Any, reference_answer: Any) -> float:
++def calculate_exact_match(generated_answer: Union[str, dict], reference_answer: Union[str, List[str]]) -> float:
+     """
+     Calcula la métrica Exact Match entre la respuesta generada y la referencia.
+     
+     Args:
+-        generated_answer (Any): La respuesta generada por el modelo
+-        reference_answer (Any): La respuesta de referencia
++        generated_answer (Union[str, dict]): La respuesta generada por el modelo
++        reference_answer (Union[str, List[str]]): La respuesta de referencia
+         
+     Returns:
+         float: 1.0 si hay match, 0.0 si no
+     """
+-    try:
+-        # Extraer y limpiar la respuesta generada
+-        generated_text = extract_label(generated_answer)
+-        if not generated_text:
+-            logger.warning("No se pudo extraer una respuesta clara del texto generado")
+-            return 0.0
+-        
+-        # Normalizar la referencia
+-        if isinstance(reference_answer, list):
+-            # Para referencias en lista, verificar si alguna coincide
+-            reference_texts = []
+-            for ref in reference_answer:
+-                if isinstance(ref, str):
+-                    reference_texts.append(ref.lower().strip())
+-                else:
+-                    reference_texts.append(str(ref).lower().strip())
+-            
+-            # Verificar coincidencias
+-            for ref in reference_texts:
+-                if ref in generated_text or generated_text in ref:
+-                    return 1.0
+-            return 0.0
+-        
+-        # Si la referencia no es una lista
+-        reference_text = ""
+-        if isinstance(reference_answer, str):
+-            reference_text = reference_answer.lower().strip()
+-        else:
+-            reference_text = str(reference_answer).lower().strip()
+-        
+-        # Verificar coincidencia
+-        return float(reference_text in generated_text or generated_text in reference_text)
++    # Extraer y limpiar la respuesta generada
++    generated_text = extract_label(generated_answer)
++    if not generated_text:
++        logger.warning("No se pudo extraer una respuesta clara del texto generado")
++        return 0.0
+     
+-    except Exception as e:
+-        logger.error(f"Error en calculate_exact_match: {e}")
+-        logger.error(f"generated_answer: {type(generated_answer)} - {generated_answer}")
+-        logger.error(f"reference_answer: {type(reference_answer)} - {reference_answer}")
++    # Normalizar la referencia
++    if isinstance(reference_answer, list):
++        reference_texts = [ref.lower().strip() for ref in reference_answer if isinstance(ref, str)]
++        # Verificar si alguna de las referencias está contenida en la respuesta generada
++        for ref in reference_texts:
++            if ref in generated_text or generated_text in ref:
++                return 1.0
+         return 0.0
++    
++    # Si la referencia es un string
++    reference_text = reference_answer.lower().strip()
++    # Verificar si la referencia está contenida en la respuesta generada o viceversa
++    return float(reference_text in generated_text or generated_text in reference_text)
+ 
+ def evaluate_exact_match_from_results(results_file: Union[str, Path]) -> Dict[str, float]:
+     """
+@@ -112,36 +96,30 @@
+         detailed_results = []
+         
+         # Evaluar cada resultado
+-        for i, result in enumerate(results):
+-            try:
+-                question_id = result.get('question_id', f'Unknown-{i}')
+-                question = result.get('question', '')
+-                generated_answer = result.get('generated_answer', '')
+-                reference_answer = result.get('reference_answer', '')
+-                
+-                if generated_answer is None or reference_answer is None:
+-                    logger.warning(f"Respuesta faltante para pregunta {question_id}")
+-                    continue
+-                
+-                # Extraer la respuesta y calcular coincidencia
+-                extracted_answer = extract_label(generated_answer)
+-                exact_match_score = calculate_exact_match(generated_answer, reference_answer)
+-                exact_matches += exact_match_score
+-                
+-                # Agregar al reporte detallado
+-                detailed_results.append({
+-                    'question_id': question_id,
+-                    'question': question,
+-                    'reference_answer': reference_answer,
+-                    'generated_answer': generated_answer,
+-                    'extracted_answer': extracted_answer,
+-                    'exact_match': bool(exact_match_score == 1),
+-                    'match_score': exact_match_score
+-                })
+-            except Exception as e:
+-                logger.error(f"Error procesando pregunta {i}: {e}")
+-                logger.error(traceback.format_exc())
++        for result in results:
++            question_id = result.get('question_id', 'Unknown')
++            question = result.get('question', '')
++            generated_answer = result.get('generated_answer', '')
++            reference_answer = result.get('reference_answer', '')
++            
++            if generated_answer is None or reference_answer is None:
++                logger.warning(f"Respuesta faltante para pregunta {question_id}")
+                 continue
++            
++            extracted_answer = extract_label(generated_answer)
++            exact_match_score = calculate_exact_match(generated_answer, reference_answer)
++            exact_matches += exact_match_score
++            
++            # Agregar al reporte detallado
++            detailed_results.append({
++                'question_id': question_id,
++                'question': question,
++                'reference_answer': reference_answer,
++                'generated_answer': generated_answer,
++                'extracted_answer': extracted_answer,
++                'exact_match': bool(exact_match_score == 1),
++                'match_score': exact_match_score
++            })
+         
+         # Calcular métricas generales
+         exact_match_rate = exact_matches / total_questions if total_questions > 0 else 0
+@@ -176,7 +154,6 @@
+         
+     except Exception as e:
+         logger.error(f"Error evaluando Exact Match: {e}")
+-        logger.error(traceback.format_exc())
+         return {
+             'total_questions': 0,
+             'exact_matches': 0,
+@@ -189,12 +166,14 @@
+     Función principal para ejecutar la evaluación de Exact Match sobre los resultados.
+     """
+     # Definir la ruta al archivo de resultados
+-    results_dir = Path(__file__).parent.parent / "BenchMarks" / "results"
++    results_dir = Path(__file__).parent.parent / "BenchMarks" / "benchmark_results_modified_qdrant_qbase"
+     
+     # Evaluar tanto resultados completos como parciales
+     result_files = [
+         results_dir / "answers" / "full_results.json"
+     ]
++
++
+     
+     for results_file in result_files:
+         if not results_file.exists():

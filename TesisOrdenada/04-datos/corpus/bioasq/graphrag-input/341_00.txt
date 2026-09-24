@@ -1,0 +1,3 @@
+The coming age of complete, accurate, and ubiquitous proteomes.
+
+High-resolution mass spectrometry (MS)-based proteomics has progressed tremendously over the years. For model organisms like yeast, we can now quantify complete proteomes in just a few hours. Developments discussed in this Perspective will soon enable complete proteome analysis of mammalian cells, as well, with profound impact on biology and biomedicine.

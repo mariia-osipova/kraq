@@ -1,0 +1,3 @@
+Binding of chimeric analogs of omega-conotoxin MVIIA and MVIIC to the N- and P/Q-type calcium channels.
+
+Despite their high sequence homology, the peptide neurotoxins omega-conotoxin MVIIA and MVIIC selectively block N- and P/Q-type calcium channels, respectively. To study the recognition mechanism of calcium channel subtypes, two chimeric analogs of omega-conotoxin MVIIA and MVIIC were synthesized by exchanging their N- and C-terminal halves. Binding assay for both N- and P/Q-type calcium channels showed that amino acid residues restricted to the N-terminal half are important for the recognition of N-type channels, whereas essential residues for P/Q-type channel recognition are widely spread over the whole omega-conotoxin molecule.

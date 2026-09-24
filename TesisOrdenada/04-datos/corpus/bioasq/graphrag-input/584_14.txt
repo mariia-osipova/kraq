@@ -1,0 +1,3 @@
+Brugada electrocardiogram pattern "unmasked" by amiodarone infusion.
+
+Brugada syndrome predisposes individuals to ventricular arrhythmias and sudden cardiac death, in the absence of structural heart disease. The typical Brugada electrocardiogram (ECG) phenotype is often concealed in affected population, and the existing genetic testing is capable of detecting just about 20% of cases. Therefore, the diagnosis largely requires various pharmacological provocative agents like class I antiarrhythmic drugs to unmask the unique features of Brugada ECG phenotype. We report an unusual case of "unmasking" of Brugada ECG pattern with ventricular tachycardia brought out by amiodarone infusion.

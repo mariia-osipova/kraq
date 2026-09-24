@@ -1,0 +1,3 @@
+Advances in clinical applications of cardiovascular magnetic resonance imaging.
+
+Cardiovascular magnetic resonance (CMR) is an evolving technology with growing indications within the clinical cardiology setting. This review article summarises the current clinical applications of CMR. The focus is on the use of CMR in the diagnosis of coronary artery disease with summaries of validation literature in CMR viability, myocardial perfusion, and dobutamine CMR. Practical uses of CMR in non-coronary diseases are also discussed.

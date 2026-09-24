@@ -1,0 +1,84 @@
+--- /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/SpeculativeRag/run_speculative_rag.py	2025-04-27 16:12:33.000000000 -0300
++++ /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_vsequential_BioASQ_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_vsequential_BioASQ_solver/SpeculativeRag/run_speculative_rag.py	2025-04-26 12:17:27.000000000 -0300
+@@ -86,14 +86,12 @@
+         logger.info('='*80)
+         
+         try:
+-            # Clase personalizada para capturar los tiempos de ejecución y los scores
++            # Clase personalizada para capturar los tiempos de ejecución
+             class TimeCaptureLogger:
+                 def __init__(self):
+                     self.times = {}
+                     self.draft_times = []
+                     self.verify_times = []
+-                    self.draft_scores = []
+-                    self.draft_info = []
+                 
+                 def write(self, text):
+                     # Capturar tiempos de todas las fases
+@@ -130,25 +128,6 @@
+                     elif "Verification estimado en paralelo:" in text:
+                         self.times["verify_parallel_estimate"] = float(text.split(":")[1].strip().split()[0])
+                     
+-                    # Capturar información de scores
+-                    elif "Draft probability:" in text:
+-                        draft_prob = float(text.split(":")[1].strip().split()[0])
+-                        if not any(info.get('draft_prob') == draft_prob for info in self.draft_info):
+-                            self.draft_info.append({'draft_prob': draft_prob})
+-                    elif "Consistency:" in text:
+-                        if self.draft_info and 'consistency' not in self.draft_info[-1]:
+-                            consistency = float(text.split(":")[1].strip().split()[0])
+-                            self.draft_info[-1]['consistency'] = consistency
+-                    elif "Verifier probability:" in text:
+-                        if self.draft_info and 'verifier_prob' not in self.draft_info[-1]:
+-                            verifier_prob = float(text.split(":")[1].strip().split()[0])
+-                            self.draft_info[-1]['verifier_prob'] = verifier_prob
+-                    elif "Final score:" in text and not "SCORES:" in text:
+-                        if self.draft_info and 'final_score' not in self.draft_info[-1]:
+-                            final_score = float(text.split(":")[1].strip().split()[0])
+-                            self.draft_info[-1]['final_score'] = final_score
+-                            self.draft_scores.append(final_score)
+-                    
+                     return
+             
+             # Capturar la salida para extraer los tiempos
+@@ -172,39 +151,6 @@
+             logger.info(response)
+             logger.info("-"*80)
+             
+-            # Mostrar detalles de los scores de cada draft
+-            if time_logger.draft_info:
+-                logger.info("\n📊 SCORES DE CADA DRAFT:")
+-                logger.info("-"*80)
+-                scores_data = []
+-                
+-                for i, info in enumerate(time_logger.draft_info):
+-                    draft_prob = info.get('draft_prob', 'N/A')
+-                    consistency = info.get('consistency', 'N/A')
+-                    verifier_prob = info.get('verifier_prob', 'N/A')
+-                    final_score = info.get('final_score', 'N/A')
+-                    
+-                    scores_data.append([
+-                        f"Draft {i+1}",
+-                        f"{draft_prob:.4f}" if isinstance(draft_prob, float) else draft_prob,
+-                        f"{consistency:.4f}" if isinstance(consistency, float) else consistency,
+-                        f"{verifier_prob:.4f}" if isinstance(verifier_prob, float) else verifier_prob,
+-                        f"{final_score:.4f}" if isinstance(final_score, float) else final_score
+-                    ])
+-                
+-                # Mostrar tabla de scores usando tabulate
+-                scores_table = tabulate(
+-                    scores_data,
+-                    headers=["Draft", "P(Draft)", "P(Consistency)", "P(Verifier)", "Score Final"],
+-                    tablefmt="pretty"
+-                )
+-                logger.info(scores_table)
+-                
+-                # Mostrar el draft ganador
+-                if time_logger.draft_scores:
+-                    best_draft_idx = np.argmax(time_logger.draft_scores)
+-                    logger.info(f"\n🏆 El draft ganador es: Draft {best_draft_idx+1} con score {time_logger.draft_scores[best_draft_idx]:.4f}")
+-            
+             # Mostrar un resumen de los tiempos en formato de tabla
+             timing_data = []
+             

@@ -1,0 +1,3 @@
+Inference of protein function and protein linkages in Mycobacterium tuberculosis based on prokaryotic genome organization: a combined computational approach.
+
+The genome of Mycobacterium tuberculosis was analyzed using recently developed computational approaches to infer protein function and protein linkages. We evaluated and employed a method to infer genes likely to belong to the same operon, as judged by the nucleotide distance between genes in the same genomic orientation, and combined this method with those of the Rosetta Stone, Phylogenetic Profile and conserved Gene Neighbor computational methods for the inference of protein function.

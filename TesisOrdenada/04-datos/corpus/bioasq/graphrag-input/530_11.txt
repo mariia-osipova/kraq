@@ -1,0 +1,3 @@
+TALEN-mediated editing of the mouse Y chromosome.
+
+The functional study of Y chromosome genes has been hindered by a lack of mouse models with specific Y chromosome mutations. We used transcription activator-like effector nuclease (TALEN)-mediated gene editing in mouse embryonic stem cells (mESCs) to produce mice with targeted gene disruptions and insertions in two Y-linked genes--Sry and Uty. TALEN-mediated gene editing is a useful tool for dissecting the biology of the Y chromosome.

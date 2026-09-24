@@ -1,0 +1,3 @@
+A case of catecholaminergic polymorphic ventricular tachycardia caused by two calsequestrin 2 mutations.
+
+Catecholaminergic polymorphic ventricular tachycardia (CPVT) is an uncommon heritable disease presenting with syncope or sudden cardiac death. Two genes involved in calcium homeostasis, the ryanodine receptor gene and the calsequestrin 2 (CASQ2) gene, have been implicated in this disease. We describe a young man presenting with exercise-induced syncope, clinically diagnosed as CPVT. Genetic analysis revealed two mutations, p.Y55C (c.164A>G) and p.P308L (c.923C>T), in the CASQ2 gene. Subsequent familial analysis indicates a compound heterozygous form of inheritance.

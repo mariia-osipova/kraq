@@ -1,0 +1,3 @@
+Focal complex maturation and bridging on 200 nm vitronectin but not fibronectin patches reveal different mechanisms of focal adhesion formation.
+
+The effects of protein type and pattern size on cell adhesion, spreading, and focal adhesion development are studied. Fibronectin and vitronectin patterns from 0.1 to 3 μm produced by colloidal lithography reveal important differences in how cells adhere to and bridge focal adhesions across protein nanopatterns versus micropatterns. Vinculin and zyxin in focal adhesions but not integrins are seen to bridge ligand gaps. Differences in protein mechanical properties are implicated as important factors in focal adhesion development.

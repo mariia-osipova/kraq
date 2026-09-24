@@ -1,0 +1,3 @@
+Silver staining of 2D electrophoresis gels.
+
+Silver staining is used to detect proteins after electrophoretic separation on polyacrylamide gels. It -combines excellent sensitivity (in the low nanogram range) with the use of very simple and cheap equipment and chemicals. For its use in proteomics, two important additional features must be considered, compatibility with mass spectrometry and quantitative response. Both features are discussed in this chapter, and optimized silver staining protocols are proposed.

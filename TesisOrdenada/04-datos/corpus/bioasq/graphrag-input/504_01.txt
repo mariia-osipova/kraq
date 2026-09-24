@@ -1,0 +1,3 @@
+Small-molecule antagonists of the orexin receptors.
+
+The orexin-1 and orexin-2 receptors are two G protein-coupled receptors that bind the neuropeptides orexin-A and orexin-B. Dual antagonism of the receptors by small molecules is clinically efficacious in the treatment of insomnia, where the most advanced molecule suvorexant has recently been approved. The scope of this article is to review the small molecule orexin receptor antagonist patent literature between January 2012 and January 2014.

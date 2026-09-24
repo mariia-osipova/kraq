@@ -1,0 +1,3 @@
+OPA1 (dys)functions.
+
+Mitochondrial morphology varies according to cell type and cellular context from an interconnected filamentous network to isolated dots. This morphological plasticity depends on mitochondrial dynamics, a balance between antagonistic forces of fission and fusion. DRP1 and FIS1 control mitochondrial outer membrane fission and Mitofusins its fusion. This review focuses on OPA1, one of the few known actors of inner membrane dynamics, whose mutations provoke an optic neuropathy. Since its first identification in 2000 the characterization of the functions of OPA1 has made rapid progress thus providing numerous clues to unravel the pathogenetic mechanisms of ADOA-1.

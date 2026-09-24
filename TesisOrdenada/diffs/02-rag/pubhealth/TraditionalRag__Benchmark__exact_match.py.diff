@@ -1,0 +1,207 @@
+--- /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/TraditionalRag/Benchmark/exact_match.py	2025-05-21 20:01:42.000000000 -0300
++++ /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_pubhealth_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_pubhealth_solver/TraditionalRag/Benchmark/exact_match.py	2025-05-21 20:45:44.000000000 -0300
+@@ -3,79 +3,61 @@
+ from typing import Dict, List, Union
+ from loguru import logger
+ import re
+-from datetime import datetime
+ 
+-def extract_label(text: Union[str, dict]) -> str:
++def extract_label(text: str) -> str:
+     """
+-    Extrae la respuesta principal del texto generado.
+-    Maneja tanto textos en formato string como respuestas en formato diccionario.
++    Extrae la etiqueta (label) de la respuesta generada.
++    Busca después de 'Label:' o 'LABEL:' y antes de 'Explanation' o nueva línea.
++    También maneja casos donde la etiqueta está entre <>.
+     
+     Args:
+-        text (Union[str, dict]): El texto o diccionario con la respuesta generada
++        text (str): El texto completo de la respuesta
+         
+     Returns:
+-        str: La respuesta extraída
++        str: La etiqueta encontrada o texto vacío si no se encuentra
+     """
+-    # Si el texto es un diccionario
+-    if isinstance(text, dict):
+-        # Intentar extraer la primera respuesta del diccionario
+-        if text:
+-            # Tomar el primer valor que no sea "no information found"
+-            for key, value in text.items():
+-                if value and value != "no information found":
+-                    return value.lower().strip()
+-            # Si no hay valores válidos, tomar el primer valor
+-            return next(iter(text.values())).lower().strip()
+-        return ""
+-    
+-    # Si es string, procesar normalmente
+-    if not isinstance(text, str):
+-        return ""
+-        
+-    # Dividir por párrafos
+-    paragraphs = text.split('\n')
+-    
+-    # Tomar el primer párrafo no vacío
+-    for paragraph in paragraphs:
+-        if paragraph.strip():
+-            return paragraph.strip().lower()
+-    
++    # Buscar el patrón "Label:" o "LABEL:" seguido por el valor
++    label_pattern = re.compile(r'(?:Label:|LABEL:)\s*(?:<)?([^:\n<>]+?)(?:>)?(?:\s*(?:Explanation:|$)|\n)', re.IGNORECASE)
++    match = label_pattern.search(text)
++    
++    if match:
++        # Normalizar la etiqueta (quitar <>, espacios extra y convertir a minúsculas)
++        label = match.group(1).strip().lower()
++        # Quitar cualquier < o > restante por si acaso
++        label = label.replace('<', '').replace('>', '')
++        return label
+     return ""
+ 
+-def calculate_exact_match(generated_answer: Union[str, dict], reference_answer: Union[str, List[str]]) -> float:
++def calculate_exact_match(generated_answer: str, reference_answer: Union[str, List[str]]) -> float:
+     """
+-    Calcula la métrica Exact Match entre la respuesta generada y la referencia.
++    Calcula la métrica Exact Match entre la etiqueta de la respuesta generada y la referencia.
+     
+     Args:
+-        generated_answer (Union[str, dict]): La respuesta generada por el modelo
+-        reference_answer (Union[str, List[str]]): La respuesta de referencia
++        generated_answer (str): La respuesta generada por el modelo
++        reference_answer (Union[str, List[str]]): La respuesta de referencia (puede ser string o lista)
+         
+     Returns:
+-        float: 1.0 si hay match, 0.0 si no
++        float: 1.0 si hay exact match, 0.0 si no
+     """
+-    # Extraer y limpiar la respuesta generada
+-    generated_text = extract_label(generated_answer)
+-    if not generated_text:
+-        logger.warning("No se pudo extraer una respuesta clara del texto generado")
++    # Extraer la etiqueta de la respuesta generada
++    generated_label = extract_label(generated_answer)
++    if not generated_label:
++        logger.warning("No se encontró etiqueta en la respuesta generada")
+         return 0.0
+     
+     # Normalizar la referencia
+     if isinstance(reference_answer, list):
+-        reference_texts = [ref.lower().strip() for ref in reference_answer if isinstance(ref, str)]
+-        # Verificar si alguna de las referencias está contenida en la respuesta generada
+-        for ref in reference_texts:
+-            if ref in generated_text or generated_text in ref:
+-                return 1.0
+-        return 0.0
++        # Convertir cada elemento de la lista a minúsculas
++        reference_labels = [ref.lower().strip() for ref in reference_answer if isinstance(ref, str)]
++        return float(generated_label in reference_labels)
+     
+     # Si la referencia es un string
+-    reference_text = reference_answer.lower().strip()
+-    # Verificar si la referencia está contenida en la respuesta generada o viceversa
+-    return float(reference_text in generated_text or generated_text in reference_text)
++    reference_label = reference_answer.lower().strip()
++    return float(generated_label == reference_label)
+ 
+ def evaluate_exact_match_from_results(results_file: Union[str, Path]) -> Dict[str, float]:
+     """
+-    Evalúa la métrica Exact Match sobre un archivo de resultados completo y genera un reporte detallado en JSON.
++    Evalúa la métrica Exact Match sobre un archivo de resultados completo.
+     
+     Args:
+         results_file (Union[str, Path]): Ruta al archivo JSON con los resultados
+@@ -92,64 +74,31 @@
+         total_questions = len(results)
+         exact_matches = 0
+         
+-        # Crear lista para el reporte detallado
+-        detailed_results = []
+-        
+         # Evaluar cada resultado
+         for result in results:
+-            question_id = result.get('question_id', 'Unknown')
+-            question = result.get('question', '')
+             generated_answer = result.get('generated_answer', '')
+             reference_answer = result.get('reference_answer', '')
+             
+-            if generated_answer is None or reference_answer is None:
+-                logger.warning(f"Respuesta faltante para pregunta {question_id}")
++            if not generated_answer or not reference_answer:
++                logger.warning(f"Respuesta faltante para pregunta {result.get('question', 'Unknown')}")
+                 continue
+-            
+-            extracted_answer = extract_label(generated_answer)
++                
+             exact_match_score = calculate_exact_match(generated_answer, reference_answer)
+             exact_matches += exact_match_score
+             
+-            # Agregar al reporte detallado
+-            detailed_results.append({
+-                'question_id': question_id,
+-                'question': question,
+-                'reference_answer': reference_answer,
+-                'generated_answer': generated_answer,
+-                'extracted_answer': extracted_answer,
+-                'exact_match': bool(exact_match_score == 1),
+-                'match_score': exact_match_score
+-            })
++            # Logging para debug
++            if exact_match_score == 0:
++                logger.debug(f"No match para pregunta {result.get('question', 'Unknown')}")
++                logger.debug(f"Label generada: {extract_label(generated_answer)}")
++                logger.debug(f"Referencia: {reference_answer}")
+         
+-        # Calcular métricas generales
++        # Calcular métricas
+         exact_match_rate = exact_matches / total_questions if total_questions > 0 else 0
+         
+-        # Crear el reporte final
+-        final_report = {
+-            'metadata': {
+-                'timestamp': datetime.now().isoformat(),
+-                'input_file': str(results_file),
+-                'total_questions': total_questions,
+-                'total_exact_matches': exact_matches,
+-                'exact_match_rate': exact_match_rate
+-            },
+-            'detailed_results': detailed_results
+-        }
+-        
+-        # Guardar el reporte
+-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+-        report_file = Path(results_file).parent / f"exact_match_analysis_{timestamp}.json"
+-        
+-        with open(report_file, 'w', encoding='utf-8') as f:
+-            json.dump(final_report, f, indent=2, ensure_ascii=False)
+-        
+-        logger.info(f"Reporte detallado generado en: {report_file}")
+-        
+         return {
+             'total_questions': total_questions,
+             'exact_matches': exact_matches,
+-            'exact_match_rate': exact_match_rate,
+-            'report_file': str(report_file)
++            'exact_match_rate': exact_match_rate
+         }
+         
+     except Exception as e:
+@@ -170,7 +119,7 @@
+     
+     # Evaluar tanto resultados completos como parciales
+     result_files = [
+-        results_dir / "exact_answers" / "full_results.json"
++        results_dir / "ideal_answers" / "full_results.json"
+     ]
+     
+     for results_file in result_files:
+@@ -185,8 +134,6 @@
+         print(f"Total de preguntas evaluadas: {metrics['total_questions']}")
+         print(f"Número de Exact Matches: {metrics['exact_matches']}")
+         print(f"Tasa de Exact Match: {metrics['exact_match_rate']:.2%}")
+-        if 'report_file' in metrics:
+-            print(f"Reporte detallado generado en: {metrics['report_file']}")
+ 
+ if __name__ == "__main__":
+     main()
+\ No hay ningún carácter de nueva línea al final del archivo

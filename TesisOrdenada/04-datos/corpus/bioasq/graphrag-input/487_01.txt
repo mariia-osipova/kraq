@@ -1,0 +1,3 @@
+Hypoxia and oxidative stress. Tumour hypoxia--therapeutic considerations.
+
+Conclusive research has shown that regions of acute/chronic hypoxia, which exist within the majority of solid tumours, have a profound influence on the therapeutic outcome of cancer chemotherapy and radiotherapy and are a strong prognostic factor of disease progression and survival. A strong argument therefore exists for assessing the hypoxic fraction of tumours, prior to patient treatment, and to tailor this treatment accordingly. Tumour hypoxia also provides a powerful physiological stimulus that can be exploited as a tumour-specific condition, allowing for the rationale design of hypoxia-activated anticancer drugs or novel hypoxia-regulated gene therapy strategies.

@@ -1,0 +1,17 @@
+--- /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/TraditionalRag/traditional_rag.py	2025-05-25 18:59:36.000000000 -0300
++++ /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_triviaQA_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_triviaQA_solver/TraditionalRag/traditional_rag.py	2025-04-30 12:07:36.000000000 -0300
+@@ -153,13 +153,12 @@
+         # Etapa 4: Generar respuesta con LLM
+         prompt_start_time = perf_counter()
+         
+-        prompt = f"""Below is an instruction that describes a task. Write a response for it and state
++        prompt = f"""Below is an instruction that describes a task. Write a response using the evidence provided for it and state
+  your explanation supporting your response.
+  ### Evidence:
+  {context}
+  ### Instruction: 
+  {query}
+- ### Response:
+ """
+         prompt_time = perf_counter() - prompt_start_time
+         

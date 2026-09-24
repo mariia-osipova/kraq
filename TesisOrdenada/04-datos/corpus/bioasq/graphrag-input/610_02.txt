@@ -1,0 +1,3 @@
+[Current state of the genetics of the white locus in Drosophila melanogaster].
+
+The modern data on structure, transcription of the white locus of Drosophila melanogaster and its insertional alleles, including unstable ones, are considered. Special attention is paid to the transvection effect (synapsis-dependent interaction between white and zeste genes), cis-acting regulatory elements and the behaviour of the white genes introduced into the genome by P element-mediated DNA transformation.

@@ -1,0 +1,3 @@
+Prolinks: a database of protein functional linkages derived from coevolution.
+
+The advent of whole-genome sequencing has led to methods that infer protein function and linkages. We have combined four such algorithms (phylogenetic profile, Rosetta Stone, gene neighbor and gene cluster) in a single database--Prolinks--that spans 83 organisms and includes 10 million high-confidence links. The Proteome Navigator tool allows users to browse predicted linkage networks interactively, providing accompanying annotation from public databases. The Prolinks database and the Proteome Navigator tool are available for use online at http://dip.doe-mbi.ucla.edu/pronav.

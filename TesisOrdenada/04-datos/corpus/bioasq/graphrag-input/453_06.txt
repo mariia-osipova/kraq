@@ -1,0 +1,3 @@
+pH-dependent binding of KDEL to its receptor in vitro.
+
+The erd2 protein is the receptor responsible for recycling proteins bearing the carboxyl-terminal sequence KDEL (single-letter amino acid code) to the endoplasmic reticulum, following their loss from that organelle by the process of forward transport. To study the interaction of erd2p with the sequence KDEL we have reconstituted binding of erd2p to its ligand in vitro. Binding in vitro exhibits the same sequence specificity as retention of lumenal proteins in vivo and is strikingly sensitive to pH. Our results raise the possibility that erd2p-mediated sorting of lumenal endoplasmic reticulum proteins is facilitated by the pH differences between compartments of the secretory pathway.

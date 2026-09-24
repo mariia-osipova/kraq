@@ -1,0 +1,3 @@
+Gene-specific characterization of human histone H2B by electron capture dissociation.
+
+The basis set of protein forms expressed by human cells from the H2B gene family was determined by Top Down Mass Spectrometry. Using Electron Capture Dissociation for MS/MS of H2B isoforms, direct evidence for the expression of unmodified H2B.Q, H2B.A, H2B.K/T, H2B.J, H2B.E, H2B.B, H2B.F, and monoacetylated H2B.A was obtained from asynchronous HeLa cells. H2B.A was the most abundant form, with the overall expression profile not changing significantly in cells arrested in mitosis by colchicine or during mid-S, mid-G2, G2/M, and mid-G1 phases of the cell cycle. Modest hyperacetylation of H2B family members was observed after sodium butyrate treatment.

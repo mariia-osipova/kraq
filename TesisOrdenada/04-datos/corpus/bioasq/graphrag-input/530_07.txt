@@ -1,0 +1,3 @@
+Efficient strategies for TALEN-mediated genome editing in mammalian cell lines.
+
+TALEN is one of the most widely used tools in the field of genome editing. It enables gene integration and gene inactivation in a highly efficient and specific fashion. Although very attractive, the apparent simplicity and high success rate of TALEN could be misleading for novices in the field of gene editing. Depending on the application, specific TALEN designs, activity assessments and screening strategies need to be adopted. Here we report different methods to efficiently perform TALEN-mediated gene integration and inactivation in different mammalian cell systems including induced pluripotent stem cells and delineate experimental examples associated with these approaches.

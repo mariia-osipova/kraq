@@ -1,0 +1,3 @@
+Immune status following alemtuzumab treatment in human CD52 transgenic mice.
+
+Alemtuzumab is a monoclonal antibody against the CD52 antigen present at high levels on the surface of lymphocytes. While treatment of multiple sclerosis patients with alemtuzumab results in marked depletion of lymphocytes from the circulation, it has not been associated with a high incidence of serious infections. In a human CD52 transgenic mouse, alemtuzumab treatment showed minimal impact on the number and function of innate immune cells. A transient decrease in primary adaptive immune responses was observed post-alemtuzumab but there was little effect on memory responses. These results potentially help explain the level of immunocompetence observed in alemtuzumab-treated MS patients.

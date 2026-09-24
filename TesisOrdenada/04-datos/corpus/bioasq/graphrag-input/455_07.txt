@@ -1,0 +1,3 @@
+Immobilized endoproteinase Glu-C to magnetic bead cellulose as a tool in proteomic analysis.
+
+Magnetic bead cellulose activated with divinyl sulfone was used for the immobilization of Staphylococcus aureus endoproteinase Glu-C (EC 3.4.21.19). The immobilized proteinase was characterized by increased thermostability, by decreased self-cleavage activity, and a possibility of repeated use. The prepared immobilized enzyme was applied for the proteolytic cleavage of α-casein and BSA under different conditions (different composition of buffers, different pH, and different time of digestion). The possibilities of the direct use of enzyme reaction products for MALDI TOF MS analysis were shown.

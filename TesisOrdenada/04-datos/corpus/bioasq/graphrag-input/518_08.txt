@@ -1,0 +1,3 @@
+[JAK inhibitor].
+
+Biologics targeting inflammatory cytokine has become a standardized tool for remission induction in rheumatoid arthritis (RA). However, it is handled under restricted conditions and their cost of acquisition is high. Small molecule drugs targeting Janus kinase (JAK), a molecule involved in intracellular signaling pathway has shown similar treatment effect as biologics. Moreover, inhibitory effect on bone destruction has been demonstrated and has been approved in 2012 as a new disease modifying anti-rheumatic drug in USA. However, since the inhibition of JAK results in inhibition of multiple cytokine signaling pathways, the clinical studies have also shown adverse events differing from biologics.

@@ -1,0 +1,3 @@
+Calcium paradox: changes in high-energy phosphate compounds of isolated perfused rat hearts.
+
+When isolated rat hearts are perfused with Ca2+-containing medium, after a brief Ca2+-free period, irreversible cell damage occurs (calcium paradox). This phenomenon is concomitant with a rapid consumption of myocardial high-energy phosphate stores, prior to the appearance of these compounds in the effluent perfusion medium. A possible mechanism for the origin of myocardial necrosis, caused by intracellular Ca2+ overload, is discussed.

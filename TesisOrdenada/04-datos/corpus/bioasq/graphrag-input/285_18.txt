@@ -1,0 +1,3 @@
+3D-printing of lightweight cellular composites.
+
+A new epoxy-based ink is reported, which enables 3D printing of lightweight cellular composites with controlled alignment of multiscale, high-aspectratio fiber reinforcement to create hierarchical structures inspired by balsa wood. Young's modulus values up to 10 times higher than existing commercially available 3D-printed polymers are attainable, while comparable strength values are maintained.

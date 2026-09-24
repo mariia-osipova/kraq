@@ -1,0 +1,3 @@
+Practical management of bleeding due to the anticoagulants dabigatran, rivaroxaban, and apixaban.
+
+The new oral anticoagulants dabigatran etexilate (Pradaxa), rivaroxaban (Xarelto), and apixaban (Eliquis) have predictable pharmacokinetic and pharmacodynamic profiles and are alternatives to warfarin. However, many physicians are wary of these drugs, since there is limited evidence on how to manage bleeding in patients taking them, and since no specific antidote is known to reverse their anticoagulant effect. Management requires careful adherence to first principles of bleeding care. Unapproved and untested reversal strategies may be required in patients with life-threatening bleeding.

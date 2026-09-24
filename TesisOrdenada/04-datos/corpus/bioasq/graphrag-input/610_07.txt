@@ -1,0 +1,3 @@
+Transvection and long-distance gene regulation.
+
+Numerous genes contain regulatory elements located many tens of kilobases away from the promoter they control. Specific mechanisms must be required to ensure that such distant elements can find and interact with their proper targets but not with extraneous genes. This review explores the connections between transvection phenomena, the activation of domains of homeotic gene expression, position effect variegation and silencers. These various examples of long-distance effects suggest that, in all cases, related forms of chromatin packaging may be involved.

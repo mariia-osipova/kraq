@@ -1,0 +1,863 @@
+--- /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/ablation.py	2025-05-23 12:54:52.000000000 -0300
++++ /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_vsequential_BioASQ_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_vsequential_BioASQ_solver/ablation.py	2025-05-18 12:06:18.000000000 -0300
+@@ -3,417 +3,475 @@
+ from pathlib import Path
+ import json
+ import time
+-import logging
+-from typing import List, Dict, Any, Optional
+-import itertools
+ import sys
+-import os
+ 
+-# Add the current directory to the path so we can import the exact_match module
+-sys.path.append(str(Path(__file__).parent))
++# Add project root to path
++project_root = Path(__file__).parent.parent
++sys.path.insert(0, str(project_root))
+ 
+ # Import the benchmark runners and question fetchers
+-from SpeculativeRag.Benchmark.benchmark_speculative import run_benchmark_with_qdrant as run_speculative
+-from SpeculativeRag.Benchmark.benchmark_speculative import get_questions_from_qdrant as get_questions_spec
+-from Speculative_Rag_Modified.BenchMarks.benchmark_modified_train import run_benchmark_with_qdrant as run_modified
+-
+-# Import exact match evaluation
+-from SpeculativeRag.Benchmark.exact_match import evaluate_exact_match_from_results
+-
+-# Configure logging
+-logging.basicConfig(level=logging.INFO)
+-logger = logging.getLogger(__name__)
+-
+-def get_accuracy_spec(results_dir: Path) -> float:
+-    """Obtiene la precisión del reporte de Speculative RAG"""
++from TraditionalRag.Benchmark.benchmark_traditional_train import get_questions_from_qdrant as get_questions_traditional
++from TraditionalRag.Benchmark.benchmark_traditional_train import generate_traditional_rag_response, evaluate_question, generate_stats_report
++from TraditionalRag_CombinedRetrieve.Benchmark.benchmark_traditional_combined_question import get_questions_from_qdrant as get_questions_combined
++from TraditionalRag_CombinedRetrieve.Benchmark.benchmark_traditional_combined_question import generate_traditional_rag_response as generate_combined_response
++from TraditionalRag_CombinedRetrieve.Benchmark.benchmark_traditional_combined_question import evaluate_question as evaluate_combined_question
++from TraditionalRag_CombinedRetrieve.Benchmark.benchmark_traditional_combined_question import generate_stats_report as generate_combined_stats_report
++
++from openai import AsyncOpenAI
++from tqdm import tqdm
++
++# Configuración para los modelos
++OLLAMA_BASE_URL = "http://localhost:11434/v1"
++VLLM_BASE_URL = "http://localhost:8000/v1"
++
++def get_accuracies(stats_dir):
++    """
++    Obtiene las accuracies tanto de exact como de ideal answers de un directorio
++    
++    Args:
++        stats_dir: Directorio que contiene las carpetas exact_answers e ideal_answers
++        
++    Returns:
++        Tuple[float, float]: (exact_accuracy, ideal_accuracy)
++    """
++    exact_acc = 0.0
++    ideal_acc = 0.0
++    
+     try:
+-        report_path = results_dir / "exact_answers" / "report.md"
+-        if not report_path.exists():
+-            logger.error(f"No se encontró el archivo de reporte en {report_path}")
+-            return 0.0
+-            
+-        with open(report_path, 'r') as f:
+-            content = f.read()
+-            
+-        # Buscar la línea que contiene la precisión
+-        for line in content.split('\n'):
+-            if "- Accuracy:" in line:
+-                # Extraer el número
+-                accuracy_str = line.split(":")[1].strip()
+-                return float(accuracy_str)
++        # Leer exact answers
++        exact_report = stats_dir / "exact_answers" / "stats_report.json"
++        if exact_report.exists():
++            with open(exact_report, "r", encoding="utf-8") as f:
++                stats = json.load(f)
++                exact_acc = stats.get("accuracy", 0.0)
++        else:
++            print(f"No se encontró archivo de estadísticas para exact answers en {exact_report}")
++        
++        # Leer ideal answers
++        ideal_report = stats_dir / "ideal_answers" / "stats_report.json"
++        if ideal_report.exists():
++            with open(ideal_report, "r", encoding="utf-8") as f:
++                stats = json.load(f)
++                ideal_acc = stats.get("accuracy", 0.0)
++        else:
++            print(f"No se encontró archivo de estadísticas para ideal answers en {ideal_report}")
+                 
+-        logger.error("No se encontró la precisión en el reporte")
+-        return 0.0
+     except Exception as e:
+-        logger.error(f"Error leyendo precisión de Speculative RAG: {e}")
+-        return 0.0
+-
+-def get_accuracy_mod(stats_path: Path) -> float:
+-    """Get accuracy from Modified RAG stats file"""
+-    try:
+-        with open(stats_path, "r", encoding="utf-8") as f:
+-            stats = json.load(f)
+-        return stats.get("accuracy", 0)
+-    except Exception as e:
+-        logger.error(f"Error reading Modified RAG stats: {e}")
+-        return 0
+-
+-def calculate_exact_match_for_results(results_dir: Path, method_name: str) -> float:
+-    """Calculate exact match for results in a directory"""
+-    try:
+-        # Find the full_results.json file
+-        if method_name == "speculative":
+-            results_file = results_dir / "exact_answers" / "full_results.json"
+-        else:  # modified
+-            results_file = results_dir / "answers" / "full_results.json"
+-        
+-        if not results_file.exists():
+-            logger.warning(f"No se encontró el archivo de resultados en {results_file}")
+-            return 0.0
+-        
+-        # Calculate exact match
+-        metrics = evaluate_exact_match_from_results(results_file)
+-        return metrics.get('exact_match_rate', 0.0)
++        print(f"Error leyendo accuracies: {e}")
+         
+-    except Exception as e:
+-        logger.error(f"Error calculating exact match for {method_name}: {e}")
+-        return 0.0
++    return exact_acc, ideal_acc
+ 
+-async def fetch_random_questions(n: int, seed: Optional[int] = None) -> List[Dict[str, Any]]:
+-    """Fetch random questions from Qdrant with optional seed for reproducibility"""
+-    if seed is not None:
+-        random.seed(seed)
+-    
+-    all_questions = await get_questions_spec(limit=1000)
++async def fetch_random_questions(n):
++    """
++    Obtiene n preguntas aleatorias de Qdrant y las formatea correctamente para ambos benchmarks
++    """
++    all_questions = await get_questions_traditional(limit=1000)
+     if len(all_questions) < n:
+         raise ValueError(f"Not enough questions in Qdrant (found {len(all_questions)}, need {n})")
+-    return random.sample(all_questions, n)
+-
+-async def run_ablation_experiment(config: Dict[str, Any], run_id: str, base_dir: Path, questions: List[Dict[str, Any]]) -> Dict[str, Any]:
+-    """Run a single ablation experiment with given configuration"""
+     
+-    # Create run directory
+-    run_dir = base_dir / run_id
+-    spec_dir = run_dir / "speculative"
+-    mod_dir = run_dir / "modified"
+-    
+-    # Create directories
+-    (spec_dir / "exact_answers").mkdir(parents=True, exist_ok=True)
+-    (spec_dir / "ideal_answers").mkdir(parents=True, exist_ok=True)
+-    (mod_dir / "answers").mkdir(parents=True, exist_ok=True)
++    selected_questions = random.sample(all_questions, n)
+     
+-    try:
+-        logger.info(f"Running experiment {run_id} with config: {config}")
+-        
+-        # Run Speculative RAG
+-        start_time = time.time()
+-        await run_speculative(
+-            limit=len(questions), 
+-            questions=questions, 
+-            results_dir=spec_dir, 
+-            **config
++    # Asegurarnos de que cada pregunta tiene los campos necesarios para ambos benchmarks
++    formatted_questions = []
++    for q in selected_questions:
++        # Obtener la respuesta exacta e ideal
++        exact_answer = q.get("exact_answer", "")
++        ideal_answer = q.get("ideal_answer", "")
++        
++        formatted_q = {
++            "question_id": q.get("question_id", "unknown"),
++            "question": q.get("question", ""),
++            "exact_answer": exact_answer,
++            "ideal_answer": ideal_answer,
++            "question_type": q.get("question_type", "unknown"),
++            "metadata": q.get("metadata", {})
++        }
++        formatted_questions.append(formatted_q)
++    
++    return formatted_questions
++
++async def run_traditional_benchmark(questions, results_dir, top_k, n_questions=None):
++    """
++    Implementación personalizada del benchmark para Traditional RAG
++    
++    Args:
++        questions: Lista de preguntas para evaluar
++        results_dir: Directorio donde guardar resultados
++        top_k: Número de documentos a recuperar
++        n_questions: Número opcional de preguntas a procesar
++    """
++    # Crear subdirectorios para cada tipo de respuesta
++    ideal_dir = results_dir / "ideal_answers"
++    exact_dir = results_dir / "exact_answers"
++    ideal_dir.mkdir(exist_ok=True)
++    exact_dir.mkdir(exist_ok=True)
++    
++    # Inicializar listas para resultados
++    ideal_results = []
++    exact_results = []
++    
++    # Limitar número de preguntas si es necesario
++    if n_questions and n_questions < len(questions):
++        questions = questions[:n_questions]
++    
++    # Inicializar clientes para LLM (vLLM) y embeddings (Ollama)
++    vllm_client = AsyncOpenAI(
++        base_url=VLLM_BASE_URL,
++        api_key="not-needed"  # vLLM no requiere API key
++    )
++    
++    ollama_client = AsyncOpenAI(
++        base_url=OLLAMA_BASE_URL,
++        api_key="ollama"
++    )
++    
++    # Procesar cada pregunta
++    for i, question_data in enumerate(tqdm(questions, desc="Evaluando Traditional RAG")):
++        question = question_data["question"]
++        question_id = question_data.get("question_id", "unknown")
++        
++        print(f"Procesando pregunta {i+1}/{len(questions)} (ID: {question_id}): {question[:50]}...")
++        
++        # Generar la respuesta una sola vez con Traditional RAG
++        response, total_time, retrieval_time = await generate_traditional_rag_response(
++            question=question,
++            llm_client=vllm_client,
++            embeddings_client=ollama_client
+         )
+-        spec_time = time.time() - start_time
+         
+-        # Run Modified RAG
+-        start_time = time.time()
+-        await run_modified(
+-            limit=len(questions), 
+-            questions=questions, 
+-            results_dir=mod_dir, 
+-            **config
++        # Evaluar contra la respuesta ideal si está disponible
++        if "ideal_answer" in question_data:
++            ideal_result = await evaluate_question(
++                question_data=question_data,
++                llm_client=vllm_client,
++                response=response,
++                total_time=total_time,
++                retrieval_time=retrieval_time,
++                answer_type="ideal_answer"
++            )
++            
++            if ideal_result:
++                ideal_results.append(ideal_result)
++                
++                # Guardar resultados parciales
++                with open(ideal_dir / "partial_results.json", "w", encoding="utf-8") as f:
++                    json.dump(ideal_results, f, indent=2, ensure_ascii=False)
++        
++        # Evaluar contra las respuestas exactas
++        if "exact_answer" in question_data:
++            exact_result = await evaluate_question(
++                question_data=question_data,
++                llm_client=vllm_client,
++                response=response,
++                total_time=total_time,
++                retrieval_time=retrieval_time,
++                answer_type="exact_answer"
++            )
++            
++            if exact_result:
++                exact_results.append(exact_result)
++                
++                # Guardar resultados parciales
++                with open(exact_dir / "partial_results.json", "w", encoding="utf-8") as f:
++                    json.dump(exact_results, f, indent=2, ensure_ascii=False)
++    
++    # Guardar todos los resultados
++    with open(ideal_dir / "full_results.json", "w", encoding="utf-8") as f:
++        json.dump(ideal_results, f, indent=2, ensure_ascii=False)
++    
++    with open(exact_dir / "full_results.json", "w", encoding="utf-8") as f:
++        json.dump(exact_results, f, indent=2, ensure_ascii=False)
++    
++    # Calcular estadísticas para cada tipo de respuesta
++    await generate_stats_report(ideal_results, ideal_dir, "Ideal Answers")
++    await generate_stats_report(exact_results, exact_dir, "Exact Answers")
++    
++    print(f"Benchmark de Traditional RAG completado. Resultados guardados en {results_dir}")
++
++async def run_combined_benchmark(questions, results_dir, top_k, n_questions=None):
++    """
++    Implementación personalizada del benchmark para Combined RAG
++    
++    Args:
++        questions: Lista de preguntas para evaluar
++        results_dir: Directorio donde guardar resultados
++        top_k: Número de documentos a recuperar
++        n_questions: Número opcional de preguntas a procesar
++    """
++    # Crear subdirectorios para cada tipo de respuesta
++    ideal_dir = results_dir / "ideal_answers"
++    exact_dir = results_dir / "exact_answers"
++    ideal_dir.mkdir(exist_ok=True)
++    exact_dir.mkdir(exist_ok=True)
++    
++    # Inicializar listas para resultados
++    ideal_results = []
++    exact_results = []
++    
++    # Limitar número de preguntas si es necesario
++    if n_questions and n_questions < len(questions):
++        questions = questions[:n_questions]
++    
++    # Inicializar clientes para LLM (vLLM) y embeddings (Ollama)
++    vllm_client = AsyncOpenAI(
++        base_url=VLLM_BASE_URL,
++        api_key="not-needed"  # vLLM no requiere API key
++    )
++    
++    ollama_client = AsyncOpenAI(
++        base_url=OLLAMA_BASE_URL,
++        api_key="ollama"
++    )
++    
++    # Procesar cada pregunta
++    for i, question_data in enumerate(tqdm(questions, desc="Evaluando Combined RAG")):
++        question = question_data["question"]
++        question_id = question_data.get("question_id", "unknown")
++        
++        print(f"Procesando pregunta {i+1}/{len(questions)} (ID: {question_id}): {question[:50]}...")
++        
++        # Generar la respuesta una sola vez con Combined RAG
++        response, total_time, retrieval_time = await generate_combined_response(
++            question=question,
++            llm_client=vllm_client,
++            embeddings_client=ollama_client
+         )
+-        mod_time = time.time() - start_time
+-        
+-        # Get LLM-based accuracies
+-        acc_spec = get_accuracy_spec(spec_dir)
+-        acc_mod = get_accuracy_mod(mod_dir / "answers" / "stats_report.json")
+-        
+-        # Calculate exact match scores
+-        logger.info(f"Calculating exact match scores for {run_id}...")
+-        exact_match_spec = calculate_exact_match_for_results(spec_dir, "speculative")
+-        exact_match_mod = calculate_exact_match_for_results(mod_dir, "modified")
+-        
+-        # Create result summary
+-        result = {
+-            "run_id": run_id,
+-            "config": config,
+-            "llm_accuracy": {
+-                "speculative": acc_spec,
+-                "modified": acc_mod,
+-                "difference": acc_mod - acc_spec
+-            },
+-            "exact_match": {
+-                "speculative": exact_match_spec,
+-                "modified": exact_match_mod,
+-                "difference": exact_match_mod - exact_match_spec
+-            },
+-            "execution_time": {
+-                "speculative": spec_time,
+-                "modified": mod_time,
+-                "difference": mod_time - spec_time
+-            },
+-            "directories": {
+-                "speculative": str(spec_dir),
+-                "modified": str(mod_dir)
+-            },
+-            "timestamp": int(time.time())
+-        }
+-        
+-        # Save individual result
+-        with open(run_dir / "result.json", "w", encoding="utf-8") as f:
+-            json.dump(result, f, indent=2, ensure_ascii=False)
+-        
+-        logger.info(f"Experiment {run_id} completed:")
+-        logger.info(f"  Speculative - LLM Acc: {acc_spec:.4f}, Exact Match: {exact_match_spec:.4f} (time: {spec_time:.2f}s)")
+-        logger.info(f"  Modified    - LLM Acc: {acc_mod:.4f}, Exact Match: {exact_match_mod:.4f} (time: {mod_time:.2f}s)")
+-        logger.info(f"  Difference  - LLM Acc: {acc_mod - acc_spec:.4f}, Exact Match: {exact_match_mod - exact_match_spec:.4f}")
+-        
+-        return result
+         
+-    except Exception as e:
+-        logger.error(f"Error in experiment {run_id}: {e}")
+-        error_result = {
+-            "run_id": run_id,
+-            "config": config,
+-            "error": str(e),
+-            "timestamp": int(time.time())
+-        }
+-        
+-        with open(run_dir / "error.json", "w", encoding="utf-8") as f:
+-            json.dump(error_result, f, indent=2, ensure_ascii=False)
+-        
+-        return error_result
++        # Evaluar contra la respuesta ideal si está disponible
++        if "ideal_answer" in question_data:
++            ideal_result = await evaluate_combined_question(
++                question_data=question_data,
++                llm_client=vllm_client,
++                response=response,
++                total_time=total_time,
++                retrieval_time=retrieval_time,
++                answer_type="ideal_answer"
++            )
++            
++            if ideal_result:
++                ideal_results.append(ideal_result)
++                
++                # Guardar resultados parciales
++                with open(ideal_dir / "partial_results.json", "w", encoding="utf-8") as f:
++                    json.dump(ideal_results, f, indent=2, ensure_ascii=False)
++        
++        # Evaluar contra las respuestas exactas
++        if "exact_answer" in question_data:
++            exact_result = await evaluate_combined_question(
++                question_data=question_data,
++                llm_client=vllm_client,
++                response=response,
++                total_time=total_time,
++                retrieval_time=retrieval_time,
++                answer_type="exact_answer"
++            )
++            
++            if exact_result:
++                exact_results.append(exact_result)
++                
++                # Guardar resultados parciales
++                with open(exact_dir / "partial_results.json", "w", encoding="utf-8") as f:
++                    json.dump(exact_results, f, indent=2, ensure_ascii=False)
++    
++    # Guardar todos los resultados
++    with open(ideal_dir / "full_results.json", "w", encoding="utf-8") as f:
++        json.dump(ideal_results, f, indent=2, ensure_ascii=False)
++    
++    with open(exact_dir / "full_results.json", "w", encoding="utf-8") as f:
++        json.dump(exact_results, f, indent=2, ensure_ascii=False)
++    
++    # Calcular estadísticas para cada tipo de respuesta
++    await generate_combined_stats_report(ideal_results, ideal_dir, "Ideal Answers")
++    await generate_combined_stats_report(exact_results, exact_dir, "Exact Answers")
++    
++    print(f"Benchmark de Combined RAG completado. Resultados guardados en {results_dir}")
++
++async def run_benchmarks(questions, run_dir, params):
++    """
++    Ejecuta ambos benchmarks con el mismo conjunto de preguntas
++    """
++    traditional_dir = run_dir / "traditional"
++    combined_dir = run_dir / "combined"
++    
++    # Crear directorios
++    traditional_dir.mkdir(exist_ok=True)
++    combined_dir.mkdir(exist_ok=True)
++    
++    # Ejecutar benchmarks con el número exacto de preguntas
++    await run_traditional_benchmark(
++        questions=questions,
++        results_dir=traditional_dir,
++        top_k=params["top_k"],
++        n_questions=len(questions)
++    )
++    
++    await run_combined_benchmark(
++        questions=questions,
++        results_dir=combined_dir,
++        top_k=params["top_k"],
++        n_questions=len(questions)
++    )
++    
++    # Obtener accuracies para traditional RAG (exact e ideal)
++    trad_exact_acc, trad_ideal_acc = get_accuracies(traditional_dir)
++    
++    # Obtener accuracies para combined RAG (exact e ideal)
++    comb_exact_acc, comb_ideal_acc = get_accuracies(combined_dir)
++    
++    # Si alguno de los accuracies es 0, probablemente hubo un error
++    if trad_exact_acc == 0:
++        print("⚠️ Warning: Traditional RAG exact accuracy is 0")
++    if trad_ideal_acc == 0:
++        print("⚠️ Warning: Traditional RAG ideal accuracy is 0")
++    if comb_exact_acc == 0:
++        print("⚠️ Warning: Combined RAG exact accuracy is 0")
++    if comb_ideal_acc == 0:
++        print("⚠️ Warning: Combined RAG ideal accuracy is 0")
++    
++    return trad_exact_acc, trad_ideal_acc, comb_exact_acc, comb_ideal_acc
+ 
+ async def main():
+-    """Main ablation study function"""
+-    
+-    # Configuration parameters to test
+-    k_values = [3, 4, 5, 6]
+-    m_values = [8]
+-    top_k_values = [10, 15, 20, 25]
+-    
+-    # Number of questions per experiment
+-    n_questions = 300
+-    
+-    # Random seed for reproducibility
+-    random_seed = 42
++    n_questions = 500  # Número de preguntas por ejecución
++    max_attempts = 1
++    param_sets = [
++        {"top_k": 5},
++        {"top_k": 8},
++        {"top_k": 10},
++        {"top_k": 13},
++        {"top_k": 15},
++        {"top_k": 17},
++        {"top_k": 20}
++    ]
+     
+-    # Create base results directory
+     base_results_dir = Path("ablation_runs")
+     base_results_dir.mkdir(exist_ok=True)
+     
+-    # Generate all parameter combinations
+-    param_combinations = list(itertools.product(k_values, m_values, top_k_values))
+-    total_experiments = len(param_combinations)
+-    
+-    logger.info(f"Starting ablation study with {total_experiments} experiments")
+-    logger.info(f"Testing k={k_values}, m={m_values}, top_k={top_k_values}")
+-    logger.info(f"Using {n_questions} questions per experiment")
+-    
+-    # Fetch questions once for all experiments (with seed for reproducibility)
+-    questions = await fetch_random_questions(n_questions, seed=random_seed)
+-    logger.info(f"Fetched {len(questions)} questions for experiments")
+-    
+-    # Store all results
+-    all_results = []
+-    failed_experiments = []
+-    
+-    # Run experiments
+-    for i, (k, m, top_k) in enumerate(param_combinations, 1):
+-        config = {"k": k, "m": m, "top_k": top_k}
+-        run_id = f"k{k}_m{m}_topk{top_k}_{int(time.time())}"
+-        
+-        logger.info(f"\n=== Experiment {i}/{total_experiments}: {run_id} ===")
+-        
+-        result = await run_ablation_experiment(config, run_id, base_results_dir, questions)
+-        
+-        if "error" in result:
+-            failed_experiments.append(result)
+-        else:
+-            all_results.append(result)
+-    
+-    # Generate final analysis
+-    logger.info("\n=== Generating final analysis ===")
+-    
+-    if all_results:
+-        # Sort results by different metrics
+-        sorted_by_llm_mod = sorted(all_results, key=lambda x: x["llm_accuracy"]["modified"], reverse=True)
+-        sorted_by_llm_spec = sorted(all_results, key=lambda x: x["llm_accuracy"]["speculative"], reverse=True)
+-        sorted_by_llm_diff = sorted(all_results, key=lambda x: x["llm_accuracy"]["difference"], reverse=True)
+-        
+-        sorted_by_em_mod = sorted(all_results, key=lambda x: x["exact_match"]["modified"], reverse=True)
+-        sorted_by_em_spec = sorted(all_results, key=lambda x: x["exact_match"]["speculative"], reverse=True)
+-        sorted_by_em_diff = sorted(all_results, key=lambda x: x["exact_match"]["difference"], reverse=True)
+-        
+-        # Find best configurations
+-        best_llm_mod = sorted_by_llm_mod[0]
+-        best_llm_spec = sorted_by_llm_spec[0]
+-        best_llm_diff = sorted_by_llm_diff[0]
+-        
+-        best_em_mod = sorted_by_em_mod[0]
+-        best_em_spec = sorted_by_em_spec[0]
+-        best_em_diff = sorted_by_em_diff[0]
+-        
+-        # Calculate statistics
+-        avg_llm_spec = sum(r["llm_accuracy"]["speculative"] for r in all_results) / len(all_results)
+-        avg_llm_mod = sum(r["llm_accuracy"]["modified"] for r in all_results) / len(all_results)
+-        avg_llm_diff = sum(r["llm_accuracy"]["difference"] for r in all_results) / len(all_results)
+-        
+-        avg_em_spec = sum(r["exact_match"]["speculative"] for r in all_results) / len(all_results)
+-        avg_em_mod = sum(r["exact_match"]["modified"] for r in all_results) / len(all_results)
+-        avg_em_diff = sum(r["exact_match"]["difference"] for r in all_results) / len(all_results)
+-        
+-        analysis = {
+-            "experiment_summary": {
+-                "total_experiments": total_experiments,
+-                "successful_experiments": len(all_results),
+-                "failed_experiments": len(failed_experiments),
+-                "questions_per_experiment": n_questions,
+-                "random_seed": random_seed
+-            },
+-            "parameter_ranges": {
+-                "k_values": k_values,
+-                "m_values": m_values,
+-                "top_k_values": top_k_values
+-            },
+-            "overall_statistics": {
+-                "llm_accuracy": {
+-                    "average_speculative": avg_llm_spec,
+-                    "average_modified": avg_llm_mod,
+-                    "average_difference": avg_llm_diff,
+-                    "modified_wins": sum(1 for r in all_results if r["llm_accuracy"]["difference"] > 0),
+-                    "speculative_wins": sum(1 for r in all_results if r["llm_accuracy"]["difference"] < 0),
+-                    "ties": sum(1 for r in all_results if r["llm_accuracy"]["difference"] == 0)
+-                },
+-                "exact_match": {
+-                    "average_speculative": avg_em_spec,
+-                    "average_modified": avg_em_mod,
+-                    "average_difference": avg_em_diff,
+-                    "modified_wins": sum(1 for r in all_results if r["exact_match"]["difference"] > 0),
+-                    "speculative_wins": sum(1 for r in all_results if r["exact_match"]["difference"] < 0),
+-                    "ties": sum(1 for r in all_results if r["exact_match"]["difference"] == 0)
+-                }
+-            },
+-            "best_configurations": {
+-                "llm_accuracy": {
+-                    "best_modified": {
+-                        "config": best_llm_mod["config"],
+-                        "accuracy": best_llm_mod["llm_accuracy"]["modified"],
+-                        "run_id": best_llm_mod["run_id"]
+-                    },
+-                    "best_speculative": {
+-                        "config": best_llm_spec["config"],
+-                        "accuracy": best_llm_spec["llm_accuracy"]["speculative"],
+-                        "run_id": best_llm_spec["run_id"]
+-                    },
+-                    "best_difference": {
+-                        "config": best_llm_diff["config"],
+-                        "difference": best_llm_diff["llm_accuracy"]["difference"],
+-                        "run_id": best_llm_diff["run_id"]
+-                    }
+-                },
+-                "exact_match": {
+-                    "best_modified": {
+-                        "config": best_em_mod["config"],
+-                        "accuracy": best_em_mod["exact_match"]["modified"],
+-                        "run_id": best_em_mod["run_id"]
+-                    },
+-                    "best_speculative": {
+-                        "config": best_em_spec["config"],
+-                        "accuracy": best_em_spec["exact_match"]["speculative"],
+-                        "run_id": best_em_spec["run_id"]
+-                    },
+-                    "best_difference": {
+-                        "config": best_em_diff["config"],
+-                        "difference": best_em_diff["exact_match"]["difference"],
+-                        "run_id": best_em_diff["run_id"]
+-                    }
+-                }
+-            },
+-            "all_results": all_results,
+-            "failed_experiments": failed_experiments,
+-            "timestamp": int(time.time())
+-        }
+-    else:
+-        analysis = {
+-            "experiment_summary": {
+-                "total_experiments": total_experiments,
+-                "successful_experiments": 0,
+-                "failed_experiments": len(failed_experiments)
++    # Almacenar los mejores resultados
++    best_results = {
++        "params": None,
++        "traditional_exact_acc": 0.0,
++        "traditional_ideal_acc": 0.0,
++        "combined_exact_acc": 0.0,
++        "combined_ideal_acc": 0.0,
++        "diff_exact": -float('inf'),  # Diferencia combinado - tradicional
++        "diff_ideal": -float('inf')   # Diferencia combinado - tradicional
++    }
++    
++    for param_idx, params in enumerate(param_sets):
++        print(f"\n=== Evaluando conjunto de parámetros {param_idx+1}/{len(param_sets)} ===")
++        print(f"Parámetros: {params}")
++        
++        for attempt in range(max_attempts):
++            timestamp = int(time.time())
++            run_dir_name = f'topk{params["top_k"]}_run{attempt+1}_{timestamp}'
++            run_dir = base_results_dir / run_dir_name
++            run_dir.mkdir(exist_ok=True)
++            
++            print(f"\n=== Attempt {attempt+1} with params {params} ===")
++            print(f"Running benchmarks with {n_questions} questions")
++            
++            # Obtener preguntas aleatorias
++            questions = await fetch_random_questions(n_questions)
++            
++            # Ejecutar benchmarks
++            trad_exact_acc, trad_ideal_acc, comb_exact_acc, comb_ideal_acc = await run_benchmarks(questions, run_dir, params)
++            
++            print(f"Traditional RAG exact accuracy:   {trad_exact_acc:.4f}")
++            print(f"Traditional RAG ideal accuracy:   {trad_ideal_acc:.4f}")
++            print(f"Combined RAG exact accuracy:      {comb_exact_acc:.4f}")
++            print(f"Combined RAG ideal accuracy:      {comb_ideal_acc:.4f}")
++            
++            # Calcular diferencias para comparación
++            diff_exact = comb_exact_acc - trad_exact_acc
++            diff_ideal = comb_ideal_acc - trad_ideal_acc
++            
++            print(f"Difference in exact accuracy:     {diff_exact:.4f}")
++            print(f"Difference in ideal accuracy:     {diff_ideal:.4f}")
++            
++            # Actualizar mejor resultado si hay mejora en la diferencia combinada
++            combined_diff = diff_exact + diff_ideal
++            best_combined_diff = best_results["diff_exact"] + best_results["diff_ideal"]
++            
++            if combined_diff > best_combined_diff:
++                best_results["params"] = params.copy()
++                best_results["traditional_exact_acc"] = trad_exact_acc
++                best_results["traditional_ideal_acc"] = trad_ideal_acc
++                best_results["combined_exact_acc"] = comb_exact_acc
++                best_results["combined_ideal_acc"] = comb_ideal_acc
++                best_results["diff_exact"] = diff_exact
++                best_results["diff_ideal"] = diff_ideal
++                print(f"✅ New best result found with params {params}")
++            
++            # Guardar resumen de la ejecución
++            summary = {
++                "run_dir": str(run_dir),
++                "params": params,
++                "n_questions": n_questions,
++                "traditional_exact_accuracy": trad_exact_acc,
++                "traditional_ideal_accuracy": trad_ideal_acc,
++                "combined_exact_accuracy": comb_exact_acc,
++                "combined_ideal_accuracy": comb_ideal_acc,
++                "diff_exact": diff_exact,
++                "diff_ideal": diff_ideal,
++                "combined_diff": combined_diff,
++                "traditional_results_dir": str(run_dir / "traditional"),
++                "combined_results_dir": str(run_dir / "combined"),
++                "timestamp": timestamp,
++                "attempt": attempt + 1,
++                "questions": [
++                    {
++                        "question_id": q.get("question_id", "unknown"),
++                        "question": q.get("question", "")
++                    } for q in questions
++                ]
++            }
++            
++            with open(run_dir / "summary.json", "w", encoding="utf-8") as f:
++                json.dump(summary, f, indent=2, ensure_ascii=False)
++            
++            # Evaluar si Combined RAG supera a Traditional RAG
++            if comb_exact_acc >= trad_exact_acc and comb_ideal_acc >= trad_ideal_acc:
++                print("✅ Combined RAG is as good or better in both exact and ideal metrics.")
++            else:
++                print("⚠️ Combined RAG is worse in at least one metric.")
++    
++    # Al final, mostrar el mejor resultado encontrado
++    print("\n=== RESULTS SUMMARY ===")
++    print(f"Best parameters: {best_results['params']}")
++    print(f"With these parameters:")
++    print(f"Traditional RAG exact accuracy:   {best_results['traditional_exact_acc']:.4f}")
++    print(f"Traditional RAG ideal accuracy:   {best_results['traditional_ideal_acc']:.4f}")
++    print(f"Combined RAG exact accuracy:      {best_results['combined_exact_acc']:.4f}")
++    print(f"Combined RAG ideal accuracy:      {best_results['combined_ideal_acc']:.4f}")
++    print(f"Difference in exact accuracy:     {best_results['diff_exact']:.4f}")
++    print(f"Difference in ideal accuracy:     {best_results['diff_ideal']:.4f}")
++    
++    # Guardar resumen final
++    final_summary = {
++        "timestamp": int(time.time()),
++        "best_params": best_results["params"],
++        "accuracies": {
++            "traditional": {
++                "exact": best_results["traditional_exact_acc"],
++                "ideal": best_results["traditional_ideal_acc"]
+             },
+-            "error": "No experiments completed successfully",
+-            "failed_experiments": failed_experiments,
+-            "timestamp": int(time.time())
+-        }
++            "combined": {
++                "exact": best_results["combined_exact_acc"],
++                "ideal": best_results["combined_ideal_acc"]
++            }
++        },
++        "diffs": {
++            "exact": best_results["diff_exact"],
++            "ideal": best_results["diff_ideal"],
++            "combined": best_results["diff_exact"] + best_results["diff_ideal"]
++        },
++        "successful": best_results["diff_exact"] >= 0 and best_results["diff_ideal"] >= 0
++    }
+     
+-    # Save analysis
+-    analysis_file = base_results_dir / "ablation_analysis.json"
+-    with open(analysis_file, "w", encoding="utf-8") as f:
+-        json.dump(analysis, f, indent=2, ensure_ascii=False)
+-    
+-    # Generate summary report
+-    report_lines = [
+-        "# Ablation Study Results",
+-        "",
+-        f"**Total Experiments:** {total_experiments}",
+-        f"**Successful:** {len(all_results)}",
+-        f"**Failed:** {len(failed_experiments)}",
+-        f"**Questions per experiment:** {n_questions}",
+-        ""
+-    ]
++    with open(base_results_dir / "final_summary.json", "w", encoding="utf-8") as f:
++        json.dump(final_summary, f, indent=2, ensure_ascii=False)
+     
+-    if all_results:
+-        report_lines.extend([
+-            "## Overall Statistics",
+-            "",
+-            "### LLM Accuracy",
+-            f"- Average Speculative: {avg_llm_spec:.4f}",
+-            f"- Average Modified: {avg_llm_mod:.4f}",
+-            f"- Average Difference (Mod - Spec): {avg_llm_diff:.4f}",
+-            f"- Modified wins: {sum(1 for r in all_results if r['llm_accuracy']['difference'] > 0)}",
+-            f"- Speculative wins: {sum(1 for r in all_results if r['llm_accuracy']['difference'] < 0)}",
+-            f"- Ties: {sum(1 for r in all_results if r['llm_accuracy']['difference'] == 0)}",
+-            "",
+-            "### Exact Match",
+-            f"- Average Speculative: {avg_em_spec:.4f}",
+-            f"- Average Modified: {avg_em_mod:.4f}",
+-            f"- Average Difference (Mod - Spec): {avg_em_diff:.4f}",
+-            f"- Modified wins: {sum(1 for r in all_results if r['exact_match']['difference'] > 0)}",
+-            f"- Speculative wins: {sum(1 for r in all_results if r['exact_match']['difference'] < 0)}",
+-            f"- Ties: {sum(1 for r in all_results if r['exact_match']['difference'] == 0)}",
+-            "",
+-            "## Best Configurations",
+-            "",
+-            "### LLM Accuracy",
+-            f"**Best Modified:** {best_llm_mod['llm_accuracy']['modified']:.4f}",
+-            f"- Config: k={best_llm_mod['config']['k']}, m={best_llm_mod['config']['m']}, top_k={best_llm_mod['config']['top_k']}",
+-            "",
+-            f"**Best Speculative:** {best_llm_spec['llm_accuracy']['speculative']:.4f}",
+-            f"- Config: k={best_llm_spec['config']['k']}, m={best_llm_spec['config']['m']}, top_k={best_llm_spec['config']['top_k']}",
+-            "",
+-            "### Exact Match",
+-            f"**Best Modified:** {best_em_mod['exact_match']['modified']:.4f}",
+-            f"- Config: k={best_em_mod['config']['k']}, m={best_em_mod['config']['m']}, top_k={best_em_mod['config']['top_k']}",
+-            "",
+-            f"**Best Speculative:** {best_em_spec['exact_match']['speculative']:.4f}",
+-            f"- Config: k={best_em_spec['config']['k']}, m={best_em_spec['config']['m']}, top_k={best_em_spec['config']['top_k']}",
+-            ""
+-        ])
+-    
+-    report_file = base_results_dir / "ablation_report.md"
+-    with open(report_file, "w", encoding="utf-8") as f:
+-        f.write("\n".join(report_lines))
+-    
+-    logger.info(f"\nAblation study completed!")
+-    logger.info(f"Results saved to: {base_results_dir}")
+-    logger.info(f"Analysis file: {analysis_file}")
+-    logger.info(f"Report file: {report_file}")
+-    
+-    if all_results:
+-        logger.info(f"\nBest results:")
+-        logger.info(f"LLM - Modified: {best_llm_mod['llm_accuracy']['modified']:.4f}, Speculative: {best_llm_spec['llm_accuracy']['speculative']:.4f}")
+-        logger.info(f"Exact Match - Modified: {best_em_mod['exact_match']['modified']:.4f}, Speculative: {best_em_spec['exact_match']['speculative']:.4f}")
++    print("Finished all parameter sets. See final_summary.json for best results.")
+ 
+ if __name__ == "__main__":
+     asyncio.run(main())

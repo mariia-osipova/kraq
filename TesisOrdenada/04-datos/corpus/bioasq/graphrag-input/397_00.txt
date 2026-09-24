@@ -1,0 +1,3 @@
+Autoimmune thyroid diseases in children.
+
+The two major autoimmune thyroid diseases (ATDs) include Graves' disease (GD) and autoimmune thyroiditis (AT); both of which are characterized by infiltration of the thyroid by T and B cells reactive to thyroid antigens, by the production of thyroid autoantibodies and by abnormal thyroid function (hyperthyroidism in GD and hypothyroidism in AT). While the exact etiology of thyroid autoimmunity is not known, it is believed to develop when a combination of genetic susceptibility and environmental encounters leads to breakdown of tolerance. It is important to recognize thyroid dysfunction at an early stage by maintaining an appropriate index of suspicion.

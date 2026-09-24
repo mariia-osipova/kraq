@@ -1,0 +1,202 @@
+--- /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_hotpot_solver/SpeculativeRag/Benchmark/benchmark_speculative.py	2025-05-10 01:35:17.000000000 -0300
++++ /tmp/claude-1000/-home-teo-TesisExactas/8627b924-8715-47f1-beb3-a367a5241b0b/scratchpad/extract/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_triviaQA_solver/Speculative_Rag_Organizado_Backup_local_version_nofinetune_v2_triviaQA_solver/SpeculativeRag/Benchmark/benchmark_speculative.py	2025-05-18 11:58:31.000000000 -0300
+@@ -51,7 +51,7 @@
+     """
+     Calcula la similitud coseno entre dos textos
+     """
+-    # Convertir a string si es una lista
++    # Convertir a string si es una lista (respuestas exactas pueden ser listas)
+     if isinstance(text1, list):
+         text1 = str(text1)
+     if isinstance(text2, list):
+@@ -62,19 +62,8 @@
+         return 0.0
+     
+     try:
+-        # Especificar el dispositivo CUDA:1
+-        device = torch.device("cuda:1")
+-        
+-        # Asegurarnos de que el modelo esté en CUDA:1
+-        if not hasattr(calculate_cosine_similarity, 'sentence_model'):
+-            calculate_cosine_similarity.sentence_model = SentenceTransformer('all-MiniLM-L6-v2', device="cuda:1")
+-        
+-        # Generar embeddings y moverlos a CUDA:1
+-        embedding1 = calculate_cosine_similarity.sentence_model.encode(text1, convert_to_tensor=True)
+-        embedding2 = calculate_cosine_similarity.sentence_model.encode(text2, convert_to_tensor=True)
+-        
+-        embedding1 = embedding1.to(device)
+-        embedding2 = embedding2.to(device)
++        embedding1 = sentence_model.encode(text1, convert_to_tensor=True)
++        embedding2 = sentence_model.encode(text2, convert_to_tensor=True)
+         
+         # Asegúrate de que los tensores sean unidimensionales (vectores)
+         if len(embedding1.shape) > 1 and embedding1.shape[0] > 1:
+@@ -88,8 +77,7 @@
+         if isinstance(similarity, torch.Tensor) and similarity.numel() > 1:
+             similarity = similarity.mean()
+             
+-        # Mover el resultado a CPU antes de convertirlo a Python
+-        return similarity.cpu().item()
++        return similarity.item()
+     except Exception as e:
+         logger.error(f"Error calculando similitud coseno: {e}")
+         return 0.0
+@@ -137,7 +125,7 @@
+ Generated Answer: {generated_answer}
+ Reference Answer: {reference_answer}
+ 
+-The reference answer represents the truth. The generated answer must match the meaning of the reference answer to be considered correct or if its a factoid answer it must be the same as the reference answer. If the generated answer is more specific but the core meaning is the same, it is also considered correct.
++The reference answer represents the truth. The generated answer must match the meaning of the reference answer to be considered correct. If the generated answer is more specific but the core meaning is the same, it is also considered correct.
+ 
+ Respond with ONLY a single digit:
+ 1 - CORRECT: 
+@@ -291,31 +279,21 @@
+ 
+         return
+ 
+-async def run_benchmark_with_qdrant(
+-    limit: int = 300,
+-    questions: Optional[List[Dict[str, Any]]] = None,
+-    results_dir: Optional[Path] = None,
+-    k: int = 5,
+-    m: int = 10,
+-    top_k: int = 20
+-) -> None:
++async def run_benchmark_with_qdrant(limit: int = 1000, results_dir: Optional[Path] = None, **kwargs):
+     """
+     Ejecuta el benchmark usando las preguntas almacenadas en Qdrant
+     
+     Args:
+         limit: Número máximo de preguntas a evaluar
+-        questions: Lista opcional de preguntas predefinidas
+-        results_dir: Directorio opcional para resultados
+-        k: Número de clusters
+-        m: Número de subsets de documentos
+-        top_k: Número de documentos a recuperar
++        results_dir: Directorio para guardar resultados (opcional)
++        **kwargs: Parámetros adicionales (k, m, top_k, etc.)
+     """
+-    logger.info(f"Iniciando benchmark de Speculative RAG con {limit} preguntas")
++    logger.info(f"Iniciando benchmark de Speculative RAG con {limit} preguntas de Qdrant")
+     
+     # Inicializar clientes
+     vllm_client = AsyncOpenAI(
+         base_url=VLLM_BASE_URL,
+-        api_key="not-needed"
++        api_key="not-needed"  # vLLM no requiere API key
+     )
+     
+     ollama_client = AsyncOpenAI(
+@@ -323,21 +301,24 @@
+         api_key="ollama"
+     )
+     
++    # Clientes separados para drafter y verifier (por ahora iguales, pero podrían ser diferentes)
+     drafter_client = vllm_client
+     verifier_client = vllm_client
+     
+-    # Usar directorio de resultados personalizado si se proporciona
++    # Usar el directorio de resultados proporcionado o el predeterminado
+     if results_dir is None:
+         results_dir = Path(__file__).parent / "benchmark_results_speculative_qdrant"
+     results_dir.mkdir(exist_ok=True)
+     
+-    # Crear directorios para respuestas
+-    answer_dir = results_dir / "answers"
+-    answer_dir.mkdir(exist_ok=True)
++    # Crear subdirectorios para cada tipo de respuesta
++    ideal_dir = results_dir / "ideal_answers"
++    exact_dir = results_dir / "exact_answers"
++    ideal_dir.mkdir(exist_ok=True)
++    exact_dir.mkdir(exist_ok=True)
+     
+     # Verificar si existen checkpoints previos
+-    ideal_checkpoint = results_dir / "ideal_answers" / "partial_results.json"
+-    exact_checkpoint = results_dir / "exact_answers" / "partial_results.json"
++    ideal_checkpoint = ideal_dir / "partial_results.json"
++    exact_checkpoint = exact_dir / "partial_results.json"
+     
+     # Cargar resultados previos si existen
+     ideal_results = []
+@@ -364,11 +345,8 @@
+             logger.error(f"Error cargando checkpoint de respuestas exactas: {e}")
+             exact_results = []
+     
+-    # Usar preguntas proporcionadas o obtenerlas de Qdrant
+-    if questions is not None:
+-        all_questions = questions[:limit]  # Respetar el límite
+-    else:
+-        all_questions = await get_questions_from_qdrant(limit=limit)
++    # Obtener preguntas de Qdrant
++    all_questions = await get_questions_from_qdrant(limit=limit)
+     
+     if not all_questions:
+         logger.error("No se pudieron obtener preguntas de Qdrant. Abortando benchmark.")
+@@ -388,13 +366,13 @@
+     if remaining_questions == 0:
+         logger.info("Todas las preguntas ya fueron procesadas. Generando informes finales.")
+         # Guardar todos los resultados (por si acaso no se guardaron al final)
+-        with open(results_dir / "ideal_answers" / "full_results.json", "w", encoding="utf-8") as f:
++        with open(ideal_dir / "full_results.json", "w", encoding="utf-8") as f:
+             json.dump(ideal_results, f, indent=2, ensure_ascii=False)
+-        with open(results_dir / "exact_answers" / "full_results.json", "w", encoding="utf-8") as f:
++        with open(exact_dir / "full_results.json", "w", encoding="utf-8") as f:
+             json.dump(exact_results, f, indent=2, ensure_ascii=False)
+         # Generar estadísticas
+-        await generate_stats_report(ideal_results, results_dir / "ideal_answers", "Ideal Answers")
+-        await generate_stats_report(exact_results, results_dir / "exact_answers", "Exact Answers")
++        await generate_stats_report(ideal_results, ideal_dir, "Ideal Answers")
++        await generate_stats_report(exact_results, exact_dir, "Exact Answers")
+         logger.info(f"Benchmark completado. Resultados guardados en {results_dir}")
+         return
+     
+@@ -420,15 +398,15 @@
+                 # Configurar parámetros para Speculative RAG
+                 params = {
+                     "embedding_model": EMBEDDING_MODEL,
+-                    "k": k,
++                    "k": 2,  # Número de clusters
+                     "seed": 23,
+-                    "client": ollama_client,
++                    "client": ollama_client, # Cliente genérico (Ollama para embeddings)
+                     "drafter_model": DRAFTER_MODEL,
+                     "verifier_model": VERIFIER_MODEL,
+-                    "m": m,
+-                    "top_k": top_k,
+-                    "verbose": False,
+-                    "debug_prints": True,
++                    "m": 5,  # Número de subsets de documentos
++                    "top_k": 10,  # Documentos a recuperar
++                    "verbose": False, # Mantener en False para no llenar logs
++                    "debug_prints": True, # True para capturar tiempos con TimeCaptureLogger
+                     "collection_name": RETRIEVAL_COLLECTION,
+                     "ollama_client": ollama_client,
+                     "llm_client": vllm_client,
+@@ -513,14 +491,14 @@
+         await asyncio.sleep(1) # Pausa
+     
+     # Guardar resultados finales
+-    with open(results_dir / "ideal_answers" / "full_results.json", "w", encoding="utf-8") as f:
++    with open(ideal_dir / "full_results.json", "w", encoding="utf-8") as f:
+         json.dump(ideal_results, f, indent=2, ensure_ascii=False)
+-    with open(results_dir / "exact_answers" / "full_results.json", "w", encoding="utf-8") as f:
++    with open(exact_dir / "full_results.json", "w", encoding="utf-8") as f:
+         json.dump(exact_results, f, indent=2, ensure_ascii=False)
+     
+     # Generar estadísticas finales
+-    await generate_stats_report(ideal_results, results_dir / "ideal_answers", "Speculative RAG - Ideal Answers")
+-    await generate_stats_report(exact_results, results_dir / "exact_answers", "Speculative RAG - Exact Answers")
++    await generate_stats_report(ideal_results, ideal_dir, "Speculative RAG - Ideal Answers")
++    await generate_stats_report(exact_results, exact_dir, "Speculative RAG - Exact Answers")
+     
+     logger.info(f"Benchmark completado. Resultados guardados en {results_dir}")
+ 
+@@ -655,7 +633,7 @@
+ 
+ if __name__ == "__main__":
+     parser = argparse.ArgumentParser(description="Benchmark de Speculative RAG con preguntas de Qdrant")
+-    parser.add_argument("--limit", type=int, default=300, help="Número máximo de preguntas a evaluar (default: 1000)")
++    parser.add_argument("--limit", type=int, default=1000, help="Número máximo de preguntas a evaluar (default: 1000)")
+     args = parser.parse_args()
+     
+     logger.info(f"Benchmark configurado para usar preguntas de '{QUESTIONS_COLLECTION}' y recuperar documentos de '{RETRIEVAL_COLLECTION}'")

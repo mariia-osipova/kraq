@@ -1,0 +1,5 @@
+8000 = vllm
+1234 = lmstudio
+11434 = ollama
+
+Corriendo indexacion de graphrag para primeras 1000 preguntas de BioASQ con embeddings nomic en ollama y llm casperhansen/llama-3-8b-instruct-awq en vllm con 20 llamadas concurrentes 
